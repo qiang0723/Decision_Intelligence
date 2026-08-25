@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>方法论总结 — 企业 Agentic AI 与决策智能架构</title>
+<meta name="description" content="对企业 Agentic AI 与决策智能架构领域现有方法论的体系化梳理，五个模块 26 个主题。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:20px">
+  <p class="eyebrow">方法论总结</p>
+  <h1>企业 Agentic AI 与决策智能架构</h1>
+  <p class="lede">对这个领域现有方法论的体系化梳理。<br>五个模块，29 个主题，约 5 小时 25 分。</p>
+  <p class="meta"><span class="pill on">既总结行业既有成果</span><span class="pill on">也标注哪些是共识、哪些有争议、哪些是我的判断</span></p>
+</section>
+
+<hr class="hr">
+
+<section>
+<h2 style="margin-top:0">为什么需要这样一份总结</h2>
+<p>这个领域的材料目前分布在三个互不交流的圈子里：</p>
+<div class="tw"><table>
+<tr><th>来源</th><th>强项</th><th>盲区</th></tr>
+<tr><td><strong>平台厂商</strong>（Palantir、各云厂商）</td><td>架构完整、有真实规模验证</td><td>与产品绑定，不谈失败，不谈组织成本</td></tr>
+<tr><td><strong>Agent 技术社区</strong></td><td>模式演进快、工程细节丰富</td><td>几乎不涉及企业权限、审计、责任边界</td></tr>
+<tr><td><strong>数据治理传统</strong>（Data Mesh、MDM、语义层）</td><td>治理成熟</td><td>止于数据供给，不涉及决策与行动闭环</td></tr>
+</table></div>
+<div class="rule"><p><strong>没有人把这三块接起来。</strong>而企业真正要做的事，恰好落在三者的交集上。</p></div>
+
+<h3>阅读约定</h3>
+<div class="legend">
+<div><span class="mk mk-c">共识</span> 领域内已验证，<strong>且必须有可点击出处</strong></div>
+<div><span class="mk mk-d">争议</span> 存在明显分歧，会列出主要立场</div>
+<div><span class="mk mk-j">判断</span> 我的个人观点，可能被推翻</div>
+</div>
+<p>这个约定本身也是一种立场：<strong>一份不区分共识与个人观点的方法论总结，读者无法评估它的可靠性。</strong></p>
+<div class="callout"><span class="tag">2026-08-23 立的两条规则</span>
+<p><strong>1. 〔共识〕必须有可点击出处，否则降级为〔判断〕。</strong>一个没有出处的〔共识〕标签，读者同样无法评估——它只是把「我认为」换成了「大家都认为」。全部外部数据集中在<a href="research.html#sources">引用与数据来源</a>。</p>
+<p><strong>2. 标注体系只覆盖本板块。</strong><a href="dia.html">DIA 框架详解</a>、<a href="playbook.html">实践</a>、<a href="domains.html">行业剖面</a> 三个板块<strong>整体属于〔判断〕</strong>——它们是我的方法论主张，不声称是领域共识。</p></div>
+</section>
+
+<hr class="hr">
+
+<section>
+<h2 style="margin-top:0">五个模块</h2>
+
+<a class="module" href="m1-foundations.html">
+  <div class="module-head"><span class="module-idx">模块一</span><span class="module-title">基础认知</span><span class="module-meta">5 主题 · 55 min</span></div>
+  <p>这个领域的问题空间是什么，为什么它不是一个模型问题。</p>
+  <ul><li>1.1 问题空间：企业 AI 到底卡在哪</li><li>1.2 四代企业数据架构的演进</li><li>1.3 十条失败症状——以及本方法论覆盖不到的失败原因</li><li>1.4 概念坐标系：这些词到底什么关系</li><li>1.5 本方法论的适用边界</li></ul>
+</a>
+
+<a class="module" href="m2-ontology.html">
+  <div class="module-head"><span class="module-idx">模块二</span><span class="module-title">语义与本体</span><span class="module-meta">6 主题 · 65 min</span></div>
+  <p>企业如何获得一层机器可理解、且业务承认的语义骨架。</p>
+  <ul><li>2.1 本体是什么、不是什么</li><li>2.2 三种本体范式对照</li><li>2.3 本体的六个构成要素</li><li>2.4 对象准入判据与本体膨胀</li><li>2.5 事实基础：口径、血缘、时点正确性</li><li>2.6 数据合同与断言校验</li></ul>
+</a>
+
+<a class="module" href="m3-agentic.html">
+  <div class="module-head"><span class="module-idx">模块三</span><span class="module-title">Agentic 系统设计与编排</span><span class="module-meta">8 主题 · 95 min</span></div>
+  <p>智能体怎么选型、有哪些设计模式、怎么编排、怎么给上下文、怎么评测。<br><strong>本模块取向：总结模式谱系，标出企业语境下哪些能用、哪些是玩具。</strong></p>
+  <ul><li>3.1 三种智能形态的选型</li><li>3.2 设计模式速查（术语对照，非选型指南）</li><li>3.3 编排范式：工作流 vs 自主体</li><li>3.4 <strong>上下文经济学</strong></li><li>3.5 工具设计与互操作（含 MCP）</li><li>3.6 <strong>Agent 威胁模型与抗注入设计</strong></li><li>3.7 <strong>harness：运行期工程</strong></li><li>3.8 评测方法总结</li></ul>
+</a>
+
+<a class="module" href="m4-adoption.html">
+  <div class="module-head"><span class="module-idx">模块四</span><span class="module-title">行动闭环与企业采纳</span><span class="module-meta">8 主题 · 85 min</span></div>
+  <p>怎么从只读走到写回，怎么逐级放权而不出事，组织怎么承接。<br><strong>这是整个领域公开材料最薄、而企业最需要的一块。</strong></p>
+  <ul><li>4.1 从只读到写回：行动契约（十一要素）</li><li>4.2 可逆性分级与人在回路</li><li>4.3 分级自治 L0–L4</li><li>4.4 四条治理约束：权限 · 证据 · 可逆 · 运行</li><li>4.4b <strong>无人值守时的身份</strong></li><li>4.5 运行约束：隔离 · 成本 · 发布回滚</li><li>4.6 组织承接：人机权责与减法</li><li>4.7 成熟度：M0–M2 + 覆盖率</li></ul>
+</a>
+
+<a class="module" href="m5-synthesis.html">
+  <div class="module-head"><span class="module-idx">模块五</span><span class="module-title">整合视图与展望</span><span class="module-meta">3 主题 · 25 min</span></div>
+  <p>前四个模块如何合成一个架构，它在范式版图中的位置，以及哪些问题还没有答案。</p>
+  <ul><li>5.1 整合：决策智能架构 DIA</li><li>5.2 在范式版图中的位置</li><li>5.3 未解问题与研究方向</li></ul>
+</a>
+</section>
+
+<hr class="hr">
+
+<section>
+<h2 style="margin-top:0">建议的阅读路径</h2>
+<div class="grid grid-3">
+<div class="card"><span class="num">决策者 · 50 min</span><h3>只读关键处</h3><p>模块一全部 → 2.1 本体是什么 → 4.2 可逆性与人在回路 → 4.3 分级自治 → 4.6 组织承接 → 模块五</p></div>
+<div class="card"><span class="num">架构师 · 4 h</span><h3>完整通读</h3><p>按模块顺序读完。模块二与模块四是重点。</p></div>
+<div class="card"><span class="num">Agent 工程师 · 2 h</span><h3>从模式切入</h3><p>模块三全部 → 2.1–2.4 本体 → 4.1 行动契约 → 4.4 四条治理约束</p></div>
+</div>
+</section>
+
+<hr class="hr">
+
+<section>
+<h2 style="margin-top:0">与其他板块的关系</h2>
+<div class="tw"><table>
+<tr><th>板块</th><th>回答什么</th></tr>
+<tr><td><strong>方法论总结</strong>（本板块）</td><td>这个领域是怎么回事：是什么、有哪些流派、怎么判断</td></tr>
+<tr><td><a href="playbook.html"><strong>实践</strong></a></td><td>明天做什么：成熟度诊断、90 天路线、工作坊、模板、反模式、开工前 12 问</td></tr>
+<tr><td><a href="dia.html"><strong>DIA 框架详解</strong></a></td><td>模块五整合框架的逐层深入（六层 + 三约束）</td></tr>
+<tr><td><a href="domains.html"><strong>行业剖面</strong></a></td><td>落到电商与软件公司内部系统的具体形态</td></tr>
+<tr><td><a href="research.html"><strong>研究</strong></a></td><td>坐标系、术语表、同类站调研与未定论札记</td></tr>
+</table></div>
+<div class="rule"><p><strong>方法论总结与实践是平级的两条线</strong>，不是「理论 + 应用」的层级关系。</p></div>
+<div class="next"><p><strong>开始 →</strong>　<a href="m1-foundations.html">模块一｜基础认知</a></p></div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="index.html">首页</a>　<a href="playbook.html">实践</a>　<a href="research.html">研究</a></div></footer>
+</body></html>

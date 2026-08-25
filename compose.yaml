@@ -1,0 +1,17 @@
+services:
+  site:
+    build: .
+    image: dia-site:local
+    container_name: dia-site
+    # 端口可用 .env 里的 SITE_PORT 覆盖，默认 8081（8080 在本机已被占用）
+    ports:
+      - "${SITE_PORT:-8081}:80"
+    # 开发挂载：本地改 HTML / Markdown，刷新浏览器即可见，无需重新 build。
+    # 只读挂载，容器不会写回你的文件。
+    volumes:
+      - ./site:/srv/site:ro
+      - ./content:/srv/content:ro
+      - ./docs:/srv/docs:ro
+      - ./README.md:/srv/README.md:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/site.conf:ro
+    restart: unless-stopped

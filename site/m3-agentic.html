@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模块三｜Agentic 系统设计与编排 — 方法论总结</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<!--NAV-->
+<div class="wrap">
+<section style="padding-bottom:16px">
+<p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 模块三</p>
+<h1>Agentic 系统设计与编排</h1>
+<p class="lede">智能体怎么选型、怎么编排、上下文怎么管、工具怎么设计、怎么防被操纵、怎么评测。</p>
+
+<div class="callout"><span class="tag">2026-08-23 重构说明</span>
+<p>本章此前是一份<strong>模式分类学</strong>——13 种模式，每一条描述的都是「推理循环的形状」。外部审查指出这是 2024 年的框架：2025–26 年 Agentic 工程真正在争论的是<strong>基础设施层</strong>（上下文预算、互操作协议、能力封装、运行框架、Agent 专属安全），而本章完全没有这一层。</p>
+<p>重构后：模式清单压缩为速查表并降级为「术语对照」，腾出的篇幅给<strong>上下文经济学</strong>、<strong>威胁模型</strong>、<strong>运行期工程</strong>三节。</p>
+<p><strong>本章立场：企业里的可靠性主要不来自选对推理循环的形状。</strong></p></div>
+
+<p class="meta"><span class="pill">8 主题 · 约 95 分钟</span></p>
+<ul class="topics">
+<li><span class="tn">3.1</span><span class="tt"><a href="#t31">三种智能形态的选型</a></span><span class="td">10 min</span></li>
+<li><span class="tn">3.2</span><span class="tt"><a href="#t32">设计模式速查（术语对照，非选型指南）</a></span><span class="td">14 min</span></li>
+<li><span class="tn">3.3</span><span class="tt"><a href="#t33">编排范式：工作流 vs 自主体</a></span><span class="td">12 min</span></li>
+<li><span class="tn">3.4</span><span class="tt"><a href="#t34">上下文经济学</a></span><span class="td">15 min</span></li>
+<li><span class="tn">3.5</span><span class="tt"><a href="#t35">工具设计与互操作</a></span><span class="td">13 min</span></li>
+<li><span class="tn">3.6</span><span class="tt"><a href="#t36">Agent 威胁模型与抗注入设计</a></span><span class="td">15 min</span></li>
+<li><span class="tn">3.7</span><span class="tt"><a href="#t37">harness：运行期工程</a></span><span class="td">8 min</span></li>
+<li><span class="tn">3.8</span><span class="tt"><a href="#t38">评测方法总结</a></span><span class="td">8 min</span></li>
+</ul>
+<p style="font-size:14.5px;color:var(--text-dim)">全部外部数据出处见 <a href="research.html#sources">引用与数据来源</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t31">
+<h2 style="margin-top:0">3.1 三种智能形态的选型</h2>
+<div class="tw"><table>
+<tr><th>形态</th><th>适用</th><th>不适用</th><th>成本</th><th>可解释性</th></tr>
+<tr><td><strong>确定性规则</strong></td><td>逻辑明确、合规红线、阈值判断</td><td>规则数量爆炸、需要泛化</td><td>极低</td><td>完全</td></tr>
+<tr><td><strong>预测模型</strong></td><td>有标签、有历史、结构化、需量化</td><td>缺历史、需解释推理链</td><td>中</td><td>中</td></tr>
+<tr><td><strong>生成/推理 Agent</strong></td><td>非结构化输入、多步任务、需综合判断</td><td>高频简单判断、要求确定性输出</td><td>高</td><td>需专门设计</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 按顺序问，不要跳步：<strong>①能写成规则吗 → ②规则写不下、有标签数据吗 → ③输入非结构化或需多步判断吗</strong>。</p>
+<blockquote><p><strong>能写死的不要用模型，能用小模型的不要用大模型。</strong><br>这不只是成本问题，更是可解释性与稳定性问题。<strong>企业更看重「每次都一样」，而不是「大多数时候更聪明」。</strong></p></blockquote>
+<p><strong>成本的量级</strong>（Anthropic 公布）：Agent 约为 chat 的 <strong>4 倍</strong> token，多 Agent 约 <strong>15 倍</strong>。这个倍率应当直接进入选型判断，而不是等上线后才发现。</p>
+<div class="rule"><span class="tag">判断</span><p>让模型负责「<strong>选哪条路</strong>」，让确定性代码负责「<strong>走这条路</strong>」。模型的输出应尽可能是一个受限的选择，而不是自由文本或自由代码。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t32">
+<h2 style="margin-top:0">3.2 设计模式速查（术语对照，非选型指南）</h2>
+<div class="rule"><p><strong>本节定位已下调。</strong>它的用途是让你在别处读到这些术语时知道指的是什么，<strong>不是</strong>让你「挑一个图来用」。企业里的可靠性主要来自 3.4–3.7 讲的东西。</p></div>
+
+<h3>单 Agent</h3>
+<div class="tw"><table>
+<tr><th>模式</th><th>2026 年的状态</th></tr>
+<tr><td><strong>Tool Use</strong></td><td>所有 Agentic 能力的地基。<span class="mk mk-j">判断</span> 工具设计是单项投入回报最高的一件事。<br>⚠️ 本站此前写「企业里 <strong>80%</strong> 的价值来自这一个模式」——<strong>这个数字是我编的，没有任何研究支持，已删除。</strong></td></tr>
+<tr><td><strong>ReAct</strong></td><td><strong>循环存活，名字在退场。</strong>LangChain 已把 <code>create_react_agent</code> 更名为 <code>create_agent</code>；文字解析式的 <code>Thought:/Action:/Observation:</code> 脚手架已被原生 function calling + 供应商侧推理取代。<strong>ReAct 没有过时，它被吸收了</strong>；剩下的工作是给循环设边界（迭代上限、成本上限、trace 可观测）。<br>⚠️ 本站此前把〔争议〕设为「显式 thought 是否还必要」——<strong>这个争论已不活跃</strong>。真正在争的是<strong>思维链作为安全监控手段有多脆弱</strong>。</td></tr>
+<tr><td><strong>Plan-and-Execute</strong></td><td><span class="mk mk-j">判断</span> 它在 2026 年<strong>首先是一个安全模式</strong>：在摄入不可信内容<strong>之前</strong>固定计划，注入就无法改变控制流（见 3.6）。<br>⚠️ 「计划可被人审查」这个优点<strong>会随时间衰减</strong>——批准率随时间上升而审查深度下降。<strong>这直接冲击 L2 作为长期稳定状态的假设。</strong></td></tr>
+<tr><td><strong>Reflection / 自省</strong></td><td><span class="mk mk-j">判断</span> 有客观真值时<strong>用外部验证器替代自省</strong>更便宜也更可靠。<br>这是本站论证最扎实的一条，现已坐实：Kamoi et al.（TACL）——「没有任何先前工作展示了仅靠 prompted LLM 反馈的成功自我纠正」，瓶颈在<strong>反馈生成</strong>；Huang et al.（ICLR 2024）仍然成立。</td></tr>
+<tr><td><strong>Router / 分类路由</strong></td><td><span class="mk mk-j">判断</span> 把「无所不能的 Agent」拆成「分类器 + 窄专家」，大幅提升可评测性与可审计性。<br>⚠️ 它在 2026 年<strong>已部分下沉为基础设施</strong>（模型路由服务），当前形态是成本/质量级联路由，不是应用层模式。</td></tr>
+<tr><td><strong>Structured Output</strong></td><td>⚠️ <strong>本站此前把它列为「首要设计模式」，这个归类本身就暴露了年份。</strong>2026 年它是 <strong>API 的基础能力</strong>而非模式。<br>仍然重要（自由文本无法被下游可靠消费，也无法被断言校验），但应作为<strong>默认设定</strong>。并有一个此前忽略的权衡：<strong>严格格式约束可能损害推理质量</strong>（EMNLP 2024）。实践取向：先自由推理、再产出结构化结果。</td></tr>
+</table></div>
+
+<h3>多 Agent</h3>
+<div class="tw"><table>
+<tr><th>模式</th><th>2026 年的状态</th></tr>
+<tr><td><strong>Supervisor</strong></td><td><span class="mk mk-j">判断</span> 警惕<strong>主管本身成为不可审计的黑箱</strong>。更好的做法是主管用确定性编排，专家用模型。</td></tr>
+<tr><td><strong>Pipeline</strong></td><td>「无聊但可靠」。每段可独立评测、独立回滚。</td></tr>
+<tr><td><strong>self-consistency</strong><br>（采样 N 次多数表决）</td><td><strong>便宜且可靠的那一个。</strong>必须与下一行区分开。</td></tr>
+<tr><td><strong>multi-agent debate</strong></td><td>❌ <strong>本站此前标〔共识〕说它「能提升困难任务的正确率」——这条被证据直接否定，是本站唯一一处「标为共识但实际结论相反」的错误。</strong><br>ICLR 2025（5 个 MAD 框架 × 9 个基准）：多数框架<strong>既打不过 CoT 也打不过 self-consistency</strong>；等 token 预算下几乎都不 scale。<strong>归给「辩论」的收益大部分其实来自多数表决。</strong>失败模式：谄媚性趋同最高 <strong>85.5%</strong>、共识坍塌；<strong>竞争式辩论比单 Agent 低最多 15 个百分点</strong>。</td></tr>
+<tr><td><strong>共享状态</strong>（blackboard）</td><td><span class="mk mk-j">判断</span> 不是过时术语，是活跃在研模式（相对 supervisor 基线端到端成功率 <strong>+13–57%</strong>）；2026 年生产口径已改称 session state / artifacts。<br>⚠️ 本站此前说它的问题是「难调试」——<strong>真正的权衡是读写不对称</strong>：<strong>冲突的写决策后果远比冲突的读严重</strong>。且它现在是一个具名安全风险（记忆与上下文投毒）。</td></tr>
+</table></div>
+
+<h3>检索</h3>
+<div class="tw"><table>
+<tr><th>模式</th><th>2026 年的状态</th></tr>
+<tr><td><strong>RAG</strong></td><td><span class="mk mk-j">判断</span>（原标〔共识〕称「默认方案」，已加时间限定）<strong>这个默认在 2026 年已经动摇</strong>：产业侧正从「向量库 + RAG」转向 <strong>agentic search / 检索即工具调用</strong>。<br>不变的判断：<strong>RAG 解决的是「知道」，不解决「能做」</strong>。</td></tr>
+<tr><td><strong>GraphRAG</strong></td><td><strong>微软已于 2026-08-14 转入维护模式</strong>（不再接受新 PR / 新功能）；LazyGraphRAG 从未在开源版发布。决策规则：简单事实检索 文本 60.9 vs 图 60.1（打平）；复杂推理 图 <strong>+10.5</strong>；上下文摘要 图 <strong>+13.1</strong>；代价 <strong>3–5 倍索引成本</strong>。<br>⚠️ 此前遗漏的告诫：<strong>Text2Cypher 与 Text-to-SQL 有同样的准确率问题</strong>——换成图查询语言只是转移了语义接地问题。</td></tr>
+<tr><td><strong>Text-to-SQL</strong></td><td>⚠️ <strong>本站此前的禁令「企业生产环境不应使用，只应存在于隔离沙箱」是错的，已改。</strong>各大平台都已 GA 且带治理地大规模提供。<strong>「隔离沙箱」不是业界控制手段，也解决不了真正的失败模式。</strong><br><strong>真实的边界是「受治理 vs 不受治理」，不是「生产 vs 沙箱」。</strong>受治理意味着：继承调用者 RBAC 的只读角色、受治理的语义层、已验证查询库、确定性 SQL 校验、回归基准。<br><strong>但原有的直觉有数据支持</strong>：dbt 2026 基准 text-to-SQL <strong>90.0%</strong> vs 语义层 <strong>98.2%</strong>；BIRD 榜首 81.95% vs 人类基线 92.96%；LinkedIn 生产实测 9%→48%；Snowflake 自承 Spider 上 90%+、真实 BI 集掉到 <strong>51%</strong>。<br><strong>关键论据是失败模式不同</strong>：text-to-SQL「有时给你一个貌似合理的错答案」，语义层<strong>直接报错</strong>——<strong>这与本方法论的「失败关闭」是同一个论证</strong>。<br>⚠️ <strong>不要引用任何 text-to-SQL 排行榜名次</strong>：CIDR 2026 发现主流基准标注错误率 52.8%–62.8%。</td></tr>
+</table></div>
+
+<div class="callout"><span class="tag">关于「模式优先级」的一处更正</span>
+<p>本站此前给出过固定排序（Structured Output + Router + Tool Use &gt; Plan-and-Execute &gt; Pipeline &gt; 其余）。<strong>这是过度声明。</strong>Anthropic、OpenAI 都主张「从最简单开始」，但<strong>没有任何一家发布过线性优先级排名</strong>，他们发布的都是<strong>决策判据</strong>。</p>
+<p>保留下来的、站得住的原则只有一条：<strong>从最简单的方案开始，每增加一层复杂度都要说出它消除了哪个具体风险。</strong></p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t33">
+<h2 style="margin-top:0">3.3 编排范式：工作流 vs 自主体</h2>
+<p><span class="mk mk-d">争议</span> 这是当前领域最核心的分歧。</p>
+<div class="tw"><table>
+<tr><th></th><th>确定性工作流</th><th>自主 Agent</th></tr>
+<tr><td>控制流</td><td>代码写死</td><td>模型决定</td></tr>
+<tr><td>可评测性</td><td>每步可测</td><td>端到端难测</td></tr>
+<tr><td>成本</td><td>可预算</td><td>波动大</td></tr>
+<tr><td>失败模式</td><td>显式报错</td><td><strong>悄悄走偏</strong></td></tr>
+</table></div>
+<h3>这个争论 2025 年最著名的一次交锋，以及它的收敛结论</h3>
+<p><span class="mk mk-c">共识</span> 2025-06 相隔 24 小时：Cognition 发《Don't Build Multi-Agents》，Anthropic 发《multi-agent research system》，给出相反建议。<strong>收敛结论是「任务决定架构」</strong>：</p>
+<blockquote><p><strong>并行、以读为主的工作</strong>适合多 Agent 隔离；<strong>共享状态、以写为主的工作</strong>应当保持单线程。</p></blockquote>
+<div class="rule"><span class="tag">合并后的立场 · 判断</span><p><strong>控制流应当是确定性的，判断应当是模型的；<br>并行只读可以放开，共享状态的写必须收敛到单线程。</strong></p></div>
+<p>理由是企业的三个硬约束：<strong>可评测</strong>（每步有明确输入输出）、<strong>可归因</strong>（出错能定位到步骤）、<strong>可放权</strong>（「在什么条件下自动」必须可陈述）。</p>
+<h3>实用折中：确定性骨架 + 模型节点</h3>
+<pre><code>[确定性] 触发条件判断
+      ↓
+[模型]   理解与分类  ──→ 结构化输出
+      ↓
+[确定性] 路由到对应分支
+      ↓
+[模型]   在该分支内生成参数  ──→ 结构化输出
+      ↓
+[确定性] 参数边界校验、权限校验、不可信来源校验（见 3.6）
+      ↓
+[确定性] 调用行动契约
+      ↓
+[确定性] 审计留痕</code></pre>
+</section>
+
+<hr class="hr">
+
+<section id="t34">
+<h2 style="margin-top:0">3.4 上下文经济学</h2>
+<div class="rule"><p><strong>本节是重构新增。</strong>本站此前的「上下文工程与记忆」停留在「放什么、不放什么」的提示词视角，没有把上下文当作<strong>有限资源与预算</strong>来处理。<strong>2025–26 年多数 Agent 工程本质上是预算管理。</strong></p></div>
+
+<h3>核心命题</h3>
+<blockquote><p><strong>上下文窗口是稀缺资源。</strong>即使窗口足够大，塞满它也是错的——理由与「装不下」无关：</p>
+<p><strong>成本</strong>（长度直接决定单次决策成本，且 Agent 每一轮都要重发历史）· <strong>可归因</strong>（塞进去 200 页，出错时无法知道模型用了哪一段）· <strong>权限</strong>（塞进去的每一条都要过权限校验，上下文越大越权风险越大）· <strong>注入面</strong>（每一条不可信内容都是一个攻击入口）</p></blockquote>
+
+<h3>上下文的四个来源与优先级</h3>
+<div class="tw"><table>
+<tr><th>来源</th><th>企业里的取向</th></tr>
+<tr><td><strong>结构化事实</strong>（来自本体）</td><td><strong>首选</strong>——只有本体化的事实才带着口径、权限和时点</td></tr>
+<tr><td>指令</td><td>必须版本化</td></tr>
+<tr><td>非结构化检索</td><td>需标注来源与时效；<strong>不能替代结构化事实</strong>；来自外部方的必须标为不可信</td></tr>
+<tr><td>记忆</td><td>权限与隐私的高风险区</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 消费级 Agent 的上下文主要靠检索，<strong>企业级 Agent 的上下文应当主要来自本体</strong>。</p>
+
+<h3>四种上下文预算技术</h3>
+<div class="tw"><table>
+<tr><th>技术</th><th>企业里的注意点</th></tr>
+<tr><td><strong>压缩（compaction）</strong></td><td><strong>压缩是有损的</strong>——被压掉的若是决策依据，证据链就断了。企业里应<strong>压缩对话、不压缩证据</strong>：证据写入审计记录而不是留在上下文</td></tr>
+<tr><td><strong>结构化笔记 / 外部状态</strong></td><td>与「不要制造第二套真相」有张力：笔记可以存，但<strong>不得成为业务状态的权威副本</strong></td></tr>
+<tr><td><strong>子 Agent 上下文隔离</strong></td><td>与 3.3 的「并行只读可放开」一致。回传结论必须带证据引用，否则主 Agent 无法追溯</td></tr>
+<tr><td><strong>即时检索</strong></td><td>对应产业侧从 RAG 转向 agentic search 的转变</td></tr>
+</table></div>
+
+<h3>代码执行即工具调用（code mode）</h3>
+<p><span class="mk mk-j">判断</span> 这是本站此前完全遗漏、且对成本影响最大的一项。把「逐个调用工具」改为「让模型写一段代码去调用工具」，循环、条件、错误处理随之移入代码：</p>
+<ul>
+<li>直接后果：<strong>Pipeline 与大半个 Plan-and-Execute 被吸收掉了</strong>——它们变成了代码里的控制流，而不是编排层的模式选择</li>
+<li>公开的量级：某些任务的 token 消耗从约 <strong>15 万降到约 2 千</strong></li>
+</ul>
+<p><strong>企业里的约束</strong>：代码执行必须在沙箱内、无网络、权限受限，且<strong>生成的代码本身应进入审计记录</strong>——它是这次决策的推理过程。</p>
+
+<h3>组织记忆应当沉淀回本体</h3>
+<div class="rule"><span class="tag">判断</span><p>记忆有三层：会话内 → 跨会话 → <strong>组织记忆</strong>（哪类告警通常是误报、哪个供应商经常延迟）。第三层最有价值，也最被忽略，而它<strong>不应该存在向量库里，应该沉淀回本体</strong>。</p>
+<p>「这个供应商经常延迟」应当是供应商对象上的一个<strong>派生属性</strong>，可被查询、可被审计、可被质疑，而不是散落在记忆库里的文本。这也是安全考虑：记忆库是上下文投毒的攻击目标，而本体属性有权限、有血缘、有变更记录。</p></div>
+
+<h3>上下文即配置项</h3>
+<p>提示词、模型版本、温度、检索策略、上下文模板、压缩策略——全部是会改变系统行为的配置：<strong>版本化 · 绑定证据 · 变更即回归 · 可回滚</strong>。</p>
+<div class="callout"><span class="tag">典型事故</span><p>有人「优化」了提示词，指标下降，很久之后才发现，且无法定位是哪次改动。根因是提示词不在版本控制里。<br>（此前本站在此写「指标悄悄降了 8%」——<strong>那个数字是示意不是实测</strong>，已删除。）</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t35">
+<h2 style="margin-top:0">3.5 工具设计与互操作</h2>
+<pre><code>❌  Agent + 数据库连接 + 「你可以写 SQL 查任何东西」
+✅  Agent + 本体工具集 + 「你可以调用这些工具」</code></pre>
+<p><span class="mk mk-j">判断</span> <strong>Agent 的能力边界 = 本体暴露给它的工具集。</strong>这不是限制智能，是<strong>让智能可以被授权</strong>。</p>
+<div class="callout"><span class="tag">一处必要的软化</span><p>见 3.2 关于 Text-to-SQL 的更正。<strong>受治理的自然语言查询在 2026 年是可用的</strong>；本原则反对的是<strong>不受治理的自由数据访问</strong>，不是反对自然语言接口本身。</p></div>
+
+<h3>工具数量：用有出处的数字替换我原来编的阈值</h3>
+<p>⚠️ 本站此前写「〔共识〕工具过多会显著降低选择准确率」+「〔判断〕超过 <strong>15–20 个</strong>工具时应先用 Router 分域」。前者无出处，后者的数字是我发明的（<strong>碰巧接近一条真实建议，但那是巧合</strong>）。</p>
+<blockquote><p>工具选择准确率随暴露工具集增大而下降。<br>
+<strong>OpenAI</strong> 建议单轮可用函数「目标少于 20 个，不过这只是一个软性建议」。<br>
+<strong>Anthropic</strong> 建议超过约 <strong>10 个工具</strong>即启用工具检索，并实测到准确率恢复：<strong>Opus 4 从 49% 提升到 74%</strong>、<strong>Opus 4.5 从 79.5% 提升到 88.1%</strong>，同时 token 减少 85%。<br>
+<strong>没有任何厂商公布硬性悬崖。</strong></p></blockquote>
+
+<h3>工具设计的五条要点</h3>
+<ol class="steps">
+<li><b>粒度贴合业务动作，不贴合数据表</b>✅ <code>查询客户近 90 天履约异常</code>　❌ <code>select from t_order</code></li>
+<li><b>返回必须包含证据引用</b>数据来源、口径版本、时间戳</li>
+<li><b>失败必须显式且可被模型理解</b><code>NOT_READY: 缺少 8-20 的库存快照</code>。<strong>绝不能返回空结果</strong>——空结果会被当成「没有异常」</li>
+<li><b>数量克制</b>超过约 10 个就该考虑工具检索或 Router 分域</li>
+<li><b>区分可信与不可信来源</b>（新增）凡返回中包含<strong>外部方提供的自由文本</strong>（客户留言、供应商备注、邮件正文、网页内容），必须显式标记为不可信，且<strong>不得直接决定行动参数</strong></li>
+</ol>
+
+<h3>MCP：工具互操作的既成标准</h3>
+<p><span class="mk mk-c">共识</span> Model Context Protocol 已于 <strong>2025-12-09</strong> 捐给 Linux Foundation 下的 Agentic AI Foundation，由 Anthropic、OpenAI、Block 共同发起，Google/微软/AWS 支持。</p>
+<p><span class="mk mk-j">判断</span> 它对本方法论是<strong>同向的</strong>，应当明确引用而不是回避：MCP 正是「<strong>工具即本体行动</strong>」这个主张的现成落地协议——把本体的查询与行动暴露为 MCP server，接入成本从 N×M 降到 N+M；企业最关心的<strong>网关级鉴权</strong>在这一层有位置。</p>
+<p><strong>注意点</strong>：MCP server 是一个新的攻击面与供应链依赖，应按引入外部依赖的标准审查（见 3.6）。</p>
+
+<h3>Agent Skills：分发与策略单元</h3>
+<p><span class="mk mk-j">判断</span> 以「技能包」形式封装能力，对企业最相关的一点不是它节省 token，而是<strong>它是一个分发与策略单元</strong>——可按组织、按角色授予与回收，可版本化，可审计谁在用哪个版本。这正是本方法论关心的东西，而此前的模式谱系里没有槽位放它。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t36">
+<h2 style="margin-top:0">3.6 Agent 威胁模型与抗注入设计</h2>
+<div class="callout"><span class="tag">本节是重构新增，也是本站此前最严重的缺口</span>
+<p>全站核心主张是「不要给 Agent 自由 SQL，要给它定义良好的工具」——<strong>而工具化 Agent 恰恰是间接提示注入的主要攻击面</strong>。本站的权限模型能挡住<strong>越权</strong>，挡不住<strong>权限内的被操纵行动</strong>。</p></div>
+
+<h3>这不是假想：EchoLeak（CVE-2025-32711）</h3>
+<p><span class="mk mk-c">共识</span> 2025 年 6 月披露的 <strong>EchoLeak</strong> 是<strong>首个在生产环境 LLM 系统中被武器化、并造成实际数据外泄的提示注入</strong>。</p>
+<div class="tw"><table>
+<tr><th>项</th><th>内容</th></tr>
+<tr><td>目标</td><td>Microsoft 365 Copilot（覆盖 Word / Excel / PowerPoint / Outlook / Teams）</td></tr>
+<tr><td>触发</td><td><strong>零点击</strong>——一封构造过的普通商务邮件，收件人<strong>不需要做任何操作</strong></td></tr>
+<tr><td>后果</td><td>Copilot 处理隐藏指令，静默外泄企业内部数据</td></tr>
+<tr><td>评级</td><td>CVSS <strong>9.3</strong></td></tr>
+<tr><td>攻击链</td><td>绕过微软专门的跨提示注入分类器 <strong>XPIA</strong> → 用引用式 Markdown 规避链接脱敏 → 利用自动拉取的图片 → 滥用 CSP 允许的 Teams 代理</td></tr>
+<tr><td>处置</td><td>Aim Security 披露，微软服务端修复，确认无在野利用</td></tr>
+</table></div>
+<div class="rule"><span class="tag">两条比技术细节更重要的后果 · 判断</span>
+<p><strong>① 检测式防御不可依赖。</strong>EchoLeak <strong>绕过了一个专门为提示注入设计的分类器</strong>。任何「我们加了一个注入检测模型」的方案，都必须假设它会被绕过。<strong>防线必须是结构性的</strong>——不依赖「认出攻击」，而依赖「即使没认出来，也做不成事」。</p>
+<p><strong>② 攻击链由若干各自合理的功能拼成。</strong>Markdown 渲染、图片自动加载、CSP 白名单——每一项单独看都是正常特性。<strong>因此逐个审查功能不足以发现问题</strong>，必须按「不可信内容能走到哪里」这条路径整体审查。</p></div>
+<p style="font-size:14.5px;color:var(--text-dim)">来源：<a href="https://arxiv.org/abs/2509.10540">arXiv 2509.10540</a>｜<a href="https://sentra.io/blog/copilot-echoleak-prompt-injection">Sentra 分析</a>｜<a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html">The Hacker News</a></p>
+
+<h3>为什么权限模型不够</h3>
+<p>把 EchoLeak 换成本方法论的语境：设想一个已经完全符合本方法论的系统——Agent 继承调用者权限、只能调用本体行动、参数有范围约束、行动可逆、全程审计。</p>
+<p>现在，一个供应商在订单备注里写一句话。Agent 读取订单对象时把这句话带进上下文，随后触发了一次<strong>完全在权限内、参数完全在范围内、审计完整</strong>的调价或补货。</p>
+<blockquote><p><strong>没有任何一条既有约束被违反，但决策是被外部人操纵的。</strong></p></blockquote>
+<p><span class="mk mk-j">判断</span> 这意味着本方法论的四条治理约束还需要补第四类防线：<strong>输入可信度</strong>。</p>
+
+<h3>威胁分类</h3>
+<div class="tw"><table>
+<tr><th>威胁</th><th>在本架构中的落点</th></tr>
+<tr><td><strong>间接提示注入</strong></td><td>任何把外部方文本带进上下文的工具返回（3.5 要点 5）</td></tr>
+<tr><td><strong>记忆与上下文投毒</strong></td><td>组织记忆、共享状态、跨会话记忆（3.4）</td></tr>
+<tr><td><strong>工具滥用 / 参数操纵</strong></td><td>行动契约的参数边界与频次上限</td></tr>
+<tr><td><strong>越权升级</strong></td><td>权限约束——<strong>这是唯一一类现有约束已覆盖的</strong></td></tr>
+<tr><td><strong>供应链</strong>（第三方工具 / MCP server / 技能包）</td><td>3.5。EchoLeak 中被滥用的 Teams 代理就是一个「已被信任的通道」</td></tr>
+<tr><td><strong>成本型拒绝服务</strong></td><td>运行约束的配额与熔断</td></tr>
+</table></div>
+
+<h3>六条可落地的抗注入设计规则</h3>
+<p><span class="mk mk-j">判断</span> 每一条都与本方法论已有的强项同源，是顺理成章的延伸而非外挂：</p>
+<div class="tw"><table>
+<tr><th>#</th><th>规则</th><th>与既有原则的关系</th></tr>
+<tr><td>1</td><td><strong>不可信内容必须显式标记</strong>，从进入上下文那一刻起带标记</td><td>延伸自「血缘可追」</td></tr>
+<tr><td>2</td><td><strong>不可信内容不得决定行动参数</strong>，参数必须来自结构化事实或用户直接指令</td><td>延伸自「结构化输出优先」</td></tr>
+<tr><td>3</td><td><strong>高风险行动前做独立复算</strong>：校验参数能否由本体事实独立推导，不能则拒绝</td><td>延伸自「双算校验」</td></tr>
+<tr><td>4</td><td><strong>先定计划，再读内容</strong>（Plan-Then-Execute）</td><td>延伸自「控制流确定性」</td></tr>
+<tr><td>5</td><td><strong>不可信内容触发的行动降一级自治</strong>：读到外部文本的那一轮自动 L3→L2</td><td>延伸自「分级自治」与「失败关闭」</td></tr>
+<tr><td>6</td><td><strong>对抗性用例进评测集</strong>，通过判据是「拒绝」而非「答对」</td><td>延伸自「评测集必须覆盖失败模式」</td></tr>
+</table></div>
+<div class="rule"><p><span class="mk mk-j">判断</span> 注意这六条<strong>没有一条是「检测注入」</strong>。这是刻意的：EchoLeak 证明了检测会被绕过。<br>六条守的都是「<strong>即使注入成功进入上下文，它也无法改变行动参数、无法改变控制流、无法在无人复核的情况下执行</strong>」。</p></div>
+
+<h3>一条对 L2 的重要修正：人工确认会退化</h3>
+<div class="rule"><span class="tag">判断</span><p>2026-06 的纵向研究显示，对 Agent 输出的<strong>批准率随时间上升，而审查深度下降</strong>。经验规则：<strong>批准率 ≥95% 时，这个检查点已经是「确认剧场」，应改为抽样复核。</strong></p>
+<p>这直接冲击本方法论把 L2（草拟 + 人工确认）当作<strong>长期稳定状态</strong>的假设。修正后：<strong>L2 是过渡态，不是终点</strong>；<strong>必须监控批准率</strong>，与「人工推翻率」并列；批准率过高时，正确的动作是<strong>要么晋级 L3 + 抽检，要么承认这个检查点无效并重新设计</strong>——而不是维持一个形式上的确认按钮。</p></div>
+
+<h3>供应链</h3>
+<p>第三方工具、MCP server、技能包都是新的供应链依赖，应按引入外部依赖的标准审查：来源可信度、版本锁定、变更通知、可撤销、最小权限。</p>
+<p><strong>一条硬规则</strong>：<strong>第三方工具不得直接绑定 R2/R3 行动。</strong>它们可以提供信息，行动必须由本企业自己定义的行动契约执行。</p>
+<p>落地检查表见 <a href="playbook.html#compliance">实践 · 合规与安全前置</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t37">
+<h2 style="margin-top:0">3.7 harness：运行期工程</h2>
+<div class="rule"><span class="tag">2026 年的实践共识 · 判断</span><p>团队从 <strong>harness 改造</strong>拿到的可靠性提升，<strong>大于</strong>从「ReAct 换成 Plan-and-Execute」拿到的。</p></div>
+<p>harness 指的是包裹模型的那层运行框架——它决定了循环怎么开始、怎么结束、错误怎么处理、上下文什么时候重置、工具长什么样、权限在哪里检查。</p>
+<div class="tw"><table>
+<tr><th>件</th><th>内容</th><th>缺失的后果</th></tr>
+<tr><td><strong>循环边界</strong></td><td>最大迭代数、最大耗时、最大成本</td><td>一次失控循环烧掉一天预算</td></tr>
+<tr><td><strong>上下文重置策略</strong></td><td>什么时候压缩、什么时候开新会话</td><td>长任务后期质量断崖式下降</td></tr>
+<tr><td><strong>验证闸</strong></td><td>每一步输出在进入下一步前被确定性校验</td><td>错误逐步放大，最后一步才暴露</td></tr>
+<tr><td><strong>工具人体工学</strong></td><td>工具名、参数名、错误信息是否对模型友好</td><td>模型反复调错工具，token 与准确率双输</td></tr>
+<tr><td><strong>权限门</strong></td><td>权限检查发生在<strong>工具执行处</strong>，而不是入口处</td><td>中途身份切换导致越权</td></tr>
+<tr><td><strong>trace 可观测</strong></td><td>每一步的输入输出、耗时、成本可回放</td><td>出错无法归因</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 这六件与本方法论的关系：它们是<strong>四条治理约束在运行期的具体实现位置</strong>。约束定义了「必须做到什么」，harness 是「在哪里做到」。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t38">
+<h2 style="margin-top:0">3.8 评测方法总结</h2>
+<div class="tw"><table>
+<tr><th>层</th><th>时机</th><th>内容</th></tr>
+<tr><td><strong>离线金标准集</strong></td><td>上线前</td><td>专家标注的历史案例，<strong>必须覆盖失败模式</strong>：缺数据、口径歧义、极端值、<strong>注入尝试</strong>（新增）</td></tr>
+<tr><td><strong>影子运行</strong></td><td>上线中</td><td>真实数据流上产出建议但不执行，与人的实际决策比对</td></tr>
+<tr><td><strong>在线抽检</strong></td><td>上线后</td><td>持续按比例人工复核已执行动作</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 金标准集<strong>冻结后不得因结果不好而修改</strong>。影子运行阶段<strong>分歧比一致更有价值</strong>——每个分歧应归因为：系统错 / 人错 / 口径不清。<strong>第三类是本体建设最好的输入。</strong></p>
+
+<h3>评测方法谱系</h3>
+<div class="tw"><table>
+<tr><th>方法</th><th>局限</th></tr>
+<tr><td>精确匹配 / 结构校验</td><td>只能测格式与取值</td></tr>
+<tr><td><strong>确定性验证器</strong></td><td><span class="mk mk-j">判断</span> 企业场景应优先用这个——比 LLM 判分便宜且稳定，且验证器质量决定收益上限</td></tr>
+<tr><td>人工标注对照</td><td>成本高，但金标准集只需建一次</td></tr>
+<tr><td>LLM-as-Judge</td><td><span class="mk mk-d">争议</span> 与人的一致性因任务而异；存在<strong>自我偏好偏差</strong>。只应作为补充，<strong>不应作为上线判据的唯一依据</strong></td></tr>
+<tr><td><strong>轨迹 / trace 评测</strong></td><td><span class="mk mk-j">判断</span> 2026 年企业侧评测重心已从终态正确性转向<strong>过程正确性</strong>——终态对但过程错的 Agent 在分布外会失败</td></tr>
+<tr><td>A/B 分流</td><td>唯一能证明业务价值的方法，但需要业务方接受实验</td></tr>
+</table></div>
+<div class="callout"><span class="tag">一处引用禁忌</span><p>OpenTelemetry 的 GenAI 语义约定<strong>仍处于 1.0 之前</strong>，2026-06 迁至独立仓库且无 tagged release——<strong>不要把它当作稳定标准引用</strong>。</p></div>
+
+<h3>指标维度</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>说明</th></tr>
+<tr><td><strong>弃权率</strong></td><td>主动说「不确定」的比例。<strong>一个从不弃权的系统是危险的</strong></td></tr>
+<tr><td><strong>错误分布</strong></td><td>高准确率但错在高价值样本上，等于不可用</td></tr>
+<tr><td><strong>稳定性</strong></td><td>⚠️ <strong>这不是一个可以靠工程达标的指标</strong>：run-to-run 方差是模型属性，pass^4 常比 pass^1 低 15–25 个百分点，90% 的基准分可能对应约 70% 的生产可靠性。<strong>应作为需要测量并接受的事实，而不是需要达标的目标</strong></td></tr>
+<tr><td><strong>人工批准率</strong></td><td>新增，见 3.6。≥95% 意味着确认环节已失效</td></tr>
+<tr><td>时延 / 单次成本</td><td>见 <a href="playbook.html#roi">投入产出测算</a></td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 上线后最诚实的指标是<strong>人工推翻率</strong>——它直接度量业务方的真实信任度。</p>
+
+<div class="prevnext">
+<span><a href="m2-ontology.html">← 模块二｜语义与本体</a></span>
+<span><a href="m4-adoption.html">模块四｜行动闭环与企业采纳 →</a></span>
+</div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

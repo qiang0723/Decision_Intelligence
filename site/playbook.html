@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>实践 — 成熟度 · 120 天 · 模板 · 12 问 · 合规 · 测算</title>
+<meta name="description" content="M0–M2 成熟度诊断、首个 120 天路线、决策清单工作坊、四套模板、反模式清单、开工前 12 问、合规与安全、投入产出测算、自建 vs 采购。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html">方法论总结</a>
+<a href="playbook.html" class="active">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:24px">
+  <p class="eyebrow">实践</p>
+  <h1>从方法论到明天早上做什么</h1>
+  <p class="lede">方法论如果不能回答「读完之后明天做什么」，它就只是观点。<br>这一页全部是可以直接拿去用的东西，<strong>不依赖是否读过<a href="methodology.html">方法论总结</a></strong>。</p>
+  <p class="meta"><span class="pill">约 30 分钟</span><span class="pill">9 套工具</span><span class="pill on">与方法论总结平级</span></p>
+  <div class="toc">
+    <p class="toc-title">目录</p>
+    <ol>
+      <li><a href="#maturity">成熟度诊断 M0–M2 + 覆盖率</a></li>
+      <li><a href="#ninety">首个 120 天</a></li>
+      <li><a href="#workshop">决策清单工作坊</a></li>
+      <li><a href="#templates">四套模板</a></li>
+      <li><a href="#anti">反模式清单</a></li>
+      <li><a href="#twelve">开工前 12 问</a></li>
+      <li><a href="#compliance">合规与安全前置　<span style="color:var(--accent)">新增</span></a></li>
+      <li><a href="#roi">投入产出测算　<span style="color:var(--accent)">新增</span></a></li>
+      <li><a href="#buildbuy">自建 vs 采购 · 共存 · 退出剧本　<span style="color:var(--accent)">新增</span></a></li>
+    </ol>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="maturity">
+<h2 style="margin-top:0">一、成熟度诊断：M0–M2 + 覆盖率</h2>
+<div class="callout"><span class="tag">2026-08-23 更正</span><p>此前是 M0–M4 五级。外部审查指出 <strong>M3/M4 只是把自治级别 L2/L3 换了个名字重说一遍</strong>（M3「系统草拟人确认」= L2；M4「限额自动」= L3），而本页自己的规则三已经写了「有价值的是有多少决策进入闭环，不是最高做到第几级」。现收敛为 <strong>M0–M2 三级 + 覆盖率指标</strong>。</p></div>
+<p>把「我们该不该做 AI」变成「我们现在在哪一格」。</p>
+<div class="tw"><table>
+<tr><th>级别</th><th>特征</th><th>决策如何发生</th><th>典型症状</th></tr>
+<tr><td><strong>M0</strong> 手工</td><td>数据散在各系统与 Excel</td><td>靠经验、开会、人工拉数</td><td>「这个数我要问一下财务」</td></tr>
+<tr><td><strong>M1</strong> 可见</td><td>有 BI/看板，数据集中</td><td>人看报表后决定</td><td>「报表有了，但还是按经验做」</td></tr>
+<tr><td><strong>M2</strong> 有语义</td><td>本体成型，口径唯一</td><td>人基于统一事实决定</td><td>「终于不吵口径了」</td></tr>
+</table></div>
+<h3>覆盖率（取代原 M3/M4）</h3>
+<pre><code>某域的成熟度报告 = M2 ＋「该域 12 个已识别决策中，5 个 ≥L2，2 个 ≥L3」</code></pre>
+<p>好处：不与 L 级重复；能表达混合状态（原模型无法回答「M3 但只有一个场景在 L2」）；奖励覆盖率而非最高级别。</p>
+
+<div class="callout">
+<span class="tag">M2 是分水岭，不可跳过</span>
+<p>M0 → M1 是数据工程问题，钱能解决。<strong>M1 → M2 是组织问题，钱解决不了。</strong></p>
+<p>M2 的实质不是建了一个语义层，而是企业<strong>接受了「某个人对某个口径有裁决权」</strong>——这是权力的重新分配，通常是整个演进过程中最难的一步。跳过 M2 直接上 M3 的项目，会在上线三个月后陷入口径战争，然后被架空。</p>
+</div>
+
+<h3>另外两条使用规则</h3>
+<ul>
+<li><strong>级别按域算，不按企业算。</strong>供应链 M3、营销 M1、财务 M2 完全正常。笼统说「我们公司是 M2」没有意义。推进策略应当是逐域打穿。</li>
+<li><strong>不要为了升级而升级。</strong>低频决策停在 M3 完全合理；R3 场景的天花板本来就在 M3。有价值的是<strong>有多少决策进入了闭环</strong>，不是最高做到第几级。</li>
+</ul>
+
+<h3>10 分钟快速诊断</h3>
+<ol class="steps">
+<li><b>「上季度的 GMV 是多少」</b>多久能得到答案？三个部门答案一致吗？——不一致 = M1 以下</li>
+<li><b>「客户」这个概念，有没有一个人有权裁决它的定义？</b>没有 = M2 未达成</li>
+<li><b>有没有任何一个系统建议能被一键执行写回业务系统？</b>没有 = L2 覆盖率为 0</li>
+<li><b>有没有任何一个决策，系统在限额内自动做了？</b>没有 = L3 覆盖率为 0</li>
+<li><b>最近一次 AI 给出错误建议，多久被发现的？能查到原因吗？</b>查不到 = 证据链缺失，无论前面几级都要补</li>
+</ol>
+</section>
+
+<hr class="hr">
+
+<section id="ninety">
+<h2 style="margin-top:0">二、首个 120 天</h2>
+<div class="callout"><span class="tag">2026-08-23 重排：90 天 → 120 天</span>
+<p>外部审查用算术证明了原阶段三排期不成立：Day 61–90 共 30 天要交付 9 项产出，其中「影子运行 2–4 周的比对报告」<strong>必须在行动契约、智能层、权限贯穿、证据链全部完成之后</strong>才能开始——即取最乐观的 2 周影子期，前四项要在 14 天内做完。</p>
+<p>而本页自己在反模式 A4 里批评「宽而浅的 PoC」——这里犯的是对称的错误：<strong>窄而不可能完成</strong>。现改为 <strong>120 天四阶段</strong>，影子运行独立为第四阶段。</p></div>
+
+<h3>成功判据（已分层，此前的版本自相矛盾）</h3>
+<div class="callout"><p>⚠️ 此前的唯一判据是「第 90 天，有一个具体岗位的人取消了一个旧动作」，而同一份文件又要求「从 L1 或 L2 起步」。<strong>L1 的定义就是「系统给建议，人做决策+执行」——按 12 问 Q3 的判据，这就是「多一个参考」，会命中自己的危险信号。</strong></p></div>
+<div class="tw"><table>
+<tr><th>阶段</th><th>自治级别</th><th>应当取消的旧动作类型</th><th>例子</th></tr>
+<tr><td><strong>第 90 天</strong></td><td>L1 / L2</td><td><strong>信息搜集类</strong></td><td>值班人员逐条浏览告警列表；采购每天从三个系统导数拼 Excel；每周对数会</td></tr>
+<tr><td><strong>第 120 天之后</strong></td><td>L3</td><td><strong>决策 / 执行类</strong></td><td>低级别告警的人工分级与指派</td></tr>
+</table></div>
+<blockquote><p><strong>L1 阶段能取消的不是判断，是判断之前的搬运。</strong>这也正是变更管理上更容易被接受的顺序——先减负担，再动判断权。</p></blockquote>
+
+<h3>适用前提（此前缺失）</h3>
+<p>⚠️ 本路线<strong>默认企业已达 M1</strong>。一个 M0 的读者照着做会在阶段二直接卡死。开工前必须全部成立：</p>
+<ul class="checklist">
+<li><strong>目标域已达 M1</strong></li>
+<li><strong>已有一名 VP 级以上 sponsor</strong></li>
+<li><strong>已有可指定的业务 Owner 候选人</strong>（具体的人，不是部门）</li>
+<li><strong>上游系统有可对话的责任人</strong></li>
+<li><strong>合规前置清单已启动</strong>（见下方第七节）</li>
+<li><strong>投入产出粗算已过四条否决线</strong>（见下方第八节）</li>
+</ul>
+<p><strong>M0 企业的前置路径</strong>：先做数据集中与基础可查询（这是数据工程项目，不是 AI 项目）；同时可以先做决策清单工作坊——<strong>决策清单不依赖数据就绪，且即使不做 AI 也有价值</strong>。</p>
+
+<h3>投入估算（此前缺失）</h3>
+<p>⚠️ 以下为<strong>经验估计，非实测</strong>，且高度依赖 M 级起点。CIO 立项书的第一页是人和钱，此前全站没有这个数字。</p>
+<div class="tw"><table>
+<tr><th>角色</th><th>投入（人月，M1 起点）</th><th>说明</th></tr>
+<tr><td>业务 Owner</td><td>0.5–1</td><td>兼职，但<strong>不可缺</strong></td></tr>
+<tr><td>数据工程</td><td>1.5–3</td><td>M0 起点需翻倍以上</td></tr>
+<tr><td>平台/后端工程</td><td>2–4</td><td>本体、行动契约、权限、证据链</td></tr>
+<tr><td>AI 工程</td><td>1–2</td><td>工具设计、评测集、智能层</td></tr>
+<tr><td>项目/交付管理</td><td>0.5–1</td><td>跨部门协调，尤其数据合同谈判</td></tr>
+<tr><td><strong>合计</strong></td><td><strong>5.5–11 人月</strong></td><td>不含平台通用能力的长期建设</td></tr>
+</table></div>
+<div class="rule"><span class="tag">目标</span><p>不是「建成平台」，而是<strong>沿着一个真实决策把六层打穿一次</strong>。<br>
+成功的唯一标准：第 90 天，有一个具体岗位的人，因为这个系统，取消了一个旧动作。</p></div>
+
+<h3>极窄但完整，而不是宽而浅</h3>
+<p>传统 PoC「宽而浅」：接了 10 个数据源、做了 5 个场景，但没有权限、审计、写回。它证明了模型能做对，却没有证明生产可行。</p>
+<pre><code>1 个决策  ·  3–5 个本体对象  ·  1 个行动  ·  完整的权限/证据/可逆</code></pre>
+<p>窄，是为了能在 90 天内把最难的部分——治理——真正做完。</p>
+
+<h3>第一个场景的选择标准（必须同时满足）</h3>
+<ul class="checklist">
+<li><strong>高频</strong>：至少每天发生（否则积累不出证据）</li>
+<li><strong>可逆</strong>：R1 或 R2（否则无法放权）</li>
+<li><strong>有明确的单一 Owner</strong>：一个具体岗位</li>
+<li><strong>有现成的落点系统</strong>：结果能写回某个已有操作</li>
+<li><strong>口径争议小</strong>：把口径战争留到第二个场景</li>
+<li><strong>业务方有痛感</strong>：他自己说这件事烦，不是我们觉得他该烦</li>
+</ul>
+
+<h3>四个阶段</h3>
+<div class="tw"><table>
+<tr><th>阶段</th><th>主要产出</th><th>里程碑判据</th></tr>
+<tr><td><strong>Day 1–30</strong><br>定方向，立地基</td><td>决策清单（20–40 条）· 四象限分类与选型 · 决策卡 · 本体初稿（3–5 对象，含 Owner）· 数据现状与差距 · 成熟度定位</td><td>决策卡的<strong>落点行动</strong>能否写出具体系统与操作？写不出来 = 只读需求，重选</td></tr>
+<tr><td><strong>Day 31–60</strong><br>打穿数据与语义</td><td>最小数据集接入 · 数据合同（⚠️ 只签第一个场景强依赖的 1–2 个上游，其余进待办；<strong>数据合同是跨部门谈判不是技术工作</strong>）· 断言校验全绿 · 本体实现 · 标识映射 · 时点正确性设计 · <strong>金标准评测集（冻结）</strong></td><td>随机挑一个指标，5 分钟内能否说清来源、口径版本与 Owner？</td></tr>
+<tr><td><strong>Day 61–90</strong><br>闭环与放权</td><td>行动契约（十一要素）· 智能层 L1 · 权限贯穿 · 证据链 · 影子运行 2–4 周比对报告 · 决策界面 · <strong>人机权责矩阵</strong> · 自治晋级条件（冻结）· 隔离与回滚</td><td><strong>有一个具体的人，取消了一个具体的旧动作</strong></td></tr>
+</table></div>
+
+<div class="callout">
+<span class="tag">最容易被违反的一条纪律</span>
+<p>评测集必须在<strong>看到系统效果之前</strong>冻结。这是整个 90 天里最影响可信度的一条。</p>
+</div>
+
+<h3>120 天不做什么（写进立项文件）</h3>
+<p><span class="pill">✗ 不建全企业本体</span><span class="pill">✗ 不接入所有数据源</span><span class="pill">✗ 不做第二个场景</span><span class="pill">✗ 不做 L3/L4 自治</span><span class="pill">✗ 不碰 R3 行动</span><span class="pill">✗ 不做通用对话界面</span><span class="pill">✗ 不做自研模型训练</span><span class="pill">✗ 不做平台化抽象</span></p>
+<p>每一条都会有人来挑战。抵抗的方式是把它们写进立项文件，并说明<strong>第 121 天之后什么条件下才做</strong>。</p>
+
+<h3>120 天之后的关键判据</h3>
+<div class="rule"><span class="tag">本体复利的验证</span><p>第二个场景应当<strong>刻意选择与第一个共用对象</strong>的决策。<br>
+能复用 60% 以上 → 架构是对的。<br>
+每个场景都要重来一遍 → <strong>停下来修架构，不要继续加场景</strong>。<br>
+这个判据决定了这套东西到底是一个平台，还是一堆定制项目。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="workshop">
+<h2 style="margin-top:0">三、决策清单工作坊</h2>
+<p class="lede" style="font-size:17px">半天 4 小时，产出 20–40 条决策清单与首批选型。整套方法论中最可复用的一个咨询动作。</p>
+
+<p>直接问「你们想用 AI 做什么」，得到的答案永远是三类：抄同行的、抄媒体的、抄供应商的。三类都不是需求。工作坊的作用是<strong>把话题从「想用什么技术」强行掰回「你每天在做什么决定」</strong>。</p>
+
+<h3>参加人</h3>
+<div class="tw"><table>
+<tr><th>角色</th><th>人数</th><th>为什么必须到场</th></tr>
+<tr><td>一线决策者</td><td>4–8</td><td>他们才知道真实决策是什么样；缺席则清单失真</td></tr>
+<tr><td>业务负责人</td><td>1–2</td><td>有权确认优先级与 Owner</td></tr>
+<tr><td>数据/IT 代表</td><td>1–2</td><td>现场判断可行性</td></tr>
+<tr><td>主持人</td><td>1</td><td>控制话题不滑向技术方案</td></tr>
+</table></div>
+<p><strong>不邀请</strong>：只关心技术选型的人。他们会在第一小时把讨论带到模型和平台上，工作坊就废了。</p>
+
+<h3>流程</h3>
+<div class="tw"><table>
+<tr><th>时间</th><th>环节</th><th>要点</th></tr>
+<tr><td>0:00–0:20</td><td>设定框架</td><td>讲清「决策」的定义，举 2 正例 2 反例。<br>❌「想看实时库存大屏」= 数据需求　❌「提升客户满意度」= 目标<br>✅「每天早上决定哪些 SKU 补货」　✅「收到差评时决定是否补偿及补多少」</td></tr>
+<tr><td>0:20–1:20</td><td>发散：列决策</td><td>独立写，不讨论。统一句式：<br><strong>「我在 ___（什么时候），需要决定 ___（对什么做什么）。」</strong><br>写不出来时，让他回忆昨天打开了哪些系统、做了什么操作</td></tr>
+<tr><td>1:20–2:00</td><td>归并与补全</td><td>⚠️ <strong>此前要求 40 分钟内对 30–60 条逐条补全八个字段——每条 40–80 秒填 8 个字段，其中还包括需要讨论的「错误代价」「口径争议」。不可能。已改为分两步：</strong><br><strong>现场只填 4 个必填字段</strong>：决策名称（用动词）· 决策者（具体岗位）· 频次 · <strong>落点系统</strong>（这个答案就是未来的行动契约）<br><strong>其余 4 个由主持人会后 3 个工作日内补全并回签</strong>：当前依据、决策耗时、错误代价、口径争议</td></tr>
+<tr><td>2:30–3:20</td><td>四象限归位</td><td>争论本身极有价值——尤其「这个动作到底可不可逆」</td></tr>
+<tr><td>3:20–4:00</td><td>选型与承诺</td><td>选定 1 个，<strong>当场确认</strong>：业务 Owner 是谁、落点系统是什么、<strong>哪个旧动作会被取消</strong></td></tr>
+</table></div>
+
+<h3>主持人的三个纪律</h3>
+<ol class="steps">
+<li><b>不许讨论技术</b>任何一次滑向「用什么模型」，立刻拉回：「我们先把决策列完。」</li>
+<li><b>不许讨论目标</b>「降本增效」不是决策。追问：「为了实现它，你每天具体在做什么选择？」</li>
+<li><b>逼出「落点」</b>「你做完这个决定之后，打开哪个系统，点了什么？」——这个答案就是未来的行动契约。</li>
+</ol>
+
+<div class="rule"><span class="tag">商务价值</span><p>这个工作坊可以作为<strong>独立的付费交付</strong>。它的价值不依赖后续是否成交——客户拿到的决策清单本身就是一份有价值的业务资产。这让它成为很好的商务切入点。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="templates">
+<h2 style="margin-top:0">四、四套模板</h2>
+<p>完整可复制版本见内容库 <code>content/20-实践/04-模板库.md</code>。此处为结构摘要。</p>
+
+<div class="callout"><span class="tag">2026-08-23 补齐</span><p>外部审查逐条指出模板缺字段，且与本站自己的反模式清单打架——最典型的是：本站在<a href="domains.html#ec">电商剖面</a>把「客服补偿被薅羊毛」诊断为「缺少<strong>频次上限</strong>」，行动契约里却没有这个字段。<strong>这说明模板此前是从概念列表推出来的，不是从真实事故反推出来的。</strong></p></div>
+
+<h3>① 决策卡</h3>
+<p>D 层向下游传递需求的唯一接口文档，13 项：</p>
+<pre><code>1  决策陈述        在【什么情况下】对【什么】做【什么决定】
+2  决策者          岗位 / 人数 / 频次
+3  触发条件        定时 / 事件驱动 / 人工发起
+4  判断依据        指标 · 口径 · 权威 Owner · 当前是否可得
+5  可选动作        离散选项 / 连续参数与范围
+6  约束条件        业务规则 · 合规红线
+7  落点行动   → A  写回哪个系统的哪个操作（写不出来 = 只读需求）
+8  涉及对象   → O  对象与关系
+9  错误代价        损失 · 可逆性 R1/R2/R3 · 发现时延
+10 成功度量        业务指标与效率指标的基线与目标
+11 人机权责        建议者 / 决定者 / 执行者 / 担责者（必须是人）
+                  ★ 被取消的旧动作
+12 自治级别   → I  起步级别 · 晋升条件（冻结）· 降级条件 · 成本预算
+                  ★ 人工批准率监控阈值：≥95% 视为「确认剧场」，须晋级或重设计
+13 经济性      ★  年度净收益 · 一次性投入 · 四条否决线是否全过 · 叫停条件（冻结）
+
+★ 4b 依赖的其他决策：本决策依赖哪些上游决策？上游未产出时的行为
+★ 4c 合规与隐私标记：决策对象是否含自然人（触发自动化决策特别义务）· 
+     判断依据是否含个人信息/重要数据 · 是否跨法人主体 · 合规签字人</code></pre>
+
+<h3>② 本体对象规范卡</h3>
+<pre><code>业务定义（业务语言，不是字段注释）
+准入五判据自查
+权威源与主键 · 标识映射规则
+属性清单（源 / 派生 / 状态）
+生命周期状态机 · 关系 · 绑定行动
+权限规则（对象 / 行 / 属性 / 行动）
+业务 Owner（具体的人）
+★ 数据新鲜度：更新频率 · 最大可接受时延 · 不达标时下游行为
+★ 下线策略：如何废弃本对象、下游如何被通知、兼容期多长
+版本与变更记录</code></pre>
+
+<h3>③ 行动契约（十一要素 + 合规/成本扩展）</h3>
+<pre><code>1  前置条件         用状态机表达
+2  参数模式         取值范围就是安全边界
+3  权限             人工触发：继承调用者身份
+                   ★自动执行：以担责岗位 &lt;岗位名&gt; 的委托身份运行
+                     担责人 · 权限来源（全集/与某岗位的交集）· 岗位空缺则降级 L2
+                     绝对禁止：权限大于其担责人
+4  副作用
+5  幂等键
+6  可逆性 R1/R2/R3   R3 开放自动需满足四条件
+7  审批链
+8  审计字段
+9  失败语义
+★10 频次上限/速率限制  单对象 · 单执行者 · 全局；超限行为
+                    「参数范围管单次幅度，管不了一天五千次每次都在范围内」
+★11 数据依赖与新鲜度  依赖哪些对象/指标、要求多新；缺失或过期时的行为
+                    没有它，「数据缺失则失败关闭」在运行时无从判定
+★12 合规标记         个人信息 · 监管报送 · 影响自然人的自动化决策 · 跨境
+★13 单位成本与通知    单次模型成本 · 执行后知会对象</code></pre>
+
+<h3>④ 评测集规范</h3>
+<pre><code>★ 人类基线：当前人工做这个决策的准确率是多少？测量方式？
+   「没有人类基线，准确率 85% 这个数字无法判断是好是坏」
+
+金标准集（必须覆盖：缺数据 / 口径歧义 / 极端值 / 恶意输入 / ★提示注入尝试）
+   注入用例的通过判据是「拒绝」而不是「答对」
+★ 样本量指引：每个失败模式类别不少于 10 条，总量不少于 100 条
+   （经验下限，非统计推导。此前只写「规模不必大」，陌生团队会做 20 条然后声称通过）
+★ 冻结声明：在系统效果产出之前冻结，不得因结果不佳而修改
+上线判据：准确率 · 高代价错误率 · 弃权率区间 · 时延 · 成本
+   ★ 稳定性：是需要「测量并接受的事实」，不是「工程达标的目标」
+     run-to-run 方差是模型属性，pass^4 常比 pass^1 低 15–25 个百分点
+影子运行：时长 · 一致率目标 · 分歧归因要求
+抽检比例（L3/L4 不得取消）
+自治晋级条件（冻结）与降级条件（自动生效）</code></pre>
+</section>
+
+<hr class="hr">
+
+<section id="anti">
+<h2 style="margin-top:0">五、反模式清单</h2>
+<p>项目评审时逐条对照。完整版含症状与根因，见内容库 <code>content/20-实践/05-反模式.md</code>。</p>
+
+<div class="grid grid-2">
+<div class="card"><span class="num">A · 立项与范围</span>
+<p><strong>从数据出发</strong>　做出一堆没人要的能力<br>
+<strong>战略决策优先</strong>　把重要性当成优先级<br>
+<strong>平台化冲动</strong>　还没跑通一个场景就做通用框架<br>
+<strong>宽而浅的 PoC</strong>　证明模型能做对，没证明生产可行</p></div>
+
+<div class="card"><span class="num">B · 本体</span>
+<p><strong>本体膨胀</strong>　300 张表就建 300 个对象<br>
+<strong>只读本体</strong>　建完了没有任何行动绑定<br>
+<strong>IT 定义本体</strong>　语义定义来自字段注释<br>
+<strong>绕过本体的捷径</strong>　报表直连库、Agent 写 SQL<br>
+<strong>忽略标识映射</strong>　假设各系统 ID 能对上</p></div>
+
+<div class="card"><span class="num">C · 数据与事实</span>
+<p><strong>数据湖谬误</strong>　把物理集中当语义统一<br>
+<strong>时点错误</strong>　用今天的主数据解释昨天<br>
+<strong>缺失值填充</strong>　用 0 或前值，指标虚假正常<br>
+<strong>可变的历史</strong>　直接 UPDATE，无法重放</p></div>
+
+<div class="card"><span class="num">D · 智能与 Agent</span>
+<p><strong>什么都用大模型</strong>　if 语句能解决的问题<br>
+<strong>自由 SQL Agent</strong>　口径、权限、审计全失控<br>
+<strong>演示驱动</strong>　用 demo 代替评测集<br>
+<strong>一步到全自动</strong>　跳过 L1–L2<br>
+<strong>追求零弃权</strong>　把安全特性当缺陷<br>
+<strong>提示词生产手改</strong>　最常见的事故来源</p></div>
+
+<div class="card"><span class="num">E · 行动与写回</span>
+<p><strong>只读陷阱</strong>　会说话的看板<br>
+<strong>第二套真相</strong>　平台自己存业务状态<br>
+<strong>无幂等</strong>　重试导致重复下单<br>
+<strong>参数无边界</strong>　小数点错误导致调价 100 倍<br>
+<strong>R3 未满足四条件即自动</strong>　一次事故毁掉全部信任<br><strong>无频次上限</strong>　每次都在范围内，但一天五千次<br><strong>无主自动执行</strong>　L3 跑起来了，说不出以谁的身份、谁担责</p></div>
+
+<div class="card"><span class="num">G · 内容与论证（新增）</span>
+<p><strong>用没有出处的数字做判据</strong>　「复用 60% 以上」「12–18 个月」——数字承担论证功能却没有来源。一句「这个数哪来的」就能击穿整套论证<br>
+<strong>把个人观点标为共识</strong>　〔共识〕后面跟着没有出处的比较级评价（「最强」「唯一一个」）<br>
+<strong>用二手转述做一手判断</strong>　从博客抄来一个框架当成官方表述写进方案地基<br>
+<span class="mk mk-j">本站三条都犯过</span></p></div>
+
+<div class="card"><span class="num">F · 治理与组织</span>
+<p><strong>没有旧动作被取消</strong>　组织上没有上线<br>
+<strong>担责者是系统</strong>　找不到具体的人<br>
+<strong>确认剧场</strong>　批准率长期 ≥95%，审批变成点一下<br><strong>只记录成功</strong>　放弃了唯一的改进信息源<br>
+<strong>事后议定晋级条件</strong>　失去裁决能力<br>
+<strong>成本只告警不熔断</strong>　夜间等于不存在<br>
+<strong>回滚需要审批</strong>　事故中还在等批</p></div>
+</div>
+</section>
+
+<hr class="hr">
+
+<section id="twelve">
+<h2 style="margin-top:0">六、开工前 12 问</h2>
+<div class="callout"><span class="tag">2026-08-23 重做计分</span>
+<p>外部审查指出两个致命问题：</p>
+<p><strong>① 原计分会否决自己的目标客户</strong>——一家典型的 M1 中国企业代入后，Q5、Q6、Q8、Q9、Q11 大概率全是危险信号，五个，结论「不要开工」。<strong>而本站写这套东西的目的是让企业开工。</strong></p>
+<p><strong>② 一半的问题问的不是现状，是尚不存在的系统</strong>——Q8（冻结的评测集）、Q9（弃权率）、Q11（三周前的自动执行）问的是「你们现在的 AI 系统怎么样」，但<strong>立项评审发生在系统存在之前</strong>。它们是<strong>设计承诺</strong>，被误放进了<strong>现状诊断</strong>的评分表并等权计分。</p>
+<p>现拆为<strong>前提组</strong>与<strong>设计组</strong>，分别计分。</p></div>
+
+<div class="tw"><table>
+<tr><th>#</th><th>问题</th><th>✅ 好答案</th><th>🚩 危险信号</th></tr>
+<tr><td>1</td><td><strong>这个系统被允许改变什么？</strong><br><span class="pill on">前提组 · 否决项</span></td><td>说得出具体系统、操作、对象</td><td>「先做分析，后面再说」</td></tr>
+<tr><td>2</td><td>第一个场景是什么？为什么是它？</td><td>高频、可逆、单一 Owner、有落点、业务方喊痛</td><td>选了最重要的战略决策；或「先做个平台」</td></tr>
+<tr><td>3</td><td><strong>哪个旧动作会被取消？</strong><br><span class="pill">前提组</span></td><td>指得出具体的会议/报表/审批环节</td><td><strong>连信息搜集类动作都减少不了</strong><br>⚠️ 此前写「不取消，只是多一个参考」——<strong>但 L1 按定义就是「多一个参考」</strong>，一个严格执行本方法论并在 L1 上线的项目会命中自己的危险信号。已按分层判据修正</td></tr>
+<tr><td>4</td><td><strong>核心指标口径谁说了算？</strong></td><td>说得出一个具体的人名</td><td>「大家协商」「各部门有各自口径」</td></tr>
+<tr><td>5</td><td>上游改一个字段你们怎么发现？</td><td>有数据合同、断言，会主动报错阻断</td><td>「上游会通知我们」「对账时能发现」</td></tr>
+<tr><td>6</td><td>回溯分析用的是当时能知道的数据吗？<br><span class="pill">设计组</span></td><td>有有效期区间、双时间轴</td><td><strong>听懂了，但说「我们不需要」</strong><br>⚠️ 此前把「听不懂」列为危险信号。但时点正确性在国内企业普及度很低，<strong>把「听不懂」判为危险等于判所有人危险</strong>。听不懂 → 是阶段二要补的一课，不是危险信号</td></tr>
+<tr><td>7</td><td><strong>AI 以什么身份访问数据？无人值守时呢？</strong><br><span class="pill on">设计组 · 权重加倍</span></td><td>只走工具集，继承调用者权限</td><td>「用一个服务账号」「它可以查数据库」</td></tr>
+<tr><td>8</td><td>怎么证明它是对的？</td><td>冻结的金标准集 + 影子运行 + 上线判据</td><td>「做了几个 demo，效果很好」</td></tr>
+<tr><td>9</td><td>它上一次说「我不确定」是什么时候？</td><td>说得出弃权率与转人工路径</td><td>「它总能给出答案」</td></tr>
+<tr><td>10</td><td><strong>出错了谁负责？</strong></td><td>指得出一个具体的人</td><td>「系统负责」「按流程走」</td></tr>
+<tr><td>11</td><td>三周前那次自动执行能还原依据吗？</td><td>输入、口径版本、模型版本、审批人全可查</td><td>「日志里应该有」</td></tr>
+<tr><td>12</td><td><strong>什么情况下你们会叫停？</strong></td><td>有事前定义的失败判据与时间点</td><td>「不会叫停，先做起来再说」</td></tr>
+</table></div>
+
+<h3>分组</h3>
+<div class="tw"><table>
+<tr><th>组</th><th>问题</th><th>问的是</th><th>危险信号的含义</th></tr>
+<tr><td><strong>前提组</strong></td><td>Q1、Q2、Q3、Q4、Q10、Q12</td><td>组织现状与意愿</td><td><strong>真正的叫停理由</strong></td></tr>
+<tr><td><strong>设计组</strong></td><td>Q5、Q6、Q7、Q8、Q9、Q11</td><td>打算怎么做</td><td><strong>不是叫停理由</strong>，是必须写进方案的待办与验收条件</td></tr>
+</table></div>
+
+<h3>结论表</h3>
+<div class="tw"><table>
+<tr><th>情况</th><th>判断</th><th>建议</th></tr>
+<tr><td><strong>Q1 不过</strong></td><td><strong>否决</strong></td><td>Q1 是单独的否决项。答不出「被允许改变什么」，项目会漂在只读层，不要开工</td></tr>
+<tr><td>前提组 0–1 个危险信号</td><td>具备开工条件</td><td>按首个 120 天推进；设计组的危险信号逐条转为立项文件里的<strong>必做项与验收条件</strong></td></tr>
+<tr><td><strong>前提组 ≥2 个危险信号</strong></td><td><strong>先不要立项</strong></td><td>先做成熟度诊断与决策清单工作坊</td></tr>
+<tr><td>设计组危险信号（无论几个）</td><td><strong>不影响开工</strong></td><td>逐条列入「必须解决项」，并在 120 天路线里指定解决阶段</td></tr>
+</table></div>
+
+<h3>设计组危险信号 → 待办映射</h3>
+<div class="tw"><table>
+<tr><th>问题</th><th>意味着这一项必须写进方案</th><th>解决阶段</th></tr>
+<tr><td>Q5</td><td>数据合同 + 断言校验</td><td>阶段二</td></tr>
+<tr><td>Q6</td><td>双时间轴与有效期区间</td><td>阶段二</td></tr>
+<tr><td><strong>Q7</strong>（权重加倍）</td><td>委托身份贯穿 + 无人值守身份规则</td><td>阶段三，<strong>不可延后</strong></td></tr>
+<tr><td>Q8</td><td>冻结的金标准集 + 影子运行计划</td><td>阶段二冻结、阶段四执行</td></tr>
+<tr><td>Q9</td><td>弃权路径与弃权率监控</td><td>阶段三</td></tr>
+<tr><td>Q11</td><td>证据链设计</td><td>阶段三</td></tr>
+</table></div>
+<div class="rule"><p><strong>为什么 Q7 权重加倍</strong>：它是唯一一个「答错就必须重做架构」的设计问题。其余五项可以后补，<strong>权限模型不能</strong>。</p></div>
+
+<div class="rule"><span class="tag">也是供应商评估清单</span><p>让候选方案商逐条回答。大部分只会讲模型能力的方案，会在 Q1、Q7、Q10、Q11 上失分。</p></div>
+
+
+<hr class="hr">
+
+<section id="compliance">
+<h2 style="margin-top:0">七、合规与安全前置</h2>
+<div class="callout"><span class="tag">2026-08-23 新增</span><p>外部审查指出：全站此前对等保、数据分类分级、个人信息保护、数据出境、提示注入<strong>零字提及</strong>，而这些是买方的<strong>一票否决项</strong>——合规过不了项目不会立项，安全评审过不了权限开不出来。</p>
+<p><strong>本节是清单不是保证。</strong>合规判断必须由企业法务与合规部门做出；本节只提供在<strong>技术设计阶段</strong>就该问的问题，以免到评审时才发现要重做。</p></div>
+
+<h3>为什么必须前置</h3>
+<div class="tw"><table>
+<tr><th></th><th>传统 IT 项目</th><th>决策智能平台</th></tr>
+<tr><td>数据流向</td><td>系统内闭环</td><td>业务数据进入模型（可能是第三方的）</td></tr>
+<tr><td>影响范围</td><td>记录被修改</td><td><strong>业务状态被改变</strong>（写回 ERP/OMS）</td></tr>
+<tr><td>攻击面</td><td>接口与权限</td><td><strong>加上「被输入操纵」</strong></td></tr>
+</table></div>
+<p><strong>合规评审的介入点必须早于架构定型</strong>，否则「模型部署形态」「数据能否出域」「哪些属性可进上下文」这些结论一旦变化，本体与工具设计要整体返工。<strong>应在 120 天路线的阶段一（Day 1–30）完成本节清单。</strong></p>
+
+<h3>数据分类分级 → 本体属性级权限</h3>
+<div class="rule"><p><strong>这是本方法论与合规要求最大的一个协同点，应当主动利用。</strong></p></div>
+<pre><code>数据分类分级结论  →  本体属性的敏感度标记
+                  →  属性级权限规则
+                  →  Agent 上下文准入规则（哪些属性允许进入上下文）
+                  →  证据链的脱敏规则</code></pre>
+<p><span class="mk mk-j">判断</span> 一旦建立这个映射，「这个 Agent 能看到什么」就有了一个<strong>可以拿给合规看的、结构化的答案</strong>，而不是一句「我们会注意的」。<strong>这是本方法论在合规评审上的主要优势，应当在方案里显式呈现。</strong></p>
+
+<h3>四类必须在阶段一回答的问题</h3>
+<div class="tw"><table>
+<tr><th>类别</th><th>问题</th></tr>
+<tr><td><strong>分类分级</strong></td><td>每个本体属性是否已标注敏感度？哪些含个人信息、敏感个人信息、重要数据？<strong>结论由谁签字</strong>（不能由项目组自己定）</td></tr>
+<tr><td><strong>个人信息</strong></td><td>决策对象是否为自然人？→ 触发<strong>自动化决策的特别义务</strong>（告知、说明、拒绝纯自动化决策的权利）。<strong>L3/L4 就是自动化决策</strong>，一旦对象是自然人，法律义务与 L0/L1 完全不同</td></tr>
+<tr><td><strong>部署形态</strong></td><td>私有化 / 境内公有云 API / <strong>境外 API（触发出境路径）</strong> / 混合。<strong>这是最需要早问的一条</strong>——若结论是不可出境，模型选型与架构会整体改变。另需确认服务商的<strong>留存与用于训练</strong>条款</td></tr>
+<tr><td><strong>审计留存</strong></td><td>等保对留存有<strong>下限</strong>要求、个人信息保护有<strong>上限</strong>要求，需分层留存。证据链要求<strong>不可篡改</strong>与删除权的冲突需与法务确认处理方式</td></tr>
+</table></div>
+<div class="rule"><p><strong>一个卖点而非负担</strong>：等保对审计留存的要求与证据链设计高度重合——<strong>证据链本来就能满足大部分审计要求</strong>。方案里应当把两者合并陈述：「审计留存不是额外建设，它与决策证据链是同一套设施。」</p></div>
+
+<h3>安全：对抗性输入落地检查表</h3>
+<p><strong>这一点必须在安全评审中主动讲，而不是等对方问出来。</strong>本方法论的权限模型能挡住<strong>越权</strong>，挡不住<strong>权限内的被操纵行动</strong>。主动承认，然后给出第四类防线（输入可信度），比被问住可信得多。完整威胁模型见 <a href="m3-agentic.html#t36">模块三 3.6</a>。</p>
+<ul class="checklist">
+<li><strong>不可信来源已枚举</strong>：哪些工具返回可能含外部方自由文本？（客户留言、供应商备注、邮件正文、上传文档、网页内容）</li>
+<li><strong>不可信内容被标记</strong>，从进入上下文那一刻起直到输出</li>
+<li><strong>行动参数不由不可信内容决定</strong></li>
+<li><strong>高风险行动做独立复算</strong>：参数能否由本体事实独立推导</li>
+<li><strong>先定计划再读内容</strong></li>
+<li><strong>读到外部文本的那一轮自动降级</strong>：L3 → L2</li>
+<li><strong>注入用例进评测集</strong>，通过判据是「拒绝」而非「答对」</li>
+<li><strong>第三方工具 / MCP server / 技能包已按外部依赖审查</strong></li>
+<li><strong>第三方工具未直接绑定 R2/R3 行动</strong></li>
+<li><strong>成本型拒绝服务已防护</strong>：迭代上限、成本上限、熔断</li>
+</ul>
+
+<h3>与既有安全体系的接口</h3>
+<p><span class="mk mk-j">判断</span> <strong>不要新建一套安全体系</strong>，接进企业已有的：IAM（Agent 用委托身份）· 数据分类分级（映射到属性敏感度）· 日志与审计（与证据链合并）· 变更管理（提示词与本体定义纳入同一发布流程）· 红蓝对抗（把注入用例加进现有红队范围）。</p>
+
+<h3>诚实的边界</h3>
+<p>本节<strong>不能替代法务判断</strong>（监管口径随行业与地区变化，且在演进中）；<strong>不能保证通过评审</strong>（它只保证你不会因为「没想到要问」而在最后一刻返工）；<strong>不覆盖多 Agent 场景的安全</strong>；<strong>不覆盖模型本身的安全属性</strong>（越狱、有害输出、幻觉率）。</p>
+<blockquote><p>这一节的存在价值是：把「合规是上线前的一道关」变成「<strong>合规是架构设计的一个输入</strong>」。</p></blockquote>
+</section>
+
+<hr class="hr">
+
+<section id="roi">
+<h2 style="margin-top:0">八、投入产出测算</h2>
+<div class="callout"><span class="tag">2026-08-23 新增</span><p>外部审查指出一处自相矛盾：<a href="#twelve">开工前 12 问</a> 的 Q12 要求客户给出「什么情况下叫停」的量化失败判据，<strong>而全站不提供任何测算工具来支撑这个回答</strong>。</p></div>
+
+<div class="rule"><span class="tag">先说这个模型的局限</span>
+<p>它算的是<strong>单场景</strong>；输入通常只有粗略估计，误差可到 ±50%；<strong>算不出本体复用带来的收益</strong>（复用率的经验曲线没有公开数据）。</p>
+<p><strong>因此：它适合用来否决明显不成立的场景，不适合用来证明一个场景值得做。这是它最主要的用法——一个负向筛子。</strong></p></div>
+
+<h3>收益侧：三类收益，只算得清前两类</h3>
+<div class="tw"><table>
+<tr><th>类型</th><th>可测量性</th><th>算法</th></tr>
+<tr><td><strong>人力节省</strong></td><td>可算</td><td>决策频次 × 单次节省时间 × 加载人力成本</td></tr>
+<tr><td><strong>决策质量改善</strong></td><td>部分可算</td><td>需 A/B 分流才有因果结论</td></tr>
+<tr><td>速度/覆盖扩大</td><td>通常算不清</td><td>「原来只能看 Top 100，现在能看全量」的价值多数无法量化</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> <strong>不要把第三类写进测算。</strong>把算不清的收益写进 ROI，是让整份测算失去可信度的最快方式。诚实的做法是单列为「未计入的潜在收益」。</p>
+
+<h3>三个容易高估的地方</h3>
+<div class="tw"><table>
+<tr><th>高估点</th><th>修正</th></tr>
+<tr><td>把「决策耗时」当成「可节省时间」</td><td>系统只替代信息搜集与草拟，人仍要审核。<strong>L1/L2 阶段实际节省通常是耗时的 30–60%</strong></td></tr>
+<tr><td>忽略新增的工作</td><td>例外处理、抽检、评测维护、Owner 的口径裁决——这些是<strong>新增</strong>人力，必须减掉</td></tr>
+<tr><td>忽略过渡期的双倍工作</td><td>影子期人要同时做旧动作和看新建议</td></tr>
+</table></div>
+<pre><code>净人力节省 = 决策频次 × 单次节省时间 × 替代率 × 人力成本
+           − 例外处理与抽检的年度人力
+           − 评测与口径维护的年度人力
+
+替代率参考：L1 建议 0.2–0.4 ｜ L2 草拟 0.4–0.7 ｜ L3 限额自动 0.7–0.9
+⚠️ 这组数字是经验估计，非实测，没有公开研究支持。
+   使用时应由团队按自己的场景重新设定，并在项目结束后回填实测值。</code></pre>
+
+<h3>成本侧</h3>
+<p><strong>一次性投入</strong>：见第二节「投入估算」表（5.5–11 人月，M1 起点，经验估计）。</p>
+<div class="tw"><table>
+<tr><th>年度运行成本</th><th>说明</th></tr>
+<tr><td><strong>模型调用</strong></td><td>决策频次 × 单次成本。注意 Agent 约为 chat 的 <strong>4 倍</strong> token，多 Agent 约 <strong>15 倍</strong></td></tr>
+<tr><td>基础设施</td><td>存储、计算、可观测</td></tr>
+<tr><td><strong>治理人力</strong></td><td>抽检、评测维护、口径裁决、证据链审计——<strong>最常被漏掉的一项</strong></td></tr>
+<tr><td>变更与升级</td><td>模型版本变更导致的回归测试</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 单次成本最容易低估的是<strong>平均轮次</strong>——Agent 每一轮都会重发历史上下文，所以成本不是线性的。这是<a href="m3-agentic.html#t34">上下文经济学</a>直接对应的经济后果。</p>
+
+<h3>四条否决线</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>否决线</th><th>理由</th></tr>
+<tr><td>1</td><td>年度净收益 &lt; 首次投入的 <strong>30%</strong></td><td>回本超三年，而模型与业务都会在三年内变化</td></tr>
+<tr><td>2</td><td>单次决策成本 &gt; 单次节省的人力成本</td><td>直接亏损</td></tr>
+<tr><td>3</td><td>决策频次 &lt; 每周一次，且单次价值不高</td><td>积累不出证据，自治级别永远升不上去</td></tr>
+<tr><td><strong>4</strong></td><td><strong>治理人力 &gt; 节省人力</strong></td><td><strong>最常被忽略。</strong>企业 AI 的隐性成本主要不是算力，是<strong>维护它所需要的人</strong></td></tr>
+</table></div>
+
+<h3>叫停条件模板（立项时冻结）</h3>
+<pre><code>□ 第 N 个月，L1 建议的人机一致率仍低于 __%
+□ 第 N 个月，仍未取消任何一个旧动作
+□ 单次决策成本连续 __ 周高于 __ 元
+□ 累计投入超过预算 __%，而净收益未达预期的 __%
+□ 治理人力超过节省人力</code></pre>
+<p><span class="mk mk-j">判断</span> 这份条件必须<strong>在立项时写下并冻结</strong>，理由与评测集冻结相同：<strong>事后议定的失败判据没有裁决能力</strong>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="buildbuy">
+<h2 style="margin-top:0">九、自建 vs 采购 · 与既有投资共存 · 退出剧本</h2>
+<div class="callout"><span class="tag">2026-08-23 新增</span><p>外部审查指出三个缺口：<strong>自建 vs 采购</strong>（CIO 最先做的决策，甚至先于选场景，而全站零提及）；<strong>与既有 IT 投资的关系</strong>（目标客户绝大多数刚建完中台/湖仓/BI，而本站把「数据湖谬误」当反面教材反复敲打，从不回答「我已经建了，现在怎么办」，读起来像在指责）；<strong>退出剧本</strong>。</p></div>
+
+<h3>先回答「我的钱白花了吗」</h3>
+<blockquote><p><strong>数据湖/中台解决了「数据在哪」，它从来就不负责解决「数据是什么」。</strong><br>用它做不到语义统一，不是它失败了，是它不做这件事。</p></blockquote>
+<div class="tw"><table>
+<tr><th>你已经有的</th><th>在本架构中的位置</th><th>需要补什么</th></tr>
+<tr><td><strong>数据湖 / 湖仓</strong></td><td>直接作为<strong>事实层的存储底座</strong>，不需要替换</td><td>口径权威、血缘可查询、时点正确性</td></tr>
+<tr><td><strong>数据中台 / 数仓</strong></td><td>同上。其中的统一维度与主数据是本体的直接输入</td><td>对象的生命周期状态机、行动绑定</td></tr>
+<tr><td><strong>BI / 报表</strong></td><td>保留，继续服务「看见」的需求</td><td>把<strong>争议最大的几个指标</strong>收进本体做权威实现，其余不动</td></tr>
+<tr><td><strong>MDM 主数据</strong></td><td><strong>最有价值的既有资产</strong>——已解决本体准入判据 1 与 2</td><td>属性分类、状态机、行动</td></tr>
+<tr><td><strong>数据治理组织</strong></td><td>直接复用为本体的 Owner 体系</td><td>把「数据 Owner」扩展为「语义 Owner + 裁决权」</td></tr>
+<tr><td><strong>ETL / 调度</strong></td><td>直接复用</td><td>断言校验</td></tr>
+<tr><td><strong>API 网关 / IAM</strong></td><td>直接复用为权限贯穿的载体</td><td>委托身份</td></tr>
+</table></div>
+<div class="rule"><span class="tag">应当在第一次会议就说出来的一句话</span><p>一个有 MDM + 数据中台 + 完整 IAM 的企业，<strong>其实已经完成了本方法论 M2 的大约一半工作量</strong>。这句话把对话从「你们之前做错了」变成「你们已经走了一半」。</p></div>
+<p><strong>真正需要新建的只有四样</strong>：本体的行动层（行动契约、可逆性分级、审批链）· 智能层的工具集与评测 · 证据链 · 权限的委托身份机制。其余都是在既有资产上补齐属性。</p>
+
+<h3>自建 vs 采购：这不是一个决策，是四个</h3>
+<div class="tw"><table>
+<tr><th>层</th><th>通常的合理答案</th><th>理由</th></tr>
+<tr><td><strong>模型</strong></td><td><strong>买</strong></td><td>自训练在绝大多数企业不成立</td></tr>
+<tr><td><strong>平台能力</strong>（编排、工具管理、可观测、评测）</td><td><strong>买或用开源</strong></td><td>同质化程度高且演进快，自建会持续落后</td></tr>
+<tr><td><strong>本体与语义</strong></td><td><strong>必须自建</strong></td><td>它就是你的业务，没有人能替你定义</td></tr>
+<tr><td><strong>行动契约与治理规则</strong></td><td><strong>必须自建</strong></td><td>它绑定你的权限体系与责任分配</td></tr>
+</table></div>
+<blockquote><p><strong>买能力，自建语义。</strong><br>买来的平台如果要求你按它的模型重塑业务语义，这是一个危险信号。</p></blockquote>
+<div class="tw"><table>
+<tr><th>形态</th><th>适合</th><th>主要风险</th></tr>
+<tr><td><strong>全采购</strong></td><td>场景标准、组织不具备平台工程能力、要求快</td><td><strong>锁定</strong>：本体与行动定义在厂商格式里，迁移成本极高</td></tr>
+<tr><td><strong>全自建</strong></td><td>场景高度特殊、有强平台团队、合规要求私有化</td><td><strong>持续落后</strong>：Agent 基础设施演进极快</td></tr>
+<tr><td><strong>混合</strong></td><td><strong>多数企业</strong></td><td>集成复杂度；需明确边界，否则语义会慢慢渗进厂商平台</td></tr>
+</table></div>
+
+<h3>三条采购专属问题（补充 12 问）</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>问题</th><th>危险信号</th></tr>
+<tr><td><strong>S1</strong></td><td><strong>本体定义与证据链能以什么格式导出？</strong></td><td>「可以导出报表」——这不是导出，是打印</td></tr>
+<tr><td><strong>S2</strong></td><td><strong>Agent 用什么身份访问我的数据？无人值守时呢？</strong></td><td>「用我们的服务账号」</td></tr>
+<tr><td><strong>S3</strong></td><td><strong>模型下线或涨价时，我的评测结论还成立吗？</strong></td><td>「模型是透明可替换的」——透明可替换意味着<strong>行为也会变</strong>，评测必须重跑</td></tr>
+</table></div>
+
+<h3>退出剧本</h3>
+<p><span class="mk mk-j">判断</span> <strong>一个没有退出剧本的项目，实际上无法真正执行 Q12</strong>——因为叫停的成本未知，所以永远不会叫停。</p>
+<div class="rule"><span class="tag">核心：按「即使项目停掉也仍然有价值」的顺序安排交付物</span></div>
+<div class="tw"><table>
+<tr><th>资产</th><th>停掉后是否仍有价值</th><th>结论</th></tr>
+<tr><td>决策清单</td><td>✅ 完全有</td><td>优先产出，独立交付</td></tr>
+<tr><td>口径裁决结论与 Owner 体系</td><td>✅ 完全有</td><td>优先产出，是组织资产</td></tr>
+<tr><td>数据合同</td><td>✅ 完全有</td><td>上游关系一旦建立不会消失</td></tr>
+<tr><td>本体定义</td><td>✅ 大部分有</td><td>可迁移到任何后续方案</td></tr>
+<tr><td>断言校验集</td><td>✅ 完全有</td><td>数据质量能力，与 AI 无关</td></tr>
+<tr><td>证据链</td><td>⚠️ 部分</td><td>需按留存规则处理</td></tr>
+<tr><td>行动契约实现 / 智能层实现</td><td>❌ 绑定架构与模型</td><td>后置</td></tr>
+</table></div>
+<p><strong>这个排序同时是 120 天路线的交付顺序依据</strong>——它让项目在任何一个阶段被叫停时，已交付的东西都不作废。<strong>这也是对冲 sponsor 变更风险的唯一实际手段。</strong></p>
+<div class="rule"><span class="tag">一项被漏算的退出成本：团队还能不能接管</span>
+<p>本节此前假设「叫停后回退到旧流程」总是可行的。<strong>技能退化让这个假设不成立</strong>：运行两年后叫停，团队可能已经没有能力按旧方式做这件事了。这项成本<strong>随时间单调上升，且在账面上完全不可见</strong>。</p>
+<p><strong>因此退出剧本的第一条不是「怎么退」，而是「保住能退的能力」</strong>：例外处理必须由人做且不自动化 · 保留一定比例的无辅助处理 · 岗位角色升级为审核者与例外处理者 · 把「人还能不能接管」纳入定期演练。<strong>这四条与效率优化直接冲突，取舍应当写进立项文件。</strong></p></div>
+
+<p><strong>退出四动作</strong>：① 冻结而非删除（本体、决策清单、数据合同转为文档资产移交数据治理团队）② 回退已改造流程（<strong>要求旧流程文档在取消时被保留</strong>）③ 证据链按留存规则处置 ④ 合同终止与数据取回（按 S1 的导出格式）。</p>
+
+<h3>诚实的边界</h3>
+<p>具体产品对照<strong>不在本节范围内</strong>——市场快速变化，任何产品清单半年内就会过时；本节只给拆解框架。「买能力、自建语义」这条结论<strong>是我的判断，不是共识</strong>；反方立场是：一体化平台的语义能力已经足够好，自建语义是重复造轮子。<strong>这个分歧在 2026 年是真实存在的。</strong></p>
+</section>
+
+<hr class="hr">
+<section>
+<div class="next">
+<p><strong>下一步 →</strong>　<a href="domains.html">行业剖面：电商 / 软件公司内部系统的具体决策清单与陷阱</a>　|　<a href="methodology.html">方法论总结</a></p>
+</div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="index.html">首页</a>　<a href="methodology.html">方法论总结</a>　<a href="research.html">研究</a></div></footer>
+</body></html>

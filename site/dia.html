@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DIA 框架详解 — 五层与四条横切约束</title>
+<meta name="description" content="以本体为中心的企业 AI 落地架构：六层 + 四条横切约束。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:24px">
+  <p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 附：框架详解</p>
+  <h1>DIA 框架详解</h1>
+  <p class="lede">决策智能架构<strong>五层与四条横切约束</strong>的逐层深入。<br>这是 <a href="m5-synthesis.html">模块五 5.1</a> 整合框架的展开；先读模块五再读本页。</p>
+<div class="callout"><span class="tag">标注体系提示</span><p>本页属于 <strong>DIA 框架详解</strong>板块，<strong>整体属于〔判断〕</strong>——它是我的方法论主张，不声称是领域共识。标注体系只覆盖<a href="methodology.html">方法论总结</a>板块。</p></div>
+  <p class="meta"><span class="pill">约 25 分钟</span><span class="pill">面向架构负责人</span></p>
+
+  <div class="toc">
+    <p class="toc-title">目录</p>
+    <ol>
+      <li><a href="#why">为什么大多数项目停在 PoC</a></li>
+      <li><a href="#overview">架构总览</a></li>
+      <li><a href="#o">O · 本体层（中心）</a></li>
+      <li><a href="#f">F · 事实层</a></li>
+      <li><a href="#a">A · 行动层</a></li>
+      <li><a href="#i">I · 智能层</a></li>
+      <li><a href="#d">D · 决策界面层</a></li>
+      <li><a href="#r">约束四 · 运行</a></li>
+      <li><a href="#cross">四条横切约束</a></li>
+      <li><a href="#diff">与传统数据架构的差异</a></li>
+    </ol>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="why">
+<h2 style="margin-top:0">一、为什么大多数项目停在 PoC</h2>
+<p>十条症状。每一条决策者都亲身经历过。</p>
+<div class="tw"><table>
+<tr><th>#</th><th>症状</th><th>根因</th></tr>
+<tr><td>1</td><td><strong>口径不唯一</strong>：三个部门三个答案，会议在争论定义中结束</td><td>没有机制裁决谁是权威</td></tr>
+<tr><td>2</td><td><strong>只读陷阱</strong>：做成会说话的看板，三个月后日活个位数</td><td>没有写回，价值链多了一环</td></tr>
+<tr><td>3</td><td><strong>数据湖谬误</strong>：数据都进来了，业务侧感受不到变化</td><td>把物理集中当成语义统一</td></tr>
+<tr><td>4</td><td><strong>PoC 与生产的断崖</strong>：两周做完，十个月上不了线</td><td>PoC 证明模型能做对，生产要求做错时的行为</td></tr>
+<tr><td>5</td><td><strong>没有评测</strong>：「感觉还不错」</td><td>缺金标准集，生成式系统尤其容易「看起来对」</td></tr>
+<tr><td>6</td><td><strong>把 Agent 当员工</strong>：期望自主，不给输入输出合同</td><td>拟人化期待代替工程化定义</td></tr>
+<tr><td>7</td><td><strong>组织没有承接</strong>：流程照旧，只是多了一个要看的东西</td><td>只做系统交付，没做运营模式变更</td></tr>
+<tr><td>8</td><td><strong>从数据出发</strong>：做出一堆没人要的能力</td><td>正向推导产生可能性，不产生需求</td></tr>
+<tr><td>9</td><td><strong>静默错误</strong>：上游改字段，下游错了三周</td><td>无数据合同、无断言、无时点正确性</td></tr>
+<tr><td>10</td><td><strong>范围与成本膨胀</strong>：本体越建越大，一年没有结果</td><td>缺少「复杂度必须付租金」的纪律</td></tr>
+</table></div>
+<div class="callout">
+<span class="tag">共同点</span>
+<p>十条里只有一条半是模型问题。其余全是<strong>语义、闭环、边界与治理</strong>问题——这正是本架构要解决的四件事。</p>
+</div>
+</section>
+
+<hr class="hr">
+
+<section id="overview">
+<h2 style="margin-top:0">二、架构总览</h2>
+<blockquote><p>决策智能架构，是把企业的<strong>事实</strong>与企业的<strong>行动</strong>，通过一层业务承认的<strong>本体</strong>缝合起来，并在权限、证据、可逆四条约束下，交给分级授权的智能体去驱动的架构。</p></blockquote>
+
+<div class="stack">
+  <div class="layer"><span class="k">D</span><span class="n">决策界面</span><span class="d">谁在决策 · 依据什么 · 谁担责</span></div>
+  <div class="arrow">▲ 决策需求向下驱动</div>
+  <div class="layer"><span class="k">A</span><span class="n">行动</span><span class="d">可写回 · 可逆分级 · 审批链 · 幂等 · 频次上限</span></div>
+  <div class="layer"><span class="k">I</span><span class="n">智能</span><span class="d">规则 / 模型 / Agent · 工具即本体行动 · 分级自治</span></div>
+  <div class="layer core"><span class="k">O</span><span class="n">本体</span><span class="d"><strong>★ 中心</strong>　对象 · 属性 · 关系 · 事件 · 指标 · 行动绑定</span></div>
+  <div class="layer"><span class="k">F</span><span class="n">事实</span><span class="d">口径权威唯一 · 血缘可追 · 时点正确</span></div>
+  <div class="arrow">▲ 事实向上支撑</div>
+</div>
+<div class="rule"><span class="tag">横切四约束 · 贯穿全部五层</span>
+<p><strong>权限</strong>　定义在本体上；Agent 继承调用者权限，<strong>无人值守时以担责岗位的委托身份运行</strong>。<br>
+<strong>证据</strong>　任何结论可追溯到输入与版本；坏消息不可隐藏；证据链自身也需被治理。<br>
+<strong>可逆</strong>　默认可撤销；R3 自动化需满足四条件，缺一即保留人闸。<br>
+<strong>运行</strong>　环境隔离 · 配额熔断 · 发布回滚 · 可观测。</p></div>
+</div>
+
+<h3>一个中心</h3>
+<p>本体是整个架构唯一的<strong>语义权威</strong>。对上定义智能层能看到什么、能做什么；对下定义事实层必须以什么口径供给；对内承载权限模型。</p>
+<div class="rule"><span class="tag">架构判据</span><p>除本体外，<strong>不存在第二条通往业务语义的路径</strong>。</p></div>
+<p>因为一旦本体只是「一个可选的语义层」，就会立刻出现绕过它的捷径：报表直连数据库、Agent 写自由 SQL、前端硬编码业务公式。三个月后企业就有了第二套、第三套口径，本体退化成文档。</p>
+
+<h3>两个方向</h3>
+<p><strong>向下连接事实</strong>——本体的每个对象与指标必须追溯到权威源，满足口径唯一、血缘可追、时点正确。这是<em>可信度</em>的来源。</p>
+<p><strong>向上驱动行动</strong>——本体的对象上绑定行动，智能层调用行动，人在决策界面审批。这是<em>价值</em>的来源。</p>
+<p>缺前者，本体是漂亮的空壳；缺后者，本体是更贵的数据仓库。</p>
+</section>
+
+<hr class="hr">
+
+<section id="o">
+<h2 style="margin-top:0">三、O · 本体层（中心）</h2>
+<p class="lede" style="font-size:17px">一句话：<strong>让机器认识这家企业。</strong></p>
+
+<h3>本体不是什么</h3>
+<div class="tw"><table>
+<tr><th>它不是</th><th>区别</th></tr>
+<tr><td>数据模型</td><td>数据模型服务于存储与事务效率；本体服务于业务语义与决策</td></tr>
+<tr><td>知识图谱</td><td>图谱通常只读、面向检索；本体必须<strong>绑定行动</strong>，是可执行的</td></tr>
+<tr><td>元数据目录</td><td>目录服务于「找数据」；本体服务于「做决定」</td></tr>
+</table></div>
+<blockquote><p>数据模型回答「怎么存」，知识图谱回答「知道什么」，<strong>本体回答「这家企业是什么，以及能对它做什么」。</strong></p></blockquote>
+
+<h3>六个构成要素</h3>
+<div class="tw"><table>
+<tr><th>要素</th><th>说明</th></tr>
+<tr><td><strong>对象</strong></td><td>业务名词：客户、订单、SKU、工单、合同</td></tr>
+<tr><td><strong>属性</strong></td><td>分三类：源属性 / 派生属性（只允许一个权威实现）/ 状态属性（必须有状态机）</td></tr>
+<tr><td><strong>关系</strong></td><td>本体相对数据表最大的价值：把跨系统的语义缝合成可遍历的路径</td></tr>
+<tr><td><strong>事件</strong></td><td>发生了什么，带时间戳且不可变。重放与审计的基础</td></tr>
+<tr><td><strong>指标</strong></td><td>只允许一个权威实现，有唯一 Owner。查询层只做只读投影</td></tr>
+<tr><td><strong>行动</strong></td><td>绑定在对象上、可改变企业状态的操作</td></tr>
+</table></div>
+
+<h3>对象准入五判据</h3>
+<p>不是所有业务名词都该进本体。必须<strong>同时</strong>满足五条：</p>
+<div class="tw"><table>
+<tr><th>#</th><th>判据</th><th>不满足的后果</th></tr>
+<tr><td>1</td><td>有唯一真身（权威源 + 主键）</td><td>出现多个版本的「客户」，口径战争</td></tr>
+<tr><td>2</td><td>有稳定标识（跨系统映射规则明确）</td><td>关系连不起来，数据看着有其实用不了</td></tr>
+<tr><td>3</td><td>有明确生命周期（状态机已定义）</td><td>行动的前置条件无法表达</td></tr>
+<tr><td>4</td><td><strong>有绑定行动或明确决策用途</strong></td><td><strong>本体膨胀</strong>——最常见的失败模式</td></tr>
+<tr><td>5</td><td>有业务 Owner（具体的人，不是部门）</td><td>变更无人裁决，本体腐化</td></tr>
+</table></div>
+<div class="callout"><span class="tag">最常被跳过的一条</span><p>判据 4 是防止本体膨胀的唯一闸门。「有 300 张表就建 300 个对象」的项目，都是从跳过它开始的。</p></div>
+
+<h3>从决策倒推，不做全企业本体</h3>
+<p>最常见的失败路径是「先把全公司本体建完，再谈应用」——这条路会消耗 12–18 个月，几乎必然在业务侧失去耐心之前无法产生结果。</p>
+<pre><code>选定一个决策
+   ↓
+做这个决策需要知道哪些东西？   → 对象（3–7 个）
+它们之间是什么关系？           → 关系
+决策依据哪几个数？             → 指标
+决策的结果是对什么做什么？      → 行动
+   ↓
+只建这些。其余一概不建。</code></pre>
+<p>一个健康的第一版本体规模：<strong>5 个以内对象，3 个以内关系，1 个行动。</strong></p>
+
+<h3>本体是产品，不是项目产物</h3>
+<p>一旦本体成为语义权威，它必须具备产品的全部特征：版本、合同、变更流程、废弃策略、Owner、业务语言的文档。</p>
+<div class="rule"><span class="tag">经验规则</span><p>没有变更流程的本体，会在六个月内退化成一份没人看的文档。</p></div>
+
+<h3>权限沿本体传播</h3>
+<p>四个维度：<span class="pill on">对象级</span><span class="pill on">行级</span><span class="pill on">属性级</span><span class="pill on">行动级</span></p>
+<p>销售 A 通过 Agent 查询时，Agent 看到的必须<strong>恰好是销售 A 能看到的那个世界</strong>。不存在「AI 账号」这种拥有超级权限的身份。这一条如果破了，整个系统在合规上不可用。</p>
+</section>
+
+<hr class="hr">
+
+<section id="f">
+<h2 style="margin-top:0">四、F · 事实层</h2>
+<p class="lede" style="font-size:17px">这一层不产生价值，但它决定上面所有价值是否可信。</p>
+
+<h3>三个必须</h3>
+<ol class="steps">
+<li><b>口径权威唯一</b>同一度量全企业只有一个权威计算实现，查询层只做只读投影。发现第二处实现按缺陷处理，不按「灵活性」处理。</li>
+<li><b>血缘可追</b>任何数字能在 5 分钟内回答：来自哪个源、经过什么加工、什么口径版本、数据时点、上次更新时间。血缘是<strong>可查询的运行时元数据</strong>，不是一张架构图。</li>
+<li><b>时点正确（PIT）</b>用「当时可知」的数据解释当时的事实。靠双时间轴与有效期区间实现。</li>
+</ol>
+
+<div class="callout">
+<span class="tag">最贵的静默错误</span>
+<p>用<strong>今天</strong>的主数据解释<strong>昨天</strong>的业务：用今天的客户分级分析上季度转化、用今天的类目回溯半年前的品类表现、用今天的组织架构归因去年业绩。</p>
+<p><strong>时点错误不报错。</strong>它会给你一个看起来完全正常、并且偏乐观的数字，直到上线后效果对不上。</p>
+</div>
+
+<h3>把静默错误变成显式失败</h3>
+<p>数据进入本体前跑一组自动断言，设计原则是<strong>不抽样看趋势，而是对账</strong>：</p>
+<div class="tw"><table>
+<tr><th>类型</th><th>例子</th></tr>
+<tr><td>完整性对账</td><td>应有记录数 − 实际记录数 = 已归因缺失数（差额必须为 0）</td></tr>
+<tr><td><strong>量纲断言</strong></td><td>金额/数量比值落在合理区间——防止差 100 倍的静默错误</td></tr>
+<tr><td><strong>双算校验</strong></td><td>关键派生量用两条独立实现各算一遍并比对</td></tr>
+<tr><td>参照完整性</td><td>订单引用的客户 ID 必须存在</td></tr>
+<tr><td>时序逻辑</td><td>发货时间 ≥ 下单时间；状态转移合法</td></tr>
+<tr><td>跨源交叉</td><td>与独立数据源比对，偏差超阈值报警</td></tr>
+</table></div>
+<p>量纲断言与双算校验是投入产出比最高的两条——它们抓的是「看起来完全正常」的那一类错误，恰恰是最贵的那一类。</p>
+
+<h3>不可变 + 可重放</h3>
+<p>原始数据只增不改，修正通过新增记录表达；给定代码版本 + 数据版本能重算出完全相同的结果。</p>
+<p>没有这两点，永远无法回答「三周前它为什么给出那个建议」。</p>
+
+<h3>接多少数据</h3>
+<div class="rule"><span class="tag">判据</span><p>每接入一个数据源，能否说出它支撑哪个对象的哪个属性、服务哪个决策？说不出来的不接。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="a">
+<h2 style="margin-top:0">五、A · 行动层</h2>
+<p class="lede" style="font-size:17px">这是分隔「会说话的看板」与「决策智能平台」的那条线。</p>
+
+<h3>行动契约：十一个必备要素</h3>
+<p>缺任何一项都不允许上线。</p>
+<div class="tw"><table>
+<tr><th>#</th><th>要素</th><th>说明</th></tr>
+<tr><td>1</td><td>前置条件</td><td>用状态机表达，如「订单状态 ∈ {待发货}」</td></tr>
+<tr><td>2</td><td><strong>参数模式</strong></td><td>取值范围就是<strong>安全边界</strong>，如调价幅度 ∈ [−15%, +15%]</td></tr>
+<tr><td>3</td><td>权限</td><td>人工触发时继承调用者身份；<strong>自动执行时以担责岗位的委托身份运行</strong>，禁止权限大于担责人</td></tr>
+<tr><td>4</td><td>副作用</td><td>改变哪些对象状态，触发哪些下游</td></tr>
+<tr><td>5</td><td><strong>幂等键</strong></td><td>重复执行不产生重复效果。必填项，不是优化项</td></tr>
+<tr><td>6</td><td>可逆性</td><td>R1 / R2 / R3（见下）</td></tr>
+<tr><td>7</td><td>审批链</td><td>什么条件下免批，什么条件下强制人工</td></tr>
+<tr><td>8</td><td>审计记录</td><td>触发者、参数、依据、口径与模型版本、结果</td></tr>
+<tr><td>9</td><td>失败语义</td><td>失败后状态、是否重试、何时需人工</td></tr>
+<tr><td><strong>10</strong></td><td><strong>频次上限 / 速率限制</strong></td><td>按对象、按执行者、按全局分别设限。<strong>参数范围管单次幅度，管不了「一天五千次，每次都在范围内」</strong></td></tr>
+<tr><td><strong>11</strong></td><td><strong>数据依赖与新鲜度</strong></td><td>依赖哪些对象/指标、要求多新的数据。没有它，「数据缺失则失败关闭」无从判定</td></tr>
+</table></div>
+
+<h3>可逆性分级</h3>
+<div class="tw"><table>
+<tr><th>级别</th><th>定义</th><th>例子</th><th>授权取向</th></tr>
+<tr><td><strong>R1</strong> 可撤销</td><td>一键回到原状态，无外部影响</td><td>改标签、调优先级</td><td>可较早开放自动</td></tr>
+<tr><td><strong>R2</strong> 可补偿</td><td>有明确反向操作</td><td>调价、创建工单、库存调拨</td><td>限额内自动</td></tr>
+<tr><td><strong>R3</strong> 不可逆</td><td>外部世界已改变</td><td>已发货、已付款、已触达客户</td><td><strong>永远需要人</strong></td></tr>
+</table></div>
+
+<div class="rule">
+<span class="tag">最实用的一个落地模式</span>
+<p>把 R3 拆成 R2 + R3：</p>
+<pre style="margin:10px 0 0;background:transparent;border:0;padding:0"><code>「自动发货」        = R3，不能自动
+拆解后：
+「自动创建发货单」   = R2（可作废）  → 可以自动
+「确认发货」        = R3（不可逆）  → 保留人闸，一键确认</code></pre>
+<p style="margin-top:10px">AI 承担 95% 工作量，人只保留最后那个不可逆的确认动作。</p>
+</div>
+
+<h3>不要制造第二套真相</h3>
+<div class="rule"><span class="tag">判据</span><p>关掉这个 AI 平台，企业的业务数据是否完全不受影响？<br>
+<strong>是</strong> → 写回设计正确（平台是决策者与执行者，不是记录者）<br>
+<strong>否</strong> → 制造了第二套真相，必须重构</p></div>
+<p>例外：平台可以保留<strong>决策记录与证据链</strong>——这是平台独有的、有价值的资产，不与业务系统冲突。</p>
+
+<h3>审批链的关键一行</h3>
+<pre><code>在历史正常区间内 + 影响面小 + R1/R2   →  自动执行，事后可查
+超出正常区间 或 影响面中等            →  单人审批
+超出硬阈值 / 影响面大 / R3           →  多级审批 / 强制人工
+数据缺失、口径不明、置信度低          →  失败关闭：不执行，明确报告</code></pre>
+<p>最后一行是关键：系统在不确定时的默认行为必须是<strong>不动作 + 明确报告</strong>，而不是「按最佳猜测执行」。</p>
+</section>
+
+<hr class="hr">
+
+<section id="i">
+<h2 style="margin-top:0">六、I · 智能层</h2>
+
+<h3>三种智能各归其位</h3>
+<p>企业里最常见的浪费，是用大模型解决一个 <code>if</code> 语句能解决的问题。选型按顺序问：</p>
+<ol class="steps">
+<li><b>能写成规则吗？</b>能就写规则。企业更看重「每次都一样」，而不是「大多数时候更聪明」。</li>
+<li><b>规则写不下，有标签数据吗？</b>有就用预测模型。</li>
+<li><b>输入非结构化、或需要多步综合判断？</b>才用 Agent。</li>
+</ol>
+
+<h3>Agent 的能力边界 = 本体暴露的工具集</h3>
+<pre><code>❌  Agent + 数据库连接 + 「你可以写 SQL 查任何东西」
+✅  Agent + 本体工具集 + 「你可以调用这 12 个工具」</code></pre>
+<div class="tw"><table>
+<tr><th>不给自由 SQL 的原因</th><th>后果</th></tr>
+<tr><td>口径失控</td><td>Agent 自拼的公式与财务不一致，结论不可采信</td></tr>
+<tr><td>权限失控</td><td>行级/属性级权限无法在自由 SQL 上强制</td></tr>
+<tr><td>不可审计</td><td>无法回答「这个数怎么算出来的」</td></tr>
+<tr><td>不可回归</td><td>同一问题两次给出不同答案</td></tr>
+</table></div>
+<div class="callout"><span class="tag">工具设计要点</span><p>工具的失败必须是<strong>显式的</strong>（<code>NOT_READY: 缺少 8-20 的库存快照</code>），而不是返回空结果——空结果会被 Agent 当成「没有异常」。</p></div>
+
+<h3>分级自治 L0–L4</h3>
+<div class="tw"><table>
+<tr><th>级别</th><th>系统做什么</th><th>人做什么</th><th>准入条件</th></tr>
+<tr><td><strong>L0</strong> 观察</td><td>只输出分析与解释</td><td>全部决策与执行</td><td>上线即可</td></tr>
+<tr><td><strong>L1</strong> 建议</td><td>推荐动作与理由</td><td>决策 + 执行</td><td>离线评测达标</td></tr>
+<tr><td><strong>L2</strong> 草拟</td><td>生成参数已填好的动作草稿</td><td>审批 + 一键执行</td><td>影子运行期通过</td></tr>
+<tr><td><strong>L3</strong> 限额自动</td><td>阈值内自动执行，超限升级</td><td>例外处理 + 抽检</td><td>连续 N 期在线指标达标</td></tr>
+<tr><td><strong>L4</strong> 全自动</td><td>全量自动执行</td><td>监控 + 定期审计</td><td>长期稳定，且仅限 R1/R2</td></tr>
+</table></div>
+<div class="rule"><span class="tag">硬规则</span><p>
+R3 不可逆行动最高只能到 L2。<br>
+晋级条件必须<strong>事前冻结</strong>，不能看到结果后临时议定。<br>
+降级条件自动生效，<strong>不需要审批</strong>。<br>
+<strong>晋级靠证据，不靠信心。</strong></p></div>
+
+<h3>没有评测集就不上线</h3>
+<ol class="steps">
+<li><b>离线金标准集（上线前）</b>必须覆盖失败模式：缺数据、口径歧义、极端值、恶意输入。<strong>冻结后不得因结果不好而修改</strong>——改了就失去了裁决能力。</li>
+<li><b>影子运行（上线中）</b>在真实数据流上产出建议但不执行，与人的实际决策比对。<strong>分歧比一致更有价值</strong>：每一个分歧都要归因（系统错 / 人错 / 口径不清）。</li>
+<li><b>在线抽检（上线后）</b>持续按比例人工复核。L3/L4 不能取消抽检。</li>
+</ol>
+
+<h3>指标不只是准确率</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>为什么</th></tr>
+<tr><td><strong>弃权率</strong></td><td>主动说「不确定」的比例。<strong>一个从不弃权的系统是危险的</strong></td></tr>
+<tr><td><strong>错误分布</strong></td><td>90% 准确率但错的都是大单，等于不可用</td></tr>
+<tr><td>稳定性</td><td>同一输入多次结果一致——企业要可预测</td></tr>
+<tr><td>单次决策成本</td><td>每次 3 元 × 每天 500 次，只省 2 分钟人工 = 经济上不成立</td></tr>
+</table></div>
+<blockquote><p>让系统学会说「这个我不确定，请人来看」，比让它多对几个百分点更有价值。</p></blockquote>
+
+<h3>提示词也是代码</h3>
+<p>提示词、模型版本、温度参数会改变系统行为，因此必须版本化、绑定证据、变更即回归、可回滚。</p>
+<div class="callout"><span class="tag">典型事故</span><p>有人「优化」了提示词，指标悄悄降了 8%，两周后才发现，且无法定位是哪次改动。根因是提示词不在版本控制里。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="d">
+<h2 style="margin-top:0">七、D · 决策界面层</h2>
+<p class="lede" style="font-size:17px">这一层决定项目的方向。方向错了，下面五层做得再好也是白做。</p>
+
+<h3>四象限：选谁先做</h3>
+<div class="tw"><table>
+<tr><th></th><th>错误可逆</th><th>错误不可逆</th></tr>
+<tr><th>高频次</th><td><strong>★ 第一批</strong><br>自动化价值最高，可快速积累证据</td><td>谨慎：需强审批链<br>适合 L1–L2</td></tr>
+<tr><th>低频次</th><td>价值有限<br>除非单次价值极高</td><td><strong>✗ 不要碰</strong><br>战略决策，人的领域</td></tr>
+</table></div>
+<div class="callout"><span class="tag">最常见的选型错误</span><p>选了公司最重要、最有战略价值的决策。那通常是低频、不可逆、多方博弈的——是最不该做第一个的。<strong>重要 ≠ 适合先做。</strong></p></div>
+
+<h3>人机权责矩阵</h3>
+<div class="tw"><table>
+<tr><th>角色</th><th>定义</th><th>可以是 AI 吗</th></tr>
+<tr><td>建议者</td><td>提出方案</td><td>✅ 通常从这里开始</td></tr>
+<tr><td>决定者</td><td>拍板</td><td>取决于自治级别</td></tr>
+<tr><td>执行者</td><td>实际操作系统</td><td>✅ 通过行动层</td></tr>
+<tr><td><strong>担责者</strong></td><td>出问题时负责</td><td><strong>❌ 永远是人</strong></td></tr>
+</table></div>
+<div class="rule"><span class="tag">交付时必须回答</span><p><strong>哪一个旧动作因此被取消了？</strong><br>
+如果答案是「没有，只是多了一个参考」，这个场景在组织意义上没有落地，它会在三个月内消亡。<br>
+<strong>落地的标志是减法。</strong></p></div>
+
+<h3>界面形态的优先级</h3>
+<ol>
+<li><strong>嵌入现有工作流</strong>（最优）：ERP 待办、飞书/企微卡片、工单系统推荐</li>
+<li><strong>推送到人所在的地方</strong>：告警、日报、审批流</li>
+<li><strong>独立控制台</strong>（次选）：仅当需要复杂上下文探索</li>
+<li><strong>对话式界面</strong>（谨慎）：适合探索性分析，<strong>不适合日常高频决策</strong></li>
+</ol>
+<blockquote><p>对话是探索的界面，不是执行的界面。一个每天要做 200 次的决策，界面应该是一个按钮和一行理由，不是一个输入框。</p></blockquote>
+</section>
+
+<hr class="hr">
+
+<section id="r">
+<h2 style="margin-top:0">八、约束四 · 运行 Runtime</h2>
+<div class="callout"><span class="tag">2026-08-23 升格</span><p>此前它是「R 运行层」，画在事实层之下。但它的内容（隔离、成本、发布回滚、可观测）<strong>作用于所有层</strong>，与那个位置没有任何关系；且它包含的「权限落到运行时」与约束一重复。现为第四条横切约束。</p></div>
+<p class="lede" style="font-size:17px">最不性感，但它是 PoC 与生产之间那道断崖的主体。</p>
+
+<div class="tw"><table>
+<tr><th>环境</th><th>数据</th><th>允许的行动</th></tr>
+<tr><td>研究/沙箱</td><td>脱敏或只读副本</td><td><strong>只读，零写回</strong>（凭据级隔离，不靠自觉）</td></tr>
+<tr><td>预生产</td><td>生产数据只读</td><td>影子行动：记录不执行</td></tr>
+<tr><td>生产</td><td>生产数据</td><td>完整行动，受权限与自治级别约束。<strong>只运行受控发布的不可变版本</strong></td></tr>
+</table></div>
+
+<h3>成本必须能熔断</h3>
+<p>生成式系统的边际成本不可忽略，且可以在无人察觉时指数增长。四件事必须在运行约束里强制：预算、配额、<strong>熔断</strong>、成本归因。</p>
+<div class="rule"><span class="tag">规则</span><p>熔断必须是「停」，不是「提醒」。一个只发告警不停止的成本保护，在夜间和周末等于不存在。</p></div>
+
+<h3>发布与回滚</h3>
+<p>代码、配置、提示词、模型、本体定义、评测集全部版本化，一次发布对应一组确定的版本组合。</p>
+<div class="rule"><span class="tag">规则</span><p><strong>回滚不需要审批；需要审批的是发布。</strong></p></div>
+<p>特别提醒：提示词与本体定义的变更，与代码变更享受同等待遇。它们同样改变系统行为，却经常被当成「配置微调」绕过流程——这是生成式系统最常见的事故来源。</p>
+
+<h3>模型供应商与版本风险</h3>
+<div class="callout"><span class="tag">一处必须承认的边界</span>
+<p>本方法论承诺「给定代码版本 + 数据版本可重放」。<strong>对托管大模型这个承诺不成立</strong>：模型会被下线、涨价、在同一版本号下变更行为；且 run-to-run 方差本身就是模型属性（pass^4 常比 pass^1 低 15–25 个百分点）。</p>
+<p><strong>行为漂移：一类不会自己暴露的失效。</strong>模型版本更新后理解口径可能发生细微偏移，表现为<strong>错误标注长期累积而无人察觉</strong>。必须与 run-to-run 方差区分：<strong>方差是同一版本内的随机性（多次采样可测），漂移是跨版本的系统性偏移（不会自己暴露）</strong>。三条监测手段：<strong>①金标准集定期重跑而不只在变更时重跑</strong>（托管模型可能在你不知情时更新）②人工推翻率与批准率的趋势 ③输出分布监控。</p>
+<p><strong>可行的是「可追溯」而不是「可重放」</strong>：证据链记录模型标识 + 版本 + 调用时间；关键决策的输入输出快照入证据链；模型版本变更时强制重跑评测集。</p></div>
+
+<h3>可观测性</h3>
+<p>技术指标 + 质量指标 + 业务指标，三类缺一不可。</p>
+<blockquote><p><strong>「人工推翻率」是最诚实的指标。</strong>它直接度量业务方对系统的真实信任度，通常比技术指标更早报警。</p></blockquote>
+</section>
+
+<hr class="hr">
+
+<section id="cross">
+<h2 style="margin-top:0">九、四条横切约束</h2>
+<p>这三条不属于某一层，而是整套架构的设计前提。六层可以裁剪，这三条不可以。</p>
+
+<h3>约束一｜权限 Authority</h3>
+<p>权限定义在本体上；身份上下文必须贯穿「用户 → Agent → 工具 → 数据 → 行动」全链路，中间任何一处退化成服务账号，模型即破。越权返回<strong>明确拒绝</strong>，不是空结果。</p>
+<div class="callout"><span class="tag">隐蔽风险</span><p>销售 A 问「我们最大的客户是谁」，如果 Agent 用超级权限回答了，就等于绕过了原有权限体系。<strong>这类泄漏不会触发任何传统安全告警。</strong></p></div>
+
+<h3>约束二｜证据 Evidence</h3>
+<pre><code>决策/结论
+  ├── 触发：谁、什么时候、通过什么入口
+  ├── 输入：哪些对象与指标，取值与时间点
+  ├── 口径：指标权威实现版本、本体版本
+  ├── 推理：规则 / 模型 / 提示词版本
+  ├── 输出：建议或已执行的行动、参数
+  ├── 人的介入：谁审批、是否被推翻、推翻理由
+  └── 结果：执行成功/失败、后续影响</code></pre>
+<div class="rule"><span class="tag">坏消息不可隐藏</span><p>拒绝、弃权、失败、人工推翻——全部留痕。<strong>人推翻系统建议的理由，是最有价值的改进信号。</strong><br>
+界面可以降噪，但不能删除或改写权威状态。做一个只展示成功案例的看板，等于主动放弃了系统改进的唯一信息来源。</p></div>
+
+<h3>约束三｜可逆 Reversibility</h3>
+<p>运行时体现为<strong>失败关闭（Fail-Closed）</strong>：</p>
+<div class="tw"><table>
+<tr><th>情形</th><th>正确行为</th><th>错误行为</th></tr>
+<tr><td>数据缺失</td><td>返回 <code>NOT_READY</code> + 缺什么</td><td>用 0 或前值填充后继续</td></tr>
+<tr><td>口径不明</td><td>返回 <code>NOT_EVALUATED</code></td><td>按最可能的口径猜一个</td></tr>
+<tr><td>权限不足</td><td>返回 <code>DENIED</code></td><td>返回空结果</td></tr>
+<tr><td>置信度低</td><td>弃权，转人工</td><td>输出最佳猜测</td></tr>
+<tr><td>断言失败</td><td>阻断下游</td><td>告警但继续出结论</td></tr>
+</table></div>
+<blockquote><p><strong>降级成「看起来成功」是最危险的失败模式。</strong>一个明确的错误会被立刻发现和修复；一个看起来正常的错误会持续污染决策数月。</p></blockquote>
+
+<h3>三者的关系</h3>
+<pre><code>权限  ──决定──▶  能做什么
+  ↓
+可逆  ──决定──▶  能自动做到什么程度
+  ↓
+证据  ──决定──▶  能不能被采信、能不能改进</code></pre>
+<p>没有权限，系统不能被授权使用；没有可逆，不能被授权自动；没有证据，不能被采信，也无法晋级。三者共同构成企业 AI 的<strong>信任基础设施</strong>。技术能力决定上限，这三条决定能不能开始。</p>
+</section>
+
+<hr class="hr">
+
+<section id="diff">
+<h2 style="margin-top:0">十、与传统数据架构的差异</h2>
+<div class="tw"><table>
+<tr><th>维度</th><th>传统数据中台 / BI</th><th>决策智能架构</th></tr>
+<tr><td>起点</td><td>有哪些数据</td><td><strong>有哪些决策</strong></td></tr>
+<tr><td>中心</td><td>数据仓库 / 湖仓</td><td><strong>本体</strong></td></tr>
+<tr><td>终点</td><td>报表与看板（只读）</td><td><strong>行动与写回</strong></td></tr>
+<tr><td>语义</td><td>分散在报表与 SQL 里</td><td>集中在本体，唯一权威</td></tr>
+<tr><td>AI 的位置</td><td>数据之上的一个应用</td><td>本体之上的一类执行者</td></tr>
+<tr><td>权限</td><td>表级 / 接口级</td><td>对象 / 关系 / 行动级</td></tr>
+<tr><td>成功标志</td><td>数据接入完成率</td><td><strong>被自动或半自动执行的决策数量</strong></td></tr>
+</table></div>
+
+<div class="rule"><span class="tag">如何使用这套架构</span>
+<p><strong>不要自上而下建全套。</strong>六层是描述性骨架，不是建设顺序。<br>
+正确方式是<strong>沿着一个真实决策，把六层打穿一次</strong>。</p></div>
+
+<div class="next">
+<p><strong>下一步 →</strong>　<a href="playbook.html">实践：成熟度诊断、首个 120 天、四套模板、开工前 12 问</a>　|　<a href="methodology.html">返回方法论总结</a></p>
+</div>
+</section>
+</div>
+
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="index.html">首页</a>　<a href="playbook.html">实践</a>　<a href="research.html">研究</a></div></footer>
+</body></html>

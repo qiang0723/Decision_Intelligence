@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>行业剖面 — 电商 · 软件公司内部系统</title>
+<meta name="description" content="具体到可执行的决策清单、本体草图、行动契约示例与行业特有陷阱。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html" class="active">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:24px">
+  <p class="eyebrow">行业剖面</p>
+  <h1>落到具体行业</h1>
+  <p class="lede">方法论是骨架，行业剖面是肉。<br>每个剖面给出：为什么适合、决策清单、本体草图、特有陷阱。</p>
+  <p class="meta"><span class="pill">约 15 分钟</span></p>
+  <div class="toc"><p class="toc-title">目录</p><ol>
+    <li><a href="#ec">电商</a></li>
+    <li><a href="#sw">软件公司内部系统</a></li>
+  </ol></div>
+</section>
+
+<hr class="hr">
+
+<section id="ec">
+<h2 style="margin-top:0">一、电商</h2>
+<p class="lede" style="font-size:17px">决策智能架构最理想的第一个落地行业：<strong>高频、可逆、数据完整、反馈快</strong>。四个条件同时成立的行业不多。</p>
+
+<div class="tw"><table>
+<tr><th>条件</th><th>电商的表现</th></tr>
+<tr><td>高频</td><td>定价、补货、派单每天数百至数万次</td></tr>
+<tr><td>可逆</td><td>大部分动作是 R2 可补偿</td></tr>
+<tr><td>数据完整</td><td>全链路数字化，几乎没有线下断点</td></tr>
+<tr><td><strong>反馈快</strong></td><td>效果数小时到数天可见——<strong>自治级别可以在几周内晋升，而不是几个季度</strong></td></tr>
+<tr><td>落点清晰</td><td>商品中心、OMS、WMS 都是现成的写回目标</td></tr>
+</table></div>
+
+<h3>决策清单</h3>
+<h4>高频 · 可逆（首批候选）</h4>
+<div class="tw"><table>
+<tr><th>决策</th><th>决策者</th><th>频次</th><th>落点行动</th><th>可逆性</th></tr>
+<tr><td>★ <strong>是否给这个 SKU 补货、补多少</strong></td><td>采购/供应链</td><td>每日</td><td>创建采购/调拨单</td><td>R2</td></tr>
+<tr><td>★ <strong>异常订单是否拦截</strong></td><td>风控/客服</td><td>每小时</td><td>订单打标/暂停</td><td>R1</td></tr>
+<tr><td>★ <strong>售后是否主动补偿、补多少</strong></td><td>客服</td><td>每日数百</td><td>创建补偿工单</td><td>R2</td></tr>
+<tr><td>仓间调拨</td><td>供应链</td><td>每日</td><td>创建调拨单</td><td>R2</td></tr>
+<tr><td>单品调价</td><td>运营</td><td>每日</td><td>更新售价</td><td>R2</td></tr>
+<tr><td>滞销品处理建议</td><td>运营</td><td>每周</td><td>打标/建议清仓</td><td>R1</td></tr>
+<tr><td>广告预算渠道分配</td><td>投放</td><td>每日</td><td>调整出价/预算</td><td>R2</td></tr>
+</table></div>
+
+<h4>高频 · 不可逆（需强审批）</h4>
+<p>是否发货（用「自动生成发货单 + 人工确认」拆解）· 是否退款（金额分档：小额自动，大额人闸）· 主动触达客户（发出去收不回，必须有频次上限与人工确认）</p>
+
+<h4>低频 · 不可逆（不做）</h4>
+<p>品类结构调整、仓网布局、供应商准入策略——这些是人的领域。</p>
+
+<h3>本体草图（以补货决策为例）</h3>
+<pre><code>        ┌──────────┐                ┌──────────┐
+        │   SKU    │───供应关系────▶│  供应商   │
+        └────┬─────┘                └──────────┘
+             │
+     ┌───────┼────────┬──────────────┐
+     ▼       ▼        ▼              ▼
+┌────────┐ ┌──────┐ ┌────────┐  ┌──────────┐
+│ 库存快照│ │ 订单 │ │销售预测 │  │  在途单   │
+└────────┘ └──┬───┘ └────────┘  └──────────┘
+              │
+              ▼
+          ┌──────┐
+          │ 客户 │
+          └──────┘</code></pre>
+
+<div class="tw"><table>
+<tr><th>对象</th><th>权威源</th><th>关键陷阱</th></tr>
+<tr><td>SKU</td><td>商品中心</td><td>前台/后台/供应链的「SKU」常常不是同一粒度；款/色/码层级必须显式定义</td></tr>
+<tr><td><strong>库存</strong></td><td>WMS</td><td><strong>可用 ≠ 实物 ≠ 可售。三个口径必须分开建模</strong></td></tr>
+<tr><td>订单</td><td>OMS</td><td>拆单、合单、改单后的订单身份延续性</td></tr>
+<tr><td>客户</td><td>CRM + 订单</td><td>一人多手机号/多账号；标识映射是主要工作量</td></tr>
+<tr><td>销售预测</td><td>派生</td><td>必须记录预测生成的时间点</td></tr>
+</table></div>
+
+<div class="callout"><span class="tag">电商本体最常见的第一个坑</span>
+<p>把「库存」当成一个数。可用、在途、锁定、残次、可售是不同的东西，合并会导致补货决策<strong>系统性错误，且不报错</strong>。</p></div>
+
+<h3>行动契约示例：创建补货单</h3>
+<div class="tw"><table>
+<tr><th>要素</th><th>内容</th></tr>
+<tr><td>前置条件</td><td>SKU 状态 ∈ {在售}；无同日未处理的补货单</td></tr>
+<tr><td>参数</td><td>数量（范围：≤ 90 天平均日销 × 60）、目标仓、期望到货日</td></tr>
+<tr><td>权限</td><td>采购员，行级限定到负责品类</td></tr>
+<tr><td>副作用</td><td>生成采购单草稿；<strong>不直接下发供应商</strong></td></tr>
+<tr><td>幂等键</td><td>SKU + 目标仓 + 业务日期</td></tr>
+<tr><td>可逆性</td><td><strong>R2</strong>（未下发供应商前无外部影响）</td></tr>
+<tr><td>审批链</td><td>金额分档；<strong>预测数据缺失则失败关闭</strong></td></tr>
+</table></div>
+<p>注意这个设计：<strong>补货单生成是 R2，下发供应商是 R3</strong>——正是「R2 前置 + R3 确认」模式。AI 做完 95% 的工作，采购员只保留一个确认动作。</p>
+
+<h3>时点正确性的电商陷阱</h3>
+<div class="tw"><table>
+<tr><th>陷阱</th><th>后果</th></tr>
+<tr><td>用当前类目回溯品类表现</td><td>类目调整过，历史归类错乱</td></tr>
+<tr><td>用当前 SKU 状态评估历史补货质量</td><td>已下架 SKU 被排除，幸存者偏差</td></tr>
+<tr><td>用当前客户分层分析历史转化</td><td>分层基于全期行为算的，含未来信息</td></tr>
+<tr><td>用最终成交价评估当时的定价决策</td><td>忽略了当时不可知的促销</td></tr>
+</table></div>
+
+<h3>评测的特殊难点：反事实不可观测</h3>
+<p>系统建议补 500 件，人改成 300 件，实际补了 300 件。那 500 件对不对？无从知道。三个应对：</p>
+<ol class="steps">
+<li><b>影子期做人机分歧归因</b>不追求判定谁对，而是找出分歧的<strong>原因类型</strong>（数据缺失 / 口径不同 / 系统没考虑促销计划）。比准确率更有信息量。</li>
+<li><b>A/B 分流</b>按品类或仓库分流。唯一能得到因果结论的方法，但需要业务方接受实验。</li>
+<li><b>看代价不对称的错误</b>缺货与积压代价不对称。应分别看「低估导致缺货」与「高估导致积压」，而不是整体偏差。</li>
+</ol>
+
+<h3>常见失败</h3>
+<div class="tw"><table>
+<tr><th>失败</th><th>原因</th></tr>
+<tr><td>补货模型上线后被采购全面推翻</td><td>没把隐性知识（促销计划、供应商产能、季节性）纳入约束条件</td></tr>
+<tr><td>定价系统引发价格战</td><td>竞对价格反馈回路没有阻尼</td></tr>
+<tr><td>拦截规则误伤大客户</td><td>行级权限与客户分层没做</td></tr>
+<tr><td>客服补偿系统被薅羊毛</td><td>行动契约没写参数边界与频次上限</td></tr>
+</table></div>
+<div class="rule"><span class="tag">共同点</span><p>四个都不是模型问题，都是<strong>约束条件与治理</strong>问题。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="sw">
+<h2 style="margin-top:0">二、软件公司内部系统</h2>
+<p class="lede" style="font-size:17px">特殊之处：<strong>你的客户就是你自己。</strong>决策链短、可以快速迭代；但也最容易变成技术自嗨。</p>
+
+<h3>为什么值得做</h3>
+<ul>
+<li><strong>最好的第一个客户</strong>：在自己身上把方法论跑通，产出真实证据</li>
+<li><strong>决策链短</strong>：不用说服采购委员会，能验证「组织承接」这一环</li>
+<li><strong>可对外复制</strong>：软件公司的内部管理问题在同行里高度同构</li>
+</ul>
+<div class="callout"><span class="tag">陷阱</span><p>在自己公司做，最容易跳过治理（反正都是自己人）——而治理恰恰是这套方法论的价值所在。<strong>要刻意保持外部项目的纪律</strong>，否则做出来的东西无法对外复制。</p></div>
+
+<h3>四个价值域</h3>
+<h4>域一｜需求到交付的价值流（几乎全是 R1，最安全的起步区）</h4>
+<div class="tw"><table>
+<tr><th>决策</th><th>决策者</th><th>频次</th><th>落点</th><th>可逆</th></tr>
+<tr><td>★ 这个需求进不进本迭代</td><td>PM/TL</td><td>每周</td><td>更新迭代计划</td><td>R1</td></tr>
+<tr><td>★ 这个 PR 该谁 review</td><td>系统/TL</td><td>每日数十</td><td>指派 reviewer</td><td>R1</td></tr>
+<tr><td>这个需求的工作量估计</td><td>TL</td><td>每周</td><td>更新工时</td><td>R1</td></tr>
+<tr><td>这个迭代能不能按时交付</td><td>PM</td><td>每周</td><td>发出风险预警</td><td>R1</td></tr>
+</table></div>
+
+<h4>域二｜事故与稳定性</h4>
+<div class="tw"><table>
+<tr><th>决策</th><th>决策者</th><th>频次</th><th>落点</th><th>可逆</th></tr>
+<tr><td>★ <strong>这个告警要不要升级为事故</strong></td><td>值班</td><td>每日</td><td>创建/升级事故单</td><td>R2</td></tr>
+<tr><td>★ 这个事故该找谁</td><td>值班</td><td>每次事故</td><td>指派责任人</td><td>R1</td></tr>
+<tr><td>变更风险多高，要不要灰度</td><td>发布负责人</td><td>每次发布</td><td>调整发布策略</td><td>R2</td></tr>
+<tr><td>要不要回滚</td><td>值班</td><td>事故中</td><td>触发回滚</td><td>R2</td></tr>
+<tr><td>是否对外发布故障公告</td><td>负责人</td><td>低频</td><td>发布公告</td><td><strong>R3</strong></td></tr>
+</table></div>
+
+<h4>域三｜客户健康度与交付质量</h4>
+<p>客户流失风险是否介入 · 工单是否升级 · 交付项目是否偏离预警 · 是否接受定制需求</p>
+
+<h4>域四｜知识与代码资产</h4>
+<p>是否需要重构 · 这个问题答案在哪个文档 · 新人这周该看什么</p>
+<div class="callout"><span class="tag">界面形态提醒</span><p>域四的「知识问答」是<strong>唯一适合对话式界面</strong>的场景（探索性）。其余三个域都应嵌入现有工作流（工单系统、IM、CI/CD），不要做成聊天。</p></div>
+
+<h3>本体草图</h3>
+<pre><code>   ┌────────┐        ┌────────┐        ┌────────┐
+   │  客户   │──有──▶│  项目   │──含──▶│  需求   │
+   └────────┘        └───┬────┘        └───┬────┘
+                         │                 │ 实现为
+                    ┌────▼────┐       ┌────▼────┐
+                    │  工单    │       │ 代码变更 │
+                    └────┬────┘       └────┬────┘
+                         │                 │ 部署为
+                    ┌────▼────┐       ┌────▼────┐
+                    │  事故    │◀─关联─│  服务    │
+                    └────┬────┘       └─────────┘
+                         ▼
+                    ┌─────────┐
+                    │   人员   │
+                    └─────────┘</code></pre>
+<div class="tw"><table>
+<tr><th>对象</th><th>陷阱</th></tr>
+<tr><td>需求</td><td>在 PRD、Jira、commit、发布说明里是四个不同的东西。标识映射是主要工作量</td></tr>
+<tr><td>人员</td><td>组织架构会变。评估历史绩效必须用<strong>当时</strong>的归属</td></tr>
+<tr><td>服务</td><td>拓扑随时间变化，事故归因要用当时的拓扑</td></tr>
+<tr><td>客户</td><td>销售视角的客户 ≠ 交付视角的项目 ≠ 支持视角的账号</td></tr>
+</table></div>
+
+<h3>推荐的第一个场景：告警分级与责任人指派</h3>
+<p>高频（每天几十到几百）· R1/R2 可逆 · 有明确 Owner · 有现成落点 · 痛感强（误报疲劳是所有团队的共同痛点）。</p>
+<div class="rule"><span class="tag">最宝贵的一点</span><p><strong>历史告警处理记录直接构成金标准集，不需要额外标注。</strong>这在其他行业是很奢侈的条件。</p></div>
+<div class="tw"><table>
+<tr><th>阶段</th><th>自治级别</th><th>内容</th></tr>
+<tr><td>第 1–2 周</td><td>L0</td><td>只做分析，输出告警聚类与历史模式</td></tr>
+<tr><td>第 3–6 周</td><td>L1</td><td>给出分级建议与责任人建议，人工决定</td></tr>
+<tr><td>第 7–10 周</td><td>L2</td><td>自动生成事故单草稿，值班一键确认</td></tr>
+<tr><td>第 11 周+</td><td>L3</td><td>低级别告警自动归档/指派，高级别升级人工</td></tr>
+</table></div>
+<p><strong>被取消的旧动作</strong>：值班人员逐条人工浏览告警列表并判断。</p>
+
+<h3>特别提醒：不要跳过治理</h3>
+<div class="tw"><table>
+<tr><th>偷懒</th><th>后果</th></tr>
+<tr><td>「都是自己人，权限就不做了」</td><td>无法对外复制；薪酬、客户合同等敏感数据会泄漏</td></tr>
+<tr><td>「效果我们自己看得出来，不做评测集了」</td><td>无法证明价值，也无法回答客户「你们怎么验证的」</td></tr>
+<tr><td>「改个提示词而已，直接上」</td><td>与外部项目相同的事故来源</td></tr>
+</table></div>
+<blockquote><p>内部项目的真正价值，不是省下的那点人力，而是<strong>产出一个可对外展示的、完整的方法论证据</strong>。偷掉治理，就偷掉了这个价值的全部。</p></blockquote>
+
+<div class="next"><p><strong>下一步 →</strong>　<a href="research.html">研究：与 Palantir 及其他范式的坐标系、同类研究站调研</a></p></div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="index.html">首页</a>　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

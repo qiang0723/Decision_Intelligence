@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模块五｜整合视图与展望 — 方法论总结</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:16px">
+<p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 模块五</p>
+<h1>整合视图与展望</h1>
+<p class="lede">前四个模块如何合成一个架构，它在范式版图中的位置，以及哪些问题还没有答案。</p>
+<p class="meta"><span class="pill">3 主题 · 约 25 分钟</span></p>
+<ul class="topics">
+<li><span class="tn">5.1</span><span class="tt"><a href="#t51">整合：决策智能架构 DIA</a></span><span class="td">12 min</span></li>
+<li><span class="tn">5.2</span><span class="tt"><a href="#t52">在范式版图中的位置</a></span><span class="td">6 min</span></li>
+<li><span class="tn">5.3</span><span class="tt"><a href="#t53">未解问题与研究方向</a></span><span class="td">7 min</span></li>
+</ul>
+</section>
+
+<hr class="hr">
+
+<section id="t51">
+<h2 style="margin-top:0">5.1 整合：决策智能架构 DIA</h2>
+<p><span class="mk mk-j">判断</span> 本节是我个人的整合框架。前四个模块总结的是领域现状，这一节是我认为它们应该如何合成。</p>
+<blockquote><p>决策智能架构，是把企业的<strong>事实</strong>与企业的<strong>行动</strong>，通过一层业务承认的<strong>本体</strong>缝合起来，并在权限、证据、可逆四条约束下，交给分级授权的智能体去驱动的架构。</p></blockquote>
+<p>记忆锚点：<strong>一个中心，两个方向，四条约束。</strong></p>
+
+<div class="stack">
+  <div class="layer"><span class="k">D</span><span class="n">决策界面</span><span class="d">谁在决策 · 依据什么 · 谁担责</span></div>
+  <div class="arrow">▲ 决策需求向下驱动</div>
+  <div class="layer"><span class="k">A</span><span class="n">行动</span><span class="d">可写回 · 可逆分级 · 审批链 · 幂等 · 频次上限</span></div>
+  <div class="layer"><span class="k">I</span><span class="n">智能</span><span class="d">规则 / 模型 / Agent · 工具即本体行动 · 分级自治</span></div>
+  <div class="layer core"><span class="k">O</span><span class="n">本体</span><span class="d"><strong>★ 中心</strong>　对象 · 属性 · 关系 · 事件 · 指标 · 行动绑定</span></div>
+  <div class="layer"><span class="k">F</span><span class="n">事实</span><span class="d">口径权威唯一 · 血缘可追 · 时点正确</span></div>
+  <div class="arrow">▲ 事实向上支撑</div>
+</div>
+<div class="rule"><span class="tag">横切四约束 · 贯穿全部五层</span>
+<p><strong>权限</strong>　定义在本体上；Agent 继承调用者权限，<strong>无人值守时以担责岗位的委托身份运行</strong>。<br>
+<strong>证据</strong>　任何结论可追溯到输入与版本；坏消息不可隐藏；证据链自身也需被治理。<br>
+<strong>可逆</strong>　默认可撤销；R3 自动化需满足四条件，缺一即保留人闸。<br>
+<strong>运行</strong>　环境隔离 · 配额熔断 · 发布回滚 · 可观测。</p></div>
+</div>
+
+<h3>五层与前四模块的对应</h3>
+<div class="tw"><table>
+<tr><th>层</th><th>核心问题</th><th>来自哪个模块</th></tr>
+<tr><td><strong>D</strong> 决策界面</td><td>谁在做什么决策，错了谁担责？</td><td><a href="m4-adoption.html#t46">模块四 4.6</a></td></tr>
+<tr><td><strong>A</strong> 行动</td><td>系统被允许改变什么？</td><td><a href="m4-adoption.html#t41">模块四 4.1–4.2</a></td></tr>
+<tr><td><strong>I</strong> 智能</td><td>用规则、模型还是 Agent？放权到哪一级？</td><td><a href="m3-agentic.html">模块三</a> + <a href="m4-adoption.html#t43">4.3</a></td></tr>
+<tr><td><strong>O</strong> 本体</td><td>企业由哪些对象和关系构成？</td><td><a href="m2-ontology.html#t21">模块二 2.1–2.4</a></td></tr>
+<tr><td><strong>F</strong> 事实</td><td>这个数从哪来，什么时候的口径？</td><td><a href="m2-ontology.html#t25">模块二 2.5–2.6</a></td></tr>
+<tr><td><strong>横切 · 运行</strong></td><td>谁能跑、花多少、错了怎么退？</td><td><a href="m4-adoption.html#t45">模块四 4.5</a></td></tr>
+<tr><td><strong>横切 · 权限/证据/可逆</strong></td><td>凭什么敢让它做？</td><td><a href="m4-adoption.html#t44">模块四 4.4</a>、<a href="m4-adoption.html#t44b">4.4b</a></td></tr>
+</table></div>
+
+<h3>为什么本体必须在中心</h3>
+<p><span class="mk mk-j">判断</span> 一旦本体只是「一个可选的语义层」，就会立刻出现绕过它的捷径：报表直连数据库、Agent 写自由 SQL、前端硬编码业务公式。三个月后企业就有了第二套、第三套口径。</p>
+<div class="rule"><span class="tag">架构判据</span><p>除本体外，<strong>不存在第二条通往业务语义的路径</strong>。</p></div>
+
+<h3>与传统数据架构的差异</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>传统数据中台 / BI</th><th>决策智能架构</th></tr>
+<tr><td>起点</td><td>有哪些数据</td><td><strong>有哪些决策</strong></td></tr>
+<tr><td>中心</td><td>数据仓库 / 湖仓</td><td><strong>本体</strong></td></tr>
+<tr><td>终点</td><td>报表与看板（只读）</td><td><strong>行动与写回</strong></td></tr>
+<tr><td>语义</td><td>分散在报表与 SQL 里</td><td>集中在本体，唯一权威</td></tr>
+<tr><td>AI 的位置</td><td>数据之上的一个应用</td><td>本体之上的一类执行者</td></tr>
+<tr><td>权限</td><td>表级 / 接口级</td><td>对象 / 关系 / 行动级</td></tr>
+<tr><td>成功标志</td><td>数据接入完成率</td><td><strong>被自动或半自动执行的决策数量</strong></td></tr>
+</table></div>
+
+<div class="rule"><span class="tag">使用方式 · 判断</span><p><strong>不要自上而下建全套。</strong>六层是描述性骨架，不是建设顺序。<br>正确方式是<strong>沿着一个真实决策，把六层打穿一次</strong>。</p></div>
+<p>逐层深入见 <a href="dia.html">DIA 框架详解</a>，执行节奏见 <a href="playbook.html#ninety">实践 · 首个 120 天</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t52">
+<h2 style="margin-top:0">5.2 在范式版图中的位置</h2>
+<div class="tw"><table>
+<tr><th>范式</th><th>关系</th><th>关键差异</th></tr>
+<tr><td><strong>Palantir Foundry/AIP</strong></td><td>同一象限，思想来源</td><td>借鉴其 <strong>semantic + kinetic 两分法</strong>内核（本站此前误写为「三层」，已更正）；<strong>不照搬</strong>重服务模式、全平台锁定、全企业本体优先</td></tr>
+<tr><td><strong>Data Mesh</strong></td><td>互补</td><td>解决「谁负责数据」；止于数据供给，不涉及行动闭环</td></tr>
+<tr><td><strong>Lakehouse</strong></td><td>底座</td><td>解决存储与计算，<strong>不解决语义</strong></td></tr>
+<tr><td><strong>语义层 / 指标平台</strong></td><td>本体层的子集</td><td>管指标口径；<strong>没有行动的语义层是 BI 的延伸</strong></td></tr>
+<tr><td><strong>知识图谱</strong></td><td>技术手段之一</td><td>面向检索推理、只读；本体必须可执行、承载权限</td></tr>
+<tr><td><strong>MDM 主数据</strong></td><td>前置能力</td><td>MDM 是<strong>名词的正确性</strong>；本体是<strong>名词 + 动词 + 权限的完整性</strong></td></tr>
+<tr><td><strong>RPA / 工作流</strong></td><td>行动层的实现手段</td><td>RPA 自动化已确定的流程；本架构自动化<strong>决策本身</strong></td></tr>
+<tr><td><strong>Agent 框架</strong></td><td>智能层的实现工具</td><td>框架解决编排；<strong>Agent 的能力边界应由本体决定，而不是由框架能力决定</strong></td></tr>
+</table></div>
+
+<h3>相对 Palantir 的补充</h3>
+<div class="callout"><span class="tag">2026-08-23 更正：这一节的前提有两处错</span>
+<p>此前的叙事是「Palantir 三层回答了『是什么』，我补上『怎么跑起来』」。</p>
+<p><strong>①不存在 semantic-kinetic-dynamic 三层</strong>，官方是两分法。<br>
+<strong>②「工程细节公开材料里基本没有」是错的</strong>——Palantir 文档逐条覆盖了参数校验、撤销回退、审批链（Ontology proposals，官方类比 Pull Request）、权限传播、幂等、时点正确、本体分支。</p>
+<p><strong>站得住的对照是</strong>：Palantir 把这些作为 <strong>Foundry 的产品特性</strong>文档化，而不是作为一套<strong>可迁移到任意技术栈的工程方法论</strong>。本框架试图提供的是后者。</p></div>
+<p>在这个前提下，本框架相对公开材料补上的是：</p>
+<div class="tw"><table>
+<tr><th>补充</th><th>解决什么</th></tr>
+<tr><td>对象准入五判据</td><td>本体膨胀</td></tr>
+<tr><td>业务 Owner 制度</td><td>本体腐化</td></tr>
+<tr><td><strong>行动十一要素契约</strong></td><td>让 kinetic 层能真正上生产</td></tr>
+<tr><td><strong>可逆性分级 + R3 四条件</strong></td><td>「敢不敢开权限」这个真问题</td></tr>
+<tr><td>分级自治 L0–L4</td><td>dynamic 层的放权依据</td></tr>
+<tr><td>四条横切约束</td><td>权限传播、证据链、失败关闭</td></tr>
+<tr><td>组织承接</td><td>人机权责 + 被取消的旧动作</td></tr>
+</table></div>
+<blockquote><p><strong>Palantir 提供的是一个产品里的实现；本框架试图提供的是一套不绑定产品的工程纪律。</strong><br>这个定位比此前的「它回答是什么、我回答怎么做」诚实，也更站得住。</p></blockquote>
+<p>完整对照见 <a href="research.html#palantir">研究 · 坐标系</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t53">
+<h2 style="margin-top:0">5.3 未解问题与研究方向</h2>
+<div class="rule"><p>一份不列出自己盲区的方法论总结，是不可信的。以下是我认为这个领域尚无好答案的问题。</p></div>
+
+<h3>已有明确分歧的问题　<span class="mk mk-d">争议</span></h3>
+<div class="tw"><table>
+<tr><th>#</th><th>问题</th><th>现状</th></tr>
+<tr><td>①</td><td><strong>编排范式的边界在哪</strong></td><td>确定性工作流 vs 自主 Agent，两派都能举出成功与失败案例。目前没有可操作的判别标准，多数团队靠试错。我的暂定立场见 <a href="m3-agentic.html#t33">3.3</a></td></tr>
+<tr><td>②</td><td><strong>生成式系统的评测方法论尚未成熟</strong></td><td>LLM-as-Judge 与人工判断的一致性因任务而异；离线评测与在线表现的相关性弱。<strong>目前没有一个企业敢说自己的评测体系是充分的</strong></td></tr>
+<tr><td>③</td><td><strong>本体的构建应该多自动化</strong></td><td>用 LLM 从数据库 schema 自动生成本体的尝试很多，但生成的是「数据模型的镜像」，不是业务语义。自动化与「业务承认」之间的矛盾没有解决</td></tr>
+</table></div>
+
+<h3>缺少数据的问题</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>问题</th><th>为什么重要</th></tr>
+<tr><td>④</td><td><strong>本体的「复利」从第几个场景开始显现？</strong></td><td>增量派的核心论据是复用，但复用率随场景数增长的曲线形态没有公开数据。<strong>这是我最想研究的一个问题</strong></td></tr>
+<tr><td>⑤</td><td><strong>M1 → M2 的真实成本</strong></td><td>口径裁决权的组织分配需要多长时间、多高层级推动，没有基准。国内企业起点普遍低于欧美，成本差异有多大也不清楚</td></tr>
+<tr><td>⑥</td><td><strong>弃权率的合理区间</strong></td><td>过低说明系统不知道自己不知道，过高说明没有价值。中间区间在哪里、取决于什么，没有答案</td></tr>
+</table></div>
+
+<h3>我认为会成为焦点的问题</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>问题</th><th>说明</th></tr>
+<tr><td>⑦</td><td><strong>责任分配的法律与制度形态</strong></td><td>「担责者永远是人」目前是一条工程原则，但自动执行规模扩大后，它需要制度化支撑（岗位定义、保险、审计标准）。<strong>目前完全空白</strong></td></tr>
+<tr><td>⑧</td><td><strong>组织记忆的表达形式</strong></td><td>「这个供应商经常延迟」应沉淀为本体属性还是留在记忆库？前者可审计但笨重，后者灵活但不可查。权衡未有共识</td></tr>
+<tr><td>⑨</td><td><strong>多 Agent 系统的审计</strong></td><td>单 Agent 的证据链已清楚。多 Agent 协作时「谁做的决定」变得难以回答。<strong>企业级多体审计方法基本没有</strong></td></tr>
+</table></div>
+</section>
+
+<hr class="hr">
+
+<section>
+<h2 style="margin-top:0">总结全文的三句话</h2>
+<ol class="steps">
+<li><b>企业 AI 的瓶颈不是模型</b>是企业没有一层机器可理解、且业务承认的语义骨架。</li>
+<li><b>只读的智能存在价值上限</b>价值发生在写回，而写回的门槛是治理，不是技术。</li>
+<li><b>自主不是能力描述，是授权描述</b>放权的依据是可逆性与证据，不是准确率与信心。</li>
+</ol>
+
+<div class="prevnext">
+<span><a href="m4-adoption.html">← 模块四｜行动闭环与企业采纳</a></span>
+<span><a href="playbook.html">实践板块 →</a></span>
+</div>
+<p style="margin-top:20px">继续：<a href="playbook.html">实践</a>（成熟度诊断 · 90 天 · 工作坊 · 模板 · 反模式 · 12 问）　|　<a href="dia.html">DIA 框架详解</a>　|　<a href="domains.html">行业剖面</a></p>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　| <a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

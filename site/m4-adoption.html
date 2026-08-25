@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模块四｜行动闭环与企业采纳 — 方法论总结</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:16px">
+<p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 模块四</p>
+<h1>行动闭环与企业采纳</h1>
+<p class="lede">怎么从只读走到写回，怎么逐级放权而不出事，组织怎么承接。</p>
+<div class="callout"><p><strong>这是整个领域公开材料最薄、而企业最需要的一块。</strong>平台厂商不谈，技术社区不关心，治理传统不涉及。</p></div>
+<p class="meta"><span class="pill">8 主题 · 约 85 分钟</span></p>
+<ul class="topics">
+<li><span class="tn">4.1</span><span class="tt"><a href="#t41">从只读到写回：行动契约</a></span><span class="td">12 min</span></li>
+<li><span class="tn">4.2</span><span class="tt"><a href="#t42">可逆性分级与人在回路</a></span><span class="td">12 min</span></li>
+<li><span class="tn">4.3</span><span class="tt"><a href="#t43">分级自治 L0–L4</a></span><span class="td">10 min</span></li>
+<li><span class="tn">4.4</span><span class="tt"><a href="#t44">四条治理约束：权限 · 证据 · 可逆 · 运行</a></span><span class="td">14 min</span></li>
+<li><span class="tn">4.4b</span><span class="tt"><a href="#t44b">无人值守时的身份　<span style="color:var(--accent)">补漏</span></a></span><span class="td">8 min</span></li>
+<li><span class="tn">4.5</span><span class="tt"><a href="#t45">运行约束：隔离 · 成本 · 发布回滚</a></span><span class="td">8 min</span></li>
+<li><span class="tn">4.6</span><span class="tt"><a href="#t46">组织承接：人机权责与减法</a></span><span class="td">8 min</span></li>
+<li><span class="tn">4.7</span><span class="tt"><a href="#t47">成熟度诊断 M0–M2 + 覆盖率</a></span><span class="td">8 min</span></li>
+</ul>
+</section>
+
+<hr class="hr">
+
+<section id="t41">
+<h2 style="margin-top:0">4.1 从只读到写回：行动契约</h2>
+<p><span class="mk mk-j">判断</span> 在传统数据架构里「写回」是边缘功能。在决策智能架构里，行动必须与对象、属性同等重要。</p>
+<p>理由是价值上限：一个只能回答问题的系统，其价值都要经过一次人工转译才能落地——人看到结论、人理解、人打开另一个系统、人操作。这条链路每一环都在衰减，且吞吐量受限于人的注意力。</p>
+<p><span class="mk mk-c">共识</span> Palantir 的 kinetic 层、各类 Agent 平台的 action/tool 概念，都指向同一件事。分歧不在于「要不要行动」，而在于<strong>行动要定义到什么程度才能上生产</strong>。</p>
+
+<h3>行动契约：十一个必备要素</h3>
+<p><span class="mk mk-j">判断</span> 缺任何一项都不应上线。</p>
+<div class="callout"><span class="tag">2026-08-23 由九要素补为十一要素</span><p>外部审查指出两处致命遗漏——本站自己在 <a href="domains.html#ec">电商剖面</a> 把「客服补偿被薅羊毛」诊断为「缺少<strong>频次上限</strong>」，却没在契约里留位置；同时「数据缺失 → 失败关闭」在运行时无从判定，因为契约没有声明它依赖什么数据。</p></div>
+<div class="tw"><table>
+<tr><th>#</th><th>要素</th><th>说明</th></tr>
+<tr><td>1</td><td>前置条件</td><td>用状态机表达，如「订单状态 ∈ {待发货}」</td></tr>
+<tr><td>2</td><td><strong>参数模式</strong></td><td>结构、类型、<strong>取值范围——范围就是安全边界</strong></td></tr>
+<tr><td>3</td><td>权限</td><td>人工触发时继承调用者身份；<strong>自动执行时以担责岗位的委托身份运行</strong>（见 4.4b）</td></tr>
+<tr><td>4</td><td>副作用</td><td>改变哪些对象状态，触发哪些下游</td></tr>
+<tr><td>5</td><td><strong>幂等键</strong></td><td>重复执行不产生重复效果。<strong>必填项，不是优化项</strong></td></tr>
+<tr><td>6</td><td>可逆性</td><td>R1 / R2 / R3，见 4.2</td></tr>
+<tr><td>7</td><td>审批链</td><td>什么条件免批，什么条件强制人工</td></tr>
+<tr><td>8</td><td>审计记录</td><td>触发者、参数、依据、口径与模型版本、审批人、结果</td></tr>
+<tr><td>9</td><td>失败语义</td><td>失败后状态、是否重试、何时需人工</td></tr>
+<tr><td><strong>10</strong></td><td><strong>频次上限 / 速率限制</strong></td><td><strong>新增。</strong>按对象、按执行者、按全局分别设限。<strong>参数范围管单次幅度，管不了「一天调用 5000 次，每次都在范围内」</strong>——这正是薅羊毛与失控循环的形态</td></tr>
+<tr><td><strong>11</strong></td><td><strong>数据依赖与新鲜度</strong></td><td><strong>新增。</strong>本行动依赖哪些对象/指标、要求多新的数据。没有它，「数据缺失则失败关闭」<strong>在运行时无从判定</strong></td></tr>
+</table></div>
+<div class="callout"><span class="tag">实践中最常被跳过的两项</span><p>第 5 项（幂等键）和第 2 项的范围部分——而这两项恰好是事故率最高的两项。参数无边界的典型后果：<strong>一个小数点错误导致调价 100 倍</strong>。</p></div>
+
+<h3>写回原则：不要制造第二套真相</h3>
+<p><span class="mk mk-j">判断</span> 行动必须写回<strong>权威系统</strong>（ERP、OMS、WMS、CRM），而不是只写在平台内部。</p>
+<p>如果平台自己存了一份「我们认为的库存」，而 ERP 里是另一份，企业就有了两套真相。这比没有 AI 更糟：对账量增加、出问题无法定位哪套对、业务方会自然相信旧系统。</p>
+<div class="rule"><span class="tag">判据</span><p><strong>关掉这个平台，企业的业务数据是否完全不受影响？</strong><br>
+是 → 写回设计正确（平台是决策者与执行者，不是记录者）<br>
+否 → 制造了第二套真相，必须重构</p>
+<p><strong>例外</strong>：平台可以保留决策记录与证据链——这是平台独有的资产，不与业务系统冲突。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t42">
+<h2 style="margin-top:0">4.2 可逆性分级与人在回路</h2>
+<p><span class="mk mk-j">判断</span> 这是整个授权体系的核心依据，也是公开材料里几乎完全缺失的一环。社区谈 "human-in-the-loop" 时通常停留在「要不要加个确认按钮」，而没有回答<strong>在什么条件下可以不加</strong>。</p>
+
+<div class="tw"><table>
+<tr><th>级别</th><th>定义</th><th>例子</th><th>授权取向</th></tr>
+<tr><td><strong>R1</strong> 可撤销</td><td>一键回到原状态，无外部影响</td><td>修改内部标签、调整优先级、更新预测</td><td>可较早开放自动</td></tr>
+<tr><td><strong>R2</strong> 可补偿</td><td>不能直接撤销，但有明确反向操作</td><td>调价、创建工单、库存调拨</td><td>限额内自动，超限审批</td></tr>
+<tr><td><strong>R3</strong> 不可逆</td><td>一旦执行，外部世界已改变</td><td>已发货、已付款、已发客户通知、已监管报送</td><td><strong>需满足四条件，否则人闸</strong></td></tr>
+</table></div>
+<h3>R3 是否永远需要人闸：一处重要更正</h3>
+<div class="callout"><span class="tag">〔争议〕2026-08-23 更正</span>
+<p>本站此前写「<strong>R3 不可逆行动永远需要人闸</strong>」，并列为不可协商。<strong>这作为对现实的描述是错的，作为规范也不是领域共识。</strong></p>
+<p>反方立场必须列出：<strong>产业界大量不可逆行动今天就在全自动执行</strong>——程序化广告投放、算法交易、自动放款与扣款、自动发送的营销短信与推送、自动化物流下单、SaaS 自动扣费。这些系统的通行做法不是人闸，而是<strong>限额 + 速率限制 + 异常熔断 + 事后补偿 + 保险</strong>。</p>
+<p>而且本站自己在 <a href="domains.html#ec">电商剖面</a> 已经写了「是否退款：<strong>小额自动，大额人闸</strong>」——那本来就是一个例外，此前没有承认。</p></div>
+
+<div class="rule"><span class="tag">修正后的规则 · 判断</span>
+<p>它比原来更有力，因为它说清了真正要守的不是「必须有人点确认」，而是<strong>必须有可承担的损失上界</strong>：</p>
+<p><strong>R3 开放自动执行，需要同时满足四条：</strong><br>
+① <strong>单次影响有硬上限</strong>（金额、数量、影响对象数）<br>
+② <strong>单位时间总量有硬上限</strong>（对应行动契约第 10 要素）<br>
+③ <strong>有可执行的事后补偿路径</strong>（已实现并演练过，不是理论上可补偿）<br>
+④ <strong>有实时异常熔断</strong>，以及<strong>一个具名担责人</strong></p>
+<p><strong>四者缺一，即保留人闸。</strong></p></div>
+
+<h3>最实用的落地模式：把 R3 拆成 R2 + R3</h3>
+<p><span class="mk mk-j">判断</span> 这是我认为企业 AI 落地最有用的一个具体技巧：</p>
+<pre><code>「自动发货」        = R3，不能自动
+拆解后：
+「自动创建发货单」   = R2（可作废，未下发前无外部影响）  → 可以自动
+「确认发货」        = R3（不可逆）                      → 保留人闸，一键确认</code></pre>
+<p>AI 承担 95% 的工作量，人只保留最后那个不可逆的确认动作。</p>
+<p><strong>这个模式几乎适用于所有 R3 场景</strong>：自动生成退款单 + 人工确认；自动起草客户通知 + 人工发送；自动准备付款指令 + 人工放行。</p>
+
+<h3>人在回路的三种形态</h3>
+<div class="tw"><table>
+<tr><th>形态</th><th>人的位置</th><th>适用</th></tr>
+<tr><td>Human-in-the-loop</td><td>执行前必须人批</td><td>R3、高代价</td></tr>
+<tr><td>Human-on-the-loop</td><td>人监督，可随时干预与叫停</td><td>R2 限额自动</td></tr>
+<tr><td>Human-in-command</td><td>人只做定期审计与规则调整</td><td>R1 稳定运行后</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 这三种形态与 4.3 的自治级别一一对应。<strong>选哪一种，由可逆性决定，而不是由模型准确率决定。</strong></p>
+</section>
+
+<hr class="hr">
+
+<section id="t43">
+<h2 style="margin-top:0">4.3 分级自治 L0–L4</h2>
+<div class="rule"><span class="tag">本节全部要点 · 判断</span><p><strong>「自主」不是能力描述，是授权描述。</strong></p>
+<p>社区里常见的「Agent 自主性等级」讨论，多数从<strong>模型能力</strong>出发（能不能自己规划、能不能自己纠错）。企业需要的分级必须从<strong>授权与责任</strong>出发。</p></div>
+
+<div class="tw"><table>
+<tr><th>级别</th><th>名称</th><th>系统做什么</th><th>人做什么</th><th>典型准入条件</th></tr>
+<tr><td><strong>L0</strong></td><td>观察</td><td>只输出分析与解释</td><td>全部决策与执行</td><td>上线即可</td></tr>
+<tr><td><strong>L1</strong></td><td>建议</td><td>给出推荐动作与理由</td><td>决策 + 执行</td><td>离线评测达标</td></tr>
+<tr><td><strong>L2</strong></td><td>草拟</td><td>生成参数已填好的动作草稿</td><td>审批 + 一键执行</td><td>影子运行期通过</td></tr>
+<tr><td><strong>L3</strong></td><td>限额自动</td><td>阈值内自动执行，超限升级</td><td>例外处理 + 抽检</td><td>连续 N 期在线指标达标</td></tr>
+<tr><td><strong>L4</strong></td><td>全自动</td><td>全量自动执行</td><td>监控 + 定期审计</td><td>长期稳定，且仅限 R1/R2</td></tr>
+</table></div>
+
+<h3>四条硬规则</h3>
+<ol class="steps">
+<li><b>R3 开放到 L3/L4 需满足 4.2 的四条件</b>四者缺一则最高只能到 L2（此前写「R3 最高只能到 L2」，已更正）</li>
+<li><b>晋级条件必须事前冻结</b>不能看到结果后临时议定</li>
+<li><b>降级条件自动生效，不需要审批</b></li>
+<li><b>每次晋级/降级都是一条审计记录</b></li>
+</ol>
+<blockquote><p><strong>晋级靠证据，不靠信心。</strong><br>「我们觉得它已经挺准了」不是晋级理由。晋级条件应当在上线之前就写进决策卡。</p></blockquote>
+
+<h3>一条重要修正：L2 不是稳定状态</h3>
+<div class="rule"><span class="tag">判断</span>
+<p>本站此前把 L2（草拟 + 人工确认）当作一个可以长期停留的稳定状态。2026-06 的纵向研究否定了这个假设：<strong>对 Agent 输出的批准率随时间上升，而审查深度下降</strong>。经验规则：<strong>批准率 ≥95% 时，这个检查点已经是「确认剧场」</strong>，实际保护力接近零。</p>
+<p>修正后：<strong>L2 是过渡态，不是终点</strong>；<strong>必须监控批准率</strong>，与「人工推翻率」并列进入可观测指标；批准率过高时，正确的动作是<strong>要么晋级到 L3 + 抽检，要么承认这个检查点无效并重新设计</strong>——而不是维持一个形式上的确认按钮。</p></div>
+
+<h3>为什么必须从 L1 起步</h3>
+<p><span class="mk mk-j">判断</span> 常见的反驳是「我们很有信心，直接上 L3」。三个理由不行：</p>
+<ul>
+<li><strong>证据不足</strong>：离线评测集覆盖不了真实分布，影子运行期是唯一能发现分布外行为的阶段</li>
+<li><strong>信任建立</strong>：业务方需要时间观察系统与自己判断的差异，跳过这段，第一次出错就是终点</li>
+<li><strong>组织准备</strong>：L3 需要「例外处理」流程与责任人，这些在 L1/L2 期间才能磨合出来</li>
+</ul>
+</section>
+
+<hr class="hr">
+
+<section id="t44">
+<h2 style="margin-top:0">4.4 四条治理约束：权限 · 证据 · 可逆 · 运行</h2>
+<p><span class="mk mk-j">判断</span> 这几条不属于某一层，而是整套架构的设计前提。</p>
+<div class="callout"><span class="tag">2026-08-23 由三条扩为四条</span><p>此前是「三条约束 + 六层（含 R 运行层）」。外部审查指出 R 运行层的内容<strong>作用于所有层</strong>，与「事实层之下」这个位置没有任何关系；且它包含的「权限落到运行时」与约束一重复。<strong>现改为五层 + 四条横切约束</strong>，记忆锚点相应改为「一个中心，两个方向，<strong>四条</strong>约束」。</p></div>
+
+<h3>约束一｜权限 Authority</h3>
+<p><strong>原则</strong>：权限定义在本体上；<strong>Agent 继承调用者权限，不存在超级 AI 身份</strong>。</p>
+<ul>
+<li>四个维度：对象级、行级、属性级、行动级</li>
+<li>身份上下文必须贯穿：用户 → Agent → 工具 → 数据 → 行动。<strong>中间任何一处退化成服务账号，模型即破</strong></li>
+<li>越权返回<strong>明确拒绝</strong>，不是空结果</li>
+</ul>
+<div class="callout"><span class="tag">隐蔽风险</span><p>销售 A 问「我们最大的客户是谁」，如果 Agent 用超级权限回答了，就等于绕过了原有权限体系。<strong>这类泄漏不会触发任何传统安全告警。</strong></p></div>
+
+<h3>约束二｜证据 Evidence</h3>
+<p><strong>原则</strong>：任何结论可追溯到输入与版本；<strong>失败与拒绝同样留痕</strong>。</p>
+<pre><code>决策/结论
+  ├── 触发：谁、什么时候、通过什么入口
+  ├── 输入：哪些对象与指标，取值与时间点
+  ├── 口径：指标权威实现版本、本体版本
+  ├── 推理：规则 / 模型 / 提示词版本
+  ├── 输出：建议或已执行的行动、参数
+  ├── 人的介入：谁审批、是否被推翻、推翻理由
+  └── 结果：执行成功/失败、后续影响</code></pre>
+<div class="rule"><span class="tag">坏消息不可隐藏 · 判断</span><p>拒绝、弃权、失败、人工推翻全部要留痕。<strong>人推翻系统建议的理由，是最有价值的改进信号。</strong></p>
+<p>界面可以降噪，但不能删除或改写权威状态。<strong>做一个只展示成功案例的看板，等于主动放弃了系统改进的唯一信息来源。</strong></p></div>
+
+<h4>证据链本身也需要被治理</h4>
+<p><span class="mk mk-j">判断</span> 这是本站此前的一个盲点：证据链是全架构中<strong>唯一允许平台自己长期存储的数据</strong>，且必然包含用户提问、数据取值、决策依据、被推翻的理由——<strong>这是一个新创建的高敏感数据存储</strong>。方法论创造了一个新风险，就必须治理它：</p>
+<div class="tw"><table>
+<tr><th>项</th><th>要求</th></tr>
+<tr><td><strong>留存期限</strong></td><td>等保与行业监管有<strong>下限</strong>要求，个人信息保护有<strong>上限</strong>要求，两者要同时满足</td></tr>
+<tr><td><strong>访问权限</strong></td><td>证据链的读取权限<strong>不等于</strong>业务数据的读取权限，需单独定义</td></tr>
+<tr><td><strong>个人信息</strong></td><td>提问内容与决策依据可能含个人信息，需纳入数据分类分级</td></tr>
+<tr><td><strong>不可篡改</strong></td><td>证据链自身必须追加式，修改证据链的操作本身要留痕</td></tr>
+</table></div>
+<div class="rule"><p><strong>这同时是一个卖点而非负担</strong>：等保对审计留存的要求与证据链设计高度重合——<strong>证据链本来就能满足大部分审计要求</strong>。合规评审时应当主动拿出来讲。见 <a href="playbook.html#compliance">合规与安全前置</a>。</p></div>
+
+<h3>约束三｜可逆 Reversibility</h3>
+<p><strong>原则</strong>：默认可撤销；不可逆行动永远需要人。运行时体现为<strong>失败关闭（Fail-Closed）</strong>：</p>
+<div class="tw"><table>
+<tr><th>情形</th><th>正确行为</th><th>错误行为</th></tr>
+<tr><td>数据缺失</td><td>返回 <code>NOT_READY</code> + 缺什么</td><td>用 0 或前值填充后继续</td></tr>
+<tr><td>口径不明</td><td>返回 <code>NOT_EVALUATED</code></td><td>按最可能的口径猜一个</td></tr>
+<tr><td>权限不足</td><td>返回 <code>DENIED</code></td><td>返回空结果</td></tr>
+<tr><td>置信度低</td><td>弃权，转人工</td><td>输出最佳猜测</td></tr>
+<tr><td>断言失败</td><td>阻断下游</td><td>告警但继续出结论</td></tr>
+</table></div>
+<blockquote><p><strong>降级成「看起来成功」是最危险的失败模式。</strong><br>一个明确的错误会被立刻发现和修复；一个看起来正常的错误会持续污染决策数月。</p></blockquote>
+
+<h3>约束四｜运行 Runtime</h3>
+<p><strong>原则：能力必须能被停下来、退回去、算清楚。</strong></p>
+<p>这一条此前是「R 运行层」，现升格为横切约束。内容见 4.5：环境隔离、配额与熔断、发布与回滚、可观测性。</p>
+<p><span class="mk mk-j">判断</span> 把它作为约束而不是层，有一个实际后果：<strong>任何一层的设计评审都必须回答「这一层出问题时怎么停、怎么退、成本怎么算」</strong>，而不是把这些问题推给「底层去解决」。</p>
+
+<h3>四者的关系</h3>
+<pre><code>权限  ──决定──▶  能做什么
+  ↓
+可逆  ──决定──▶  能自动做到什么程度
+  ↓
+证据  ──决定──▶  能不能被采信、能不能改进
+  ↓
+运行  ──决定──▶  出事时能不能停下来、退回去、算清楚</code></pre>
+<p><span class="mk mk-j">判断</span> 四者共同构成企业 AI 的<strong>信任基础设施</strong>。技术能力决定上限，这四条决定能不能开始。</p>
+<div class="callout"><span class="tag">争议</span><p>需要承认：四条约束的<strong>完整实施成本很高</strong>，而产业界大量成功的自动化系统（广告投放、风控、推荐）并没有全部做到——它们用限额、熔断与事后补偿替代了其中几条。本方法论的立场是「在可写回企业权威系统的场景下四条都需要」，<strong>但这是我的判断，不是共识</strong>。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t44b">
+<h2 style="margin-top:0">4.4b 无人值守时的身份</h2>
+<div class="callout"><span class="tag">本节是补漏，2026-08-23 新增</span>
+<p>本站在六个文件里反复陈述：「Agent 继承调用者权限，不存在超级 AI 身份」「中间任何一处退化成服务账号，模型即破」。</p>
+<p>同时 L3/L4 的定义是系统<strong>自动执行</strong>——定时或事件触发。<strong>在无人值守的自动执行里，没有「调用者」。</strong>那么此时 Agent 用谁的身份？</p>
+<p><strong>本站此前没有任何一处回答这个问题。</strong>而这恰恰是企业安全评审第一个会问的，也是「超级 AI 账号」在现实中真正诞生的地方——绝大多数团队会在这里悄悄配一个服务账号，按本站自己的说法就是「模型即破」。</p></div>
+
+<h3>规则：岗位委托身份</h3>
+<div class="rule"><p>它与「担责者永远是人」天然衔接：</p>
+<p><strong>自动执行以「担责岗位」的身份运行。</strong><br>
+该身份的权限<strong>恰好等于</strong>该岗位的人工权限，不多一分；<br>
+该岗位的具体担责人对每一次自动执行<strong>事后可见、可撤回</strong>；<br>
+<strong>岗位空缺或担责人离职时，该自动执行自动降级为 L2</strong>，直到指定新的担责人。</p></div>
+
+<h3>两条配套硬约束</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>约束</th></tr>
+<tr><td>1</td><td><strong>权限下界原则</strong>：当一个自动执行服务于多个岗位时，其权限必须是这些岗位权限的<strong>交集</strong>，不是并集</td></tr>
+<tr><td>2</td><td><strong>绝对禁止</strong>：不得使用任何权限<strong>大于</strong>其担责人的自动执行身份。这条没有例外——一旦允许，「不存在超级 AI 身份」就失效了</td></tr>
+</table></div>
+
+<h3>落到契约</h3>
+<p>行动契约第 3 要素此前只写「Agent 执行时继承：<code>&lt;调用者身份&gt;</code>」，在 L3/L4 下这个字段填不出来。现补为：</p>
+<pre><code>权限
+  人工触发时：继承调用者身份
+  自动执行时：以担责岗位 &lt;岗位名&gt; 的委托身份运行
+             担责人：&lt;具体的人&gt;
+             权限来源：该岗位人工权限的 [全集 / 与 XX 岗位的交集]
+             岗位空缺时的行为：降级至 L2</code></pre>
+<p><span class="mk mk-d">争议</span> 业界正在成型的标准化 Agent 身份委派（A2A、OAuth Cross-App Access 一类）与本规则不冲突——那是<strong>实现机制</strong>，本规则定的是<strong>权限边界</strong>。标准成熟后应优先采用标准。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t45">
+<h2 style="margin-top:0">4.5 运行约束：隔离 · 成本 · 发布回滚</h2>
+<p><span class="mk mk-j">判断</span> 最不性感，但它是 PoC 与生产之间那道断崖的主体。</p>
+<div class="tw"><table>
+<tr><th>环境</th><th>数据</th><th>允许的行动</th></tr>
+<tr><td>研究 / 沙箱</td><td>脱敏或只读副本</td><td><strong>只读，零写回</strong>（凭据级隔离，不靠自觉）</td></tr>
+<tr><td>预生产</td><td>生产数据只读</td><td>影子行动：记录不执行</td></tr>
+<tr><td>生产</td><td>生产数据</td><td>完整行动，受权限与自治级别约束；<strong>只运行受控发布的不可变版本</strong></td></tr>
+</table></div>
+
+<h3>成本必须能熔断</h3>
+<p><span class="mk mk-c">共识</span> 生成式系统的边际成本不可忽略，且可在无人察觉时指数增长。四件事必须强制：预算、配额、<strong>熔断</strong>、成本归因。</p>
+<div class="rule"><span class="tag">判断</span><p><strong>熔断必须是「停」，不是「提醒」。</strong>一个只发告警不停止的成本保护，在夜间和周末等于不存在。</p></div>
+
+<h3>发布与回滚</h3>
+<p>代码、配置、提示词、模型、本体定义、评测集全部版本化，一次发布对应一组确定的版本组合。</p>
+<div class="rule"><p><strong>回滚不需要审批；需要审批的是发布。</strong></p></div>
+<p><span class="mk mk-j">判断</span> 特别提醒：<strong>提示词与本体定义的变更，与代码变更享受同等待遇</strong>。它们同样改变系统行为，却经常被当成「配置微调」绕过流程——这是生成式系统最常见的事故来源。</p>
+
+<h3>可观测性</h3>
+<p>三类信号缺一不可：技术指标（时延、错误率、成本）、质量指标（准确率、弃权率、抽检）、业务指标（该决策对应的业务成效）。</p>
+<p><span class="mk mk-j">判断</span> <strong>人工推翻率是最诚实的指标</strong>，通常比技术指标更早报警。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t46">
+<h2 style="margin-top:0">4.6 组织承接：人机权责与减法</h2>
+<p><span class="mk mk-j">判断</span> 这是公开材料里最被忽略、而失败率贡献最大的一环。</p>
+
+<h3>人机权责矩阵</h3>
+<div class="tw"><table>
+<tr><th>角色</th><th>定义</th><th>可以是 AI 吗</th></tr>
+<tr><td>建议者</td><td>提出方案</td><td>✅ 通常从这里开始</td></tr>
+<tr><td>决定者</td><td>拍板</td><td>取决于自治级别</td></tr>
+<tr><td>执行者</td><td>实际操作系统</td><td>✅ 通过行动层</td></tr>
+<tr><td><strong>担责者</strong></td><td>出问题时负责</td><td><strong>❌ 永远是人</strong></td></tr>
+</table></div>
+<div class="rule"><span class="tag">不可协商</span><p>任何一个「AI 自动执行」的场景，都必须能指出一个具体的人对结果负责。<br><strong>找不到这个人，就不要上自动执行。</strong></p></div>
+
+<h3>交付时必须回答的问题</h3>
+<div class="callout"><span class="tag">哪一个旧动作因此被取消了？</span><p>如果答案是「没有，只是多了一个参考」，那么这个场景在组织意义上没有落地，它会在三个月内消亡。</p>
+<p>新增一个动作而不取消任何动作，是净增加负担。<strong>落地的标志是减法。</strong></p></div>
+
+<h3>决策界面的形态优先级</h3>
+<ol>
+<li><strong>嵌入现有工作流</strong>（最优）：ERP 待办、飞书/企微卡片、工单系统推荐</li>
+<li><strong>推送到人所在的地方</strong>：告警、日报、审批流</li>
+<li><strong>独立控制台</strong>（次选）：仅当需要复杂上下文探索</li>
+<li><strong>对话式界面</strong>（谨慎）：适合探索性分析，<strong>不适合日常高频决策</strong></li>
+</ol>
+<blockquote><p>常见错误：把所有场景都做成 Chat。<br><strong>对话是探索的界面，不是执行的界面。</strong><br>一个高频重复的决策，界面应该是一个按钮和一行理由，不是一个输入框。</p></blockquote>
+
+<h3>变更管理：判据之外还需要方法</h3>
+<p><span class="mk mk-j">判断</span> 本站此前在这里只有两个交付物（人机权责矩阵、被取消的旧动作）。它们是好判据，<strong>但判据不是方法</strong>。以下是四个真实会发生、而此前没有工具应对的情形：</p>
+<div class="tw"><table>
+<tr><th>情形</th><th>可用的处理</th></tr>
+<tr><td><strong>被取消动作的岗位抵触</strong></td><td>先取消<strong>信息搜集类</strong>而不是判断类动作——前者是负担，后者是身份。让这个岗位成为系统的<strong>审核者与例外处理者</strong>，职责升级而不是缩小</td></tr>
+<tr><td><strong>Owner 拒绝当 Owner</strong></td><td>通常不是懒，是<strong>责任与权力不匹配</strong>——他要为口径负责，却无权否决别的部门的用法。解法是把「裁决权」与「Owner」一起给出去；给不出，就改用 <a href="m2-ontology.html#t25">分层指标模式</a></td></tr>
+<tr><td><strong>sponsor 换人</strong></td><td>这是本方法论<strong>覆盖不到</strong>的失败原因。唯一的对冲是<strong>在 sponsor 任期内产出可独立成立的资产</strong>：决策清单、本体与数据合同即使项目停摆也仍然有用</td></tr>
+<tr><td><strong>过渡期激励错配</strong></td><td>影子期人要同时做旧动作和看新建议，<strong>工作量是增加的</strong>。必须有补偿或考核豁免，否则影子期数据会被敷衍生成、评测结论失真</td></tr>
+</table></div>
+</section>
+
+<hr class="hr">
+
+<section id="t47">
+<h2 style="margin-top:0">4.7 成熟度：M0–M2 + 覆盖率</h2>
+<div class="callout"><span class="tag">2026-08-23 更正</span><p>本站此前用 M0–M4 五级。外部审查指出 <strong>M3/M4 只是把 L2/L3 换了个名字重说一遍</strong>：M3「系统草拟，人一键确认」= L2 的定义；M4「限额自动」= L3 的定义。而本站自己的规则三已经写了「有价值的是有多少决策进入闭环，不是最高做到第几级」——<strong>那就应该让模型本身长成这个样子</strong>。</p></div>
+<div class="tw"><table>
+<tr><th>级别</th><th>特征</th><th>决策如何发生</th><th>典型症状</th></tr>
+<tr><td><strong>M0</strong> 手工</td><td>数据散在各系统与 Excel</td><td>靠经验、开会、人工拉数</td><td>「这个数我要问一下财务」</td></tr>
+<tr><td><strong>M1</strong> 可见</td><td>有 BI/看板，数据集中</td><td>人看报表后决定</td><td>「报表有了，但还是按经验做」</td></tr>
+<tr><td><strong>M2</strong> 有语义</td><td>本体成型，口径唯一</td><td>人基于统一事实决定</td><td>「终于不吵口径了」</td></tr>
+
+</table></div>
+
+<h3>覆盖率（取代原 M3/M4）</h3>
+<p>自动化程度直接用 <strong>L 级的决策计数</strong>表达，不再新造级别：</p>
+<pre><code>某域的成熟度报告 = M2 ＋「该域 12 个已识别决策中，5 个 ≥L2，2 个 ≥L3」</code></pre>
+<p>三个好处：<strong>不重复</strong>（不需要 M3/M4 复述 L2/L3）；<strong>能表达混合状态</strong>（原模型无法回答「一个域 M3 但只有一个场景在 L2 怎么报告」）；<strong>与规则三一致</strong>（奖励覆盖率而非最高级别）。</p>
+
+<h3>三条使用规则</h3>
+<div class="callout"><span class="tag">规则一 · M2 是分水岭，不可跳过</span><p>M0 → M1 是数据工程问题，钱能解决。<strong>M1 → M2 是组织问题，钱解决不了</strong>——M2 的实质是企业接受了「某个人对某个口径有裁决权」，这是权力的重新分配。跳过 M2 直接上 M3 的项目，会在上线三个月后陷入口径战争。</p></div>
+<p><strong>规则二 · 级别按域算，不按企业算。</strong>供应链 M3、营销 M1、财务 M2 完全正常。笼统说「我们公司是 M2」没有意义。</p>
+<p><strong>规则三 · 不要为了升级而升级。</strong>低频决策停在 L1/L2 完全合理；不满足 4.2 四条件的 R3 场景天花板本来就在 L2。<strong>有价值的是覆盖率，不是最高级别。</strong></p>
+
+<h3>与本总结各模块的对应</h3>
+<div class="tw"><table>
+<tr><th>成熟度跃迁</th><th>主要涉及</th></tr>
+<tr><td>M0 → M1</td><td><a href="m2-ontology.html#t25">模块二 2.5–2.6</a>（数据接入与可信）</td></tr>
+<tr><td><strong>M1 → M2</strong></td><td><a href="m2-ontology.html"><strong>模块二全部</strong></a>（本体与语义）</td></tr>
+<tr><td>提升 L2 覆盖率</td><td>本模块 4.1–4.2 + <a href="m3-agentic.html">模块三</a></td></tr>
+<tr><td>提升 L3 覆盖率</td><td>本模块 4.3、4.4b、4.5</td></tr>
+<tr><td>全程</td><td>本模块 4.4（四条治理约束）</td></tr>
+</table></div>
+<p>诊断工具与推进路线见 <a href="playbook.html#maturity">实践 · 成熟度诊断</a>。</p>
+
+<div class="prevnext">
+<span><a href="m3-agentic.html">← 模块三｜Agentic 系统设计与编排</a></span>
+<span><a href="m5-synthesis.html">模块五｜整合视图与展望 →</a></span>
+</div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

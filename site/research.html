@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>研究 — 坐标系 · 调研 · 引用来源 · 术语表 · 札记</title>
+<meta name="description" content="与 Palantir 及其他范式的关系、同类研究站调研、术语表与未定论的思考。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html" class="active">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:24px">
+  <p class="eyebrow">研究</p>
+  <h1>坐标系与调研</h1>
+  <p class="lede">明确借鉴什么、不照搬什么，以及本方法论在现有范式版图中的位置。<br>这一区也保留未定论的思考——只展示成品结论的研究站，可信度反而更低。</p>
+  <p class="meta"><span class="pill">约 15 分钟</span></p>
+  <div class="toc"><p class="toc-title">目录</p><ol>
+    <li><a href="#palantir">与 Palantir 的关系</a></li>
+    <li><a href="#paradigms">与其他范式的关系</a></li>
+    <li><a href="#survey">调研：RebootingWithAI.com</a></li>
+    <li><a href="#glossary">术语表</a></li>
+    <li><a href="#notes">研究札记</a></li>
+  </ol></div>
+</section>
+
+<hr class="hr">
+
+<section id="palantir">
+<h2 style="margin-top:0">一、与 Palantir：借鉴内核，不照搬形态</h2>
+
+<h3>值得借鉴的思想内核</h3>
+<blockquote><p>用本体把「数据」和「决策行动」缝合起来，让企业拥有一个<strong>可运行的数字孪生</strong>，而不是一个更大的数据仓库。</p></blockquote>
+
+<div class="callout"><span class="tag">⚠️ 2026-08-23 更正</span>
+<p>本站此前在此写「Palantir 官方的本体表述是三层：Semantic / Kinetic / <strong>Dynamic（绑定到对象上的模型）</strong>」。</p>
+<p><strong>官方没有 Dynamic 层。</strong>该三层说法出自第三方博客转述，本站未经核实即采用，<strong>并据此给该转述来源的「概念准确性」打了高分</strong>——错误因此被双重放大。</p></div>
+
+<p><strong>官方表述是两分法：</strong></p>
+<div class="tw"><table>
+<tr><th>元素</th><th>内容</th></tr>
+<tr><td><strong>Semantic elements</strong>（语义/名词）</td><td>objects、properties、links</td></tr>
+<tr><td><strong>Kinetic elements</strong>（动能/动词）</td><td>actions、functions、<strong>dynamic security</strong></td></tr>
+</table></div>
+<p>其中 <strong>"dynamic" 指 dynamic security</strong>——运行时计算的细粒度权限策略，是 kinetic 的<strong>子项</strong>，讲的是<strong>权限，不是模型</strong>。名词—动词的比喻确实是官方自己的说法，「组织的数字孪生」也是。</p>
+
+<h3>但真正的洞察，是一句反直觉的话</h3>
+<p>大多数人以为 Palantir 卖的是数据整合能力。实际上它卖的是：</p>
+<div class="rule"><p><strong>让「分析」和「操作」发生在同一个语义空间里。</strong></p></div>
+<p>传统架构里，分析在数据仓库，操作在业务系统，中间隔着人。Palantir 的价值是把这堵墙拆掉——你在看板上看到的那个订单，就是你能直接操作的那个订单，权限、审计、回滚一并跟着。<strong>这才是要借鉴的东西</strong>，而不是它的产品功能列表。</p>
+
+<h3>不应照搬的部分</h3>
+<div class="tw"><table>
+<tr><th>不照搬</th><th>原因</th></tr>
+<tr><td>重度专业服务模式</td><td>依赖大量前置工程师驻场。多数企业和服务商没有这个成本结构</td></tr>
+<tr><td>全平台锁定</td><td>一次性替换全套数据基础设施，中国大多数企业不接受，也不必要</td></tr>
+<tr><td>全企业本体优先</td><td>本方法论主张从决策倒推、增量生长</td></tr>
+<tr><td>高昂的起步成本</td><td>应当有一个 90 天、单场景、可验证的起步路径</td></tr>
+<tr><td>技术叙事</td><td>中国的 CIO 更需要责任边界、失败代价与组织承接的答案</td></tr>
+</table></div>
+<div class="callout"><span class="tag">另一处更正</span><p>本站此前写「幂等、参数边界、可逆性、审批链、权限传播、时点正确性……这些<strong>公开材料里基本没有</strong>」。<strong>这是错的，且是明显的稻草人化</strong>——Palantir 文档逐条覆盖。<strong>站得住的说法是</strong>：它把这些作为 <strong>Foundry 的产品特性</strong>文档化，而不是作为可迁移的工程方法论。</p></div>
+</table></div>
+
+<h3>本方法论相对 semantic-kinetic-dynamic 的补充</h3>
+<p>Palantir 的三层框架描述了<strong>本体是什么</strong>，但没有回答<strong>在企业里怎么让它真的跑起来</strong>。补上的是：</p>
+<div class="tw"><table>
+<tr><th>补充</th><th>解决什么</th></tr>
+<tr><td>对象准入五判据</td><td>防止本体膨胀——最常见的失败模式</td></tr>
+<tr><td>业务 Owner 制度</td><td>本体是产品，要有人负责</td></tr>
+<tr><td><strong>行动十一要素契约</strong></td><td>让 kinetic 层能真正上生产（幂等、参数边界、失败语义）</td></tr>
+<tr><td><strong>可逆性分级 + 人闸</strong></td><td>让「敢不敢开权限」这个真问题有答案</td></tr>
+<tr><td>分级自治 L0–L4</td><td>让 dynamic 层的放权有依据</td></tr>
+<tr><td>四条横切约束</td><td>权限传播、证据链、失败关闭</td></tr>
+<tr><td>组织承接</td><td>人机权责矩阵 + 被取消的旧动作</td></tr>
+</table></div>
+<blockquote><p><strong>Palantir 提供的是一个产品里的实现；本方法论试图提供的是一套不绑定产品的工程纪律。</strong></p></blockquote>
+</section>
+
+<hr class="hr">
+
+<section id="paradigms">
+<h2 style="margin-top:0">二、与其他范式的关系</h2>
+<div class="tw"><table>
+<tr><th>范式</th><th>关系</th><th>关键差异</th></tr>
+<tr><td><strong>Data Mesh</strong></td><td>互补</td><td><strong>四条原则完整为</strong>：领域自治的数据所有权、数据即产品、自服务基础设施、<strong>联邦式计算化治理</strong>（本站此前只提第二条）。<br>准确的差异是：<strong>Data Mesh 自动化的是治理，不是决策</strong>——此前说它「终点是把可信数据交给人」是稻草人化，第四原则讲的正是把治理策略计算化固化进平台</td></tr>
+<tr><td><strong>Lakehouse</strong></td><td>底座</td><td>解决存储与计算，<strong>不解决语义</strong>。把它当成终点，就是数据湖谬误</td></tr>
+<tr><td><strong>语义层 / 指标平台</strong></td><td>本体层的<strong>子集</strong></td><td>管的是指标口径唯一；本体还要管对象、关系、状态机、<strong>行动</strong>与权限。没有行动的语义层是 BI 的延伸，不是决策平台</td></tr>
+<tr><td><strong>知识图谱</strong></td><td>技术手段之一</td><td>通常面向检索与推理，只读；本体必须可执行、绑定行动、承载权限</td></tr>
+<tr><td><strong>MDM 主数据管理</strong></td><td>前置能力</td><td>MDM 是<strong>名词的正确性</strong>，本体是<strong>名词 + 动词 + 权限的完整性</strong></td></tr>
+<tr><td><strong>RPA</strong></td><td>行动层的实现手段</td><td>RPA 自动化<strong>已确定的流程</strong>，本方法论自动化<strong>决策本身</strong>。RPA 不问「该不该做」，只问「怎么做」</td></tr>
+<tr><td><strong>Agent 框架</strong></td><td>智能层的实现工具</td><td>框架解决编排，不解决企业问题。<strong>Agent 的能力边界应由本体决定，而不是由框架能力决定</strong></td></tr>
+</table></div>
+
+<h3>定位图</h3>
+<pre><code>            高｜决策与行动闭环
+              │
+              │   ┌──────────────────┐
+              │   │ Palantir Foundry  │
+              │   │ 决策智能架构 DIA   │   ← 唯一有持续价值的位置
+              │   └──────────────────┘
+              │
+              │        ┌─────────┐
+              │        │   RPA   │  只有动作，没有决策语义
+              │        └─────────┘
+   ───────────┼──────────────────────────────────▶
+              │  ┌──────────┐   ┌───────────┐   语义完整度   高
+              │  │ BI / 报表 │   │ 语义层/指标 │
+              │  └──────────┘   └───────────┘
+              │
+            低│  ┌──────────┐   ┌──────────┐
+              │  │ 数据湖仓  │   │ 知识图谱  │
+              │  └──────────┘   └──────────┘</code></pre>
+<blockquote><p>数据湖解决「数据在哪」，语义层解决「数字是什么」，知识图谱解决「关系是什么」，RPA 解决「怎么执行」——<br>
+<strong>本体解决「这家企业是什么、能对它做什么」，治理解决「凭什么敢让它做」。</strong><br>
+前四个是工具，后两个才是架构。</p></blockquote>
+<div class="callout"><span class="tag">一句必须补上的话</span><p>说它们「是工具」不等于说它们没有持续价值。<strong>大量企业从 BI 与数仓获得的是长期、稳定、可观的回报</strong>（2026 年云数仓仍占主环境 44%）。它们的价值上限低于右上角，<strong>但不等于应该被替换</strong>。既有投资如何直接复用见 <a href="playbook.html#buildbuy">与既有投资共存</a>。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="survey">
+<h2 style="margin-top:0">三、调研：RebootingWithAI.com</h2>
+<p class="meta">调研日期 2026-08-23　|　方法：逐层抓取阅读首页、Learning Hub、Foundry Overview、Ontology Layer、Designing and Building Agentic Systems 五个页面</p>
+
+<h3>它是什么</h3>
+<p>一个个人技术研究站，定位为 "My Journey Through the AI Revolution"。主体三块：<strong>Learning Hub</strong>（Enterprise Agentic Architecture Patterns 学习路径，5 模块约 6 小时）、<strong>Foundry Analysis</strong>（用开源组件复刻 Palantir Foundry 的 MVP 架构蓝图，12 章）、<strong>Blog / Case Studies</strong>。</p>
+<p>Foundry 部分把 9 层架构映射到开源组件：Airbyte、DuckDB、Neo4j、Kafka、Flink、MLflow、Dagster、Superset、Keycloak，以 DuckDB 为中心，面向 100–500 GB 活跃数据量，实施路线 4–5 个月。</p>
+
+<h3>做得好的地方</h3>
+<ul>
+<li><strong>信息架构清晰</strong>：首页 → 学习路径 → 具体主题，标注阅读时长。成熟的内容组织方式</li>
+<li><strong>Foundry 蓝图是真功夫</strong>：架构映射、实施路线、风险矩阵、竞争对比，是认真做过架构设计的人才写得出来的</li>
+<li><strong>抓住了闭环这个内核</strong>："digital operational twin"、"closed intelligence loop" 的表述方向准确。<strong>但它转述的 semantic-kinetic-dynamic 三层不是 Palantir 官方表述</strong>——见下方评分更正</li>
+<li><strong>定位诚实</strong>：没有假装是企业级方法论</li>
+</ul>
+
+<h3>短板（也是差异化机会）</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>短板</th><th>说明</th></tr>
+<tr><td>1</td><td><strong>治理完全缺席</strong> ★最关键</td><td>Ontology 页面明确不涉及治理框架、访问控制、数据血缘、时点正确性、评测协议、审计留痕、组织变革。Agentic 部分同样不涉及权限、审计、人在回路、回滚</td></tr>
+<tr><td>2</td><td>Agentic 部分是二手知识</td><td>Design Patterns / Orchestration 是行业通识整理，2026 年已严重同质化</td></tr>
+<tr><td>3</td><td><strong>技术视角，不是决策者视角</strong></td><td>回答的是「怎么造一个 Foundry」，不是「企业怎么用它做决策」</td></tr>
+<tr><td>4</td><td>闭环没有真正打通</td><td>讲了 kinetic 概念，但没讲行动契约、可逆性分级、审批链、第二套真相——这些才是真正卡住的地方</td></tr>
+<tr><td>5</td><td>没有可交付工具</td><td>缺成熟度模型、诊断清单、模板、工作坊流程。读完不知道明天做什么</td></tr>
+<tr><td>6</td><td>缺少反面证据</td><td>全是正面叙述。<strong>在企业决策者眼里，只讲成功的方案是可疑的</strong></td></tr>
+<tr><td>7</td><td>形态服务于学历，不服务于生意</td><td>只有一个邮箱，没有明确的第一步服务入口</td></tr>
+</table></div>
+
+<div class="callout"><span class="tag">⚠️ 2026-08-23 评分更正</span>
+<p>本调研原先在「概念准确性」一项给该站 ★★★★☆，理由是「它采用了 Palantir 的官方三层框架并解释到位」。</p>
+<p><strong>这个判断是错的，而且错误被双重放大</strong>：该站转述的三层<strong>不是官方表述</strong>；而本站<strong>未经核实就采信了这个转述，给它打了高分，然后把它当作自己整套方法论的概念地基</strong>。</p>
+<p><strong>由此立的规则</strong>：凡是作为架构地基使用的外部概念，<strong>必须核实到一手来源</strong>——二手转述可作线索，不可作依据。</p></div>
+
+<h3>评分</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>评分</th></tr>
+<tr><td>信息架构与形态</td><td>★★★★☆</td></tr>
+<tr><td>技术架构深度</td><td>★★★★☆</td></tr>
+<tr><td>概念准确性</td><td><strong>★★☆☆☆</strong>（原评 ★★★★☆，已下调）</td></tr>
+<tr><td><strong>治理与风险</strong></td><td><strong>★★☆☆☆</strong>（原评 ★☆☆☆☆，已上调）——治理确实几乎空白，但<strong>风险与反面内容比首次调研判定的要好</strong></td></tr>
+<tr><td><strong>决策者视角</strong></td><td>★☆☆☆☆</td></tr>
+<tr><td>可执行性</td><td>★★☆☆☆</td></tr>
+<tr><td>原创性</td><td>★★★☆☆</td></tr>
+<tr><td>商务转化设计</td><td>★★☆☆☆</td></tr>
+</table></div>
+<div class="rule"><span class="tag">结论</span><p>作为个人技术研究站，它是合格甚至优秀的；作为面向 CIO/CTO 和潜在客户的方法论资产，它有系统性空白。<br>
+<strong>它证明了「我懂怎么造」，没有证明「我懂怎么让企业用起来并且不出事」。</strong></p></div>
+
+<div class="callout"><span class="tag">一个必须承认的对称问题</span>
+<p>本调研批评该站「零案例、零引用」，而<strong>本站在 2026-08-23 之前同样是零案例、零引用</strong>，且有 41 处无出处的〔共识〕标注。</p>
+<p>引用问题已修（见下方<a href="#sources">引用与数据来源</a>）；<strong>案例问题仍未解决</strong>。<strong>在补上案例之前，本站在这一维度上没有资格批评对方。</strong></p></div>
+
+<h3>从该站实际吸收的内容（2026-08-24 复查后补记）</h3>
+<div class="callout"><span class="tag">一处需要修正的判断</span>
+<p>首次调研时我把该站的价值主要判定为「形态可借鉴、内容有系统性空白」。二次逐页复查后，<strong>这个判断需要修正一部分</strong>——它有三处内容是本站当时完全没有的，现已吸收。</p></div>
+<div class="tw"><table>
+<tr><th>来源章节</th><th>吸收的内容</th><th>落在本站哪里</th></tr>
+<tr><td rowspan="3">Risks of OverUsing<br>Agentic Automation</td><td><strong>EchoLeak（CVE-2025-32711）</strong> 真实案例</td><td><a href="m3-agentic.html#t36">模块三 3.6</a>。本站原先用虚构例子；<strong>换成真实 CVE 后还额外得出一条它没写的结论——该攻击绕过了专门的注入分类器 XPIA，因此检测式防御不可依赖</strong></td></tr>
+<tr><td><strong>技能退化 / 认知债</strong></td><td><a href="m4-adoption.html#t46">模块四 4.6</a>。<strong>三条里最有价值的一条</strong>：本站组织章节此前只覆盖短期抵触。它与本站自己的「确认剧场」构成同一现象的两个时间尺度，并牵出一项漏算的<strong>退出成本</strong></td></tr>
+<tr><td><strong>行为漂移</strong>作为命名的运行期风险</td><td><a href="dia.html#r">运行约束</a>。本站原先把模型变更框成「可重放」问题，没把它作为<strong>不会自己暴露的</strong>监控类别</td></tr>
+</table></div>
+<p>另有一条「集成成本 $1.3M–$5M」，方向有用，但<strong>未查到一手出处，按本站规则不予引用</strong>。</p>
+<div class="rule"><span class="tag">一句必要的自省</span><p>首次调研给出的「它的 Agentic 部分是二手知识、严重同质化」这个判断，<strong>对其模式章节成立，对其风险章节不成立</strong>。<br>我在首次调研时<strong>只读了 5 个页面就下了全站结论</strong>——<strong>这与本站批评它「样本不足」是同一类错误</strong>。</p></div>
+
+<h3>本站的差异化定位</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>参考站</th><th>本站</th></tr>
+<tr><td>主视角</td><td>技术实现</td><td><strong>决策与治理</strong></td></tr>
+<tr><td>核心问题</td><td>怎么造</td><td><strong>怎么用起来且不出事</strong></td></tr>
+<tr><td>本体框架</td><td>转述 Palantir（且转述有误）</td><td>一个中心 · 两个方向 · 四条约束——<strong>本站曾犯同样的错误，已更正</strong></td></tr>
+<tr><td>行动</td><td>概念层</td><td>十一要素契约 + 可逆性分级 + 人闸</td></tr>
+<tr><td>智能</td><td>通用 Agent 模式</td><td>分级自治 L0–L4 + 评测三层 + 弃权率</td></tr>
+<tr><td>治理</td><td>缺席</td><td>权限 / 证据 / 可逆 / 运行 四条横切约束 + 合规与安全前置 + Agent 威胁模型</td></tr>
+<tr><td>组织</td><td>缺席</td><td>人机权责矩阵 + 被取消的旧动作</td></tr>
+<tr><td>可执行</td><td>路线图</td><td>成熟度诊断 + 120 天路线 + 工作坊 + 四套模板 + 反模式 + 12 问 + 投入产出测算 + 退出剧本</td></tr>
+<tr><td>可信度</td><td>全正面</td><td>反模式清单 + 失败症状库</td></tr>
+</table></div>
+<blockquote><p>参考站：<strong>「我在研究怎么造一个 Palantir。」</strong><br>
+本站：<strong>「我在解决企业为什么用不起来 Palantir 式的系统——以及怎么才用得起来。」</strong></p></blockquote>
+</section>
+
+<hr class="hr">
+
+<section id="glossary">
+<h2 style="margin-top:0">四、术语表</h2>
+<div class="tw"><table>
+<tr><th>术语</th><th>本方法论中的含义</th></tr>
+<tr><td><strong>本体 Ontology</strong></td><td>企业的可执行语义层。⚠️ 与知识工程中的 ontology 不同：<strong>必须绑定行动、承载权限</strong></td></tr>
+<tr><td><strong>对象 Object</strong></td><td>本体中的业务名词，须满足准入五判据</td></tr>
+<tr><td><strong>行动 Action</strong></td><td>绑定在对象上、可改变企业状态的操作，须有十一要素契约</td></tr>
+<tr><td><strong>决策卡</strong></td><td>D 层向下游传递需求的唯一接口文档（12 项）</td></tr>
+<tr><td><strong>R1 / R2 / R3</strong></td><td>可逆性分级：可撤销 / 可补偿 / 不可逆。<br><strong>〔争议〕2026-08-23 更正</strong>：此前写「R3 永远需要人闸」。现为条件化规则——<strong>R3 开放自动需同时满足四条</strong>（单次上限、总量上限、已演练的补偿路径、熔断与具名担责人），<strong>四者缺一即保留人闸</strong></td></tr>
+<tr><td><strong>L0–L4</strong></td><td>自治级别：观察 / 建议 / 草拟 / 限额自动 / 全自动。晋级靠证据，不靠信心。<strong>L2 是过渡态不是终点</strong>——人工确认会随时间退化</td></tr>
+<tr><td><strong>M0–M2 + 覆盖率</strong></td><td>成熟度：手工 / 可见 / 有语义。<strong>2026-08-23 更正</strong>：此前是 M0–M4，但 M3=L2、M4=L3，只是换名重说。自动化程度现用<strong>覆盖率</strong>表达</td></tr>
+<tr><td><strong>岗位委托身份</strong></td><td>无人值守自动执行时 Agent 使用的身份：以<strong>担责岗位</strong>的身份运行，权限恰好等于该岗位的人工权限；服务多岗位取<strong>交集</strong>；岗位空缺则降级 L2。<strong>禁止权限大于其担责人</strong></td></tr>
+<tr><td><strong>间接提示注入</strong></td><td>外部方文本被 Agent 读入上下文后操纵其行为。<strong>权限模型挡不住它</strong>——被操纵的行动完全在权限内。防线是第四类：<strong>输入可信度</strong></td></tr>
+<tr><td><strong>人工批准率</strong></td><td>人批准系统建议的比例。<strong>≥95% 意味着该检查点已成「确认剧场」</strong>，应晋级或重新设计</td></tr>
+<tr><td><strong>失败关闭 Fail-Closed</strong></td><td>不确定时默认「不动作 + 明确报告」，返回 <code>NOT_READY</code>/<code>NOT_EVALUATED</code>/<code>DENIED</code>，而不是降级成看起来成功</td></tr>
+<tr><td><strong>时点正确 PIT</strong></td><td>用「当时可知」的数据解释当时的事实。靠双时间轴与有效期区间实现。<strong>时点错误不报错</strong></td></tr>
+<tr><td><strong>数据合同</strong></td><td>上下游关于 Schema、语义、质量、变更流程、违约处理的显式约定</td></tr>
+<tr><td><strong>双算校验</strong></td><td>关键派生量用两条独立实现各算一遍并比对。投入产出比最高的断言之一</td></tr>
+<tr><td><strong>金标准集</strong></td><td>业务专家标注的评测样本，必须覆盖失败模式，<strong>冻结后不得因结果不佳而修改</strong></td></tr>
+<tr><td><strong>影子运行</strong></td><td>真实数据流上产出建议但不执行。<strong>分歧比一致更有价值</strong></td></tr>
+<tr><td><strong>弃权率</strong></td><td>主动说「不确定」的比例。<strong>是安全特性，不是缺陷</strong></td></tr>
+<tr><td><strong>人工推翻率</strong></td><td>人否决系统建议的比例。最诚实的信任度指标</td></tr>
+<tr><td><strong>担责者</strong></td><td>出问题时负责的角色。<strong>永远是人</strong></td></tr>
+<tr><td><strong>被取消的旧动作</strong></td><td>交付时必须指出的、因系统上线而消失的人工动作。落地的标志是减法</td></tr>
+</table></div>
+</section>
+
+<hr class="hr">
+
+<section id="sources">
+<h2 style="margin-top:0">五、引用与数据来源</h2>
+<div class="rule"><span class="tag">2026-08-23 立的编辑规则</span>
+<p><strong>1. 标〔共识〕的主张必须有可点击来源，否则降级为〔判断〕。</strong><br>
+<strong>2. 具体数字必须有出处，或明确标注为「示意」「本人经验估计」。</strong><br>
+<strong>3. 引用必须附方法论限定</strong>（样本量、抽样方式、利益关系），不得只取数字。<br>
+<strong>4. 作为架构地基使用的外部概念，必须核实到一手来源。</strong></p></div>
+
+<h3>企业 AI 落地成效（可直接引用）</h3>
+<div class="tw"><table>
+<tr><th>来源</th><th>数字</th><th>限定</th></tr>
+<tr><td><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai">McKinsey, 2025-11</a></td><td>88% 至少一个职能用了 AI；<strong>仅 7% 完全规模化</strong>；39% 有 EBIT 影响且多数 &lt;5%</td><td>n=1,993，105 国。方法论披露最完整</td></tr>
+<tr><td>BCG, 2025-09</td><td>仅约 <strong>5%</strong> 达到变革性规模化成熟度；<strong>60%</strong> 收益甚微或没有</td><td>n&gt;1,250 高管</td></tr>
+<tr><td>S&amp;P Global, 2025-03</td><td><strong>42%</strong> 放弃多数 AI 计划（上年 17%）；平均<strong>报废 46% 的 PoC</strong></td><td>n&gt;1,000。<strong>最硬的试点死亡率数据</strong></td></tr>
+<tr><td><a href="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk">Gartner, 2025-02</a></td><td>到 2026 年缺乏 AI-ready 数据的项目将有 <strong>60%</strong> 被放弃；<strong>63%</strong> 组织数据未就绪</td><td>n=248。<strong>是预测不是实测</strong></td></tr>
+<tr><td>Gartner, 2025-06</td><td>到 2027 年底 <strong>&gt;40%</strong> 的 agentic AI 项目将被取消</td><td>n=3,400+。<strong>是预测不是实测</strong></td></tr>
+<tr><td>Gartner, 2024-05</td><td>原型到生产平均 <strong>8 个月</strong>；仅 <strong>48%</strong> 进入生产</td><td>替代本站原先杜撰的「PoC 两周 / 生产十个月」</td></tr>
+<tr><td>Anthropic + Material, 2026</td><td>障碍：集成 <strong>46%</strong>、数据访问与质量 <strong>42%</strong>、变更管理 <strong>39%</strong></td><td>500+ 技术负责人。<strong>利益披露：Anthropic 售卖模型，此结论对其有利</strong></td></tr>
+</table></div>
+
+<h3>不可引用的数字（已核实为不可靠）</h3>
+<div class="tw"><table>
+<tr><th>流传说法</th><th>问题</th></tr>
+<tr><td>「95% 企业 GenAI 试点失败」（MIT NANDA, 2025）</td><td>测的是「六个月内无可测量 P&amp;L 影响」，非技术失败也非取消；把从未试点的企业也算成失败是分类错误；未经同行评审；有研究者无法复现并要求公开数据；作者与被推荐方案的机构有未披露的利益关联。<strong>如需引用必须带上全部限定</strong></td></tr>
+<tr><td>「78% 有 agent 试点但不到 15% 进生产」等 2026 年数字</td><td>仅能溯源到厂商/SEO 博客，无方法论披露。<strong>不引用</strong></td></tr>
+<tr><td><strong>任何 text-to-SQL 排行榜名次</strong></td><td>CIDR 2026 发现 BIRD Mini-Dev 标注错误率 <strong>52.8%</strong>、Spider 2.0-Snow <strong>62.8%</strong>，纠正后排名位移 −9 至 +9 位。<strong>排行榜名次不能作为证据</strong></td></tr>
+<tr><td>OpenTelemetry GenAI 语义约定</td><td>仍处于 1.0 之前，2026-06 迁至独立仓库且无 tagged release。<strong>不要当作稳定标准引用</strong></td></tr>
+</table></div>
+
+<h3>本站删除或替换的杜撰数字</h3>
+<div class="tw"><table>
+<tr><th>原数字</th><th>处理</th></tr>
+<tr><td>「12.4 万 vs 9.8 万」活跃客户</td><td>删，改为定性</td></tr>
+<tr><td>「指标悄悄降了 8%」</td><td>删，改为定性</td></tr>
+<tr><td>「PoC 两周 / 生产十个月」</td><td>替换为 Gartner 的 8 个月 / 48%</td></tr>
+<tr><td>「本体建设 12–18 个月」</td><td>删，改为定性</td></tr>
+<tr><td><strong>「第二个场景复用 60% 以上」</strong></td><td><strong>删。</strong>它被用作「判断架构对不对」的唯一判据，却是编的。改为「由团队自行设定阈值并冻结」</td></tr>
+<tr><td><strong>「80% 的价值来自 Tool Use」</strong></td><td><strong>删。</strong>改为「工具设计是单项投入回报最高的一件事」</td></tr>
+<tr><td>「工具超过 15–20 个」</td><td>替换为 OpenAI「单轮 &lt;20 个」与 Anthropic「&gt;10 个即启用工具检索，实测 49%→74%」</td></tr>
+</table></div>
+<p style="font-size:14.5px;color:var(--text-dim)">完整的 31 条来源清单（含 Palantir 一手文档、Agentic 研究、数据架构史时间锚点）见内容库 <code>content/40-参考/04-引用与数据来源.md</code>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="notes">
+<h2 style="margin-top:0">五、研究札记</h2>
+<p>未定论的思考、正在验证的假设、读到的材料与反驳。这一区<strong>允许不完整、允许后来被推翻</strong>。被推翻的札记不删除，加修正说明并链接到新结论。</p>
+
+<h3>待研究选题</h3>
+<ul class="checklist">
+<li>本体的「复利」到底从第几个场景开始显现？寻找可量化的判据</li>
+<li>中小企业（数据不全、无数据团队）的最小可行路径</li>
+<li>「弃权率」的合理区间——过高与过低分别意味着什么</li>
+<li>人工推翻率的时间序列形态，是否可作为信任度的先行指标</li>
+<li>国内企业数据治理起点普遍低于欧美，M1→M2 的成本差异有多大</li>
+<li>Agent 编排框架的选型是否真的重要，还是本体设计决定了一切</li>
+<li>决策清单工作坊在不同行业的产出差异</li>
+</ul>
+
+<div class="next"><p><strong>下一步 →</strong>　<a href="about.html">关于与合作</a></p></div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="index.html">首页</a>　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

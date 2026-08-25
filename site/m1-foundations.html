@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模块一｜基础认知 — 方法论总结</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:16px">
+<p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 模块一</p>
+<h1>基础认知</h1>
+<p class="lede">这个领域的问题空间是什么，为什么它主要不是一个模型问题——以及这个说法在什么条件下不成立。</p>
+<p class="meta"><span class="pill">5 主题 · 约 55 分钟</span></p>
+<ul class="topics">
+<li><span class="tn">1.1</span><span class="tt"><a href="#t11">问题空间：企业 AI 到底卡在哪</a></span><span class="td">12 min</span></li>
+<li><span class="tn">1.2</span><span class="tt"><a href="#t12">四代企业数据架构的演进</a></span><span class="td">12 min</span></li>
+<li><span class="tn">1.3</span><span class="tt"><a href="#t13">十条失败症状——以及本方法论覆盖不到的失败原因</a></span><span class="td">15 min</span></li>
+<li><span class="tn">1.4</span><span class="tt"><a href="#t14">概念坐标系：这些词到底什么关系</a></span><span class="td">9 min</span></li>
+<li><span class="tn">1.5</span><span class="tt"><a href="#t15">本方法论的适用边界</a></span><span class="td">5 min</span></li>
+</ul>
+<div class="legend">
+<div><span class="mk mk-c">共识</span> 已验证，<strong>且有可点击出处</strong></div>
+<div><span class="mk mk-d">争议</span> 存在明显分歧</div>
+<div><span class="mk mk-j">判断</span> 我的个人观点</div>
+</div>
+</section>
+
+<hr class="hr">
+
+<section id="t11">
+<h2 style="margin-top:0">1.1 问题空间：企业 AI 到底卡在哪</h2>
+<p><span class="mk mk-c">共识</span> 企业 AI 的规模化率极低，且失败原因高度集中在非模型环节。这一条现在可以用具体数字支撑：</p>
+<div class="tw"><table>
+<tr><th>数字</th><th>来源</th></tr>
+<tr><td>88% 企业至少在一个职能用了 AI，但<strong>仅 7% 完全规模化</strong>；39% 有 EBIT 影响且多数 &lt;5%</td><td>McKinsey 2025-11，n=1,993</td></tr>
+<tr><td>仅约 <strong>5%</strong> 达到可产生变革性影响的成熟度；<strong>60%</strong> 报告收益甚微或没有</td><td>BCG 2025-09，n&gt;1,250</td></tr>
+<tr><td><strong>42%</strong> 的公司放弃了多数 AI 计划（上年 17%）；平均<strong>报废 46% 的 PoC</strong></td><td>S&amp;P Global 2025-03，n&gt;1,000</td></tr>
+<tr><td>原型到生产平均 <strong>8 个月</strong>；仅 <strong>48%</strong> 进入生产</td><td>Gartner 2024-05</td></tr>
+<tr><td>障碍分解：<strong>集成 46%、数据访问与质量 42%、变更管理 39%</strong></td><td>Anthropic + Material 2026</td></tr>
+<tr><td>预测：到 2026 年缺乏 AI-ready 数据的项目将有 <strong>60%</strong> 被放弃；<strong>63%</strong> 的组织数据未就绪</td><td>Gartner 2025-02，n=248。<strong>是预测不是实测</strong></td></tr>
+</table></div>
+<p>出处与方法论限定见 <a href="research.html#sources">引用与数据来源</a>。</p>
+
+<div class="callout"><span class="tag">两条必须交代的限定</span>
+<p><strong>利益披露</strong>：「障碍分解中模型能力不在首位」这条证据来自 Anthropic 的调研，而 Anthropic 售卖模型——这个结论对其有利，读者应据此打折。</p>
+<p><strong>曾经的错误</strong>：本站在 2026-08-23 之前写过「企业 AI 的失败率<strong>远高于消费级 AI 应用</strong>」。核实后发现，所有可查的研究<strong>都只测企业侧</strong>，没有任何一份用同一口径做过这个对比。<strong>该表述已删除。</strong></p></div>
+
+<h3>三种主流的问题定义</h3>
+<p>不同流派对「卡在哪」的回答不同，这直接决定了他们的解法：</p>
+<div class="tw"><table>
+<tr><th>流派</th><th>问题定义</th><th>解法</th><th>盲区</th></tr>
+<tr><td><strong>数据派</strong></td><td>数据没打通</td><td>数据湖 / 湖仓 / 中台</td><td>集中 ≠ 语义统一</td></tr>
+<tr><td><strong>知识派</strong></td><td>模型不懂企业知识</td><td>RAG / 知识库 / 微调</td><td>解决了「知道」，没解决「能做」</td></tr>
+<tr><td><strong>流程派</strong></td><td>流程没自动化</td><td>RPA / 工作流 / Agent 编排</td><td>自动化了动作，没自动化决策</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 三种定义都对了一部分，但都不完整。真正的问题是：</p>
+<blockquote><p>企业没有一层<strong>机器可理解、且业务承认</strong>的语义骨架，因此 AI 既不知道这家企业是什么，也不知道能对它做什么。</p></blockquote>
+<p>数据派解决了「数据在哪」，知识派解决了「知道什么」，流程派解决了「怎么执行」。三者之间缺的那一层——<strong>这家企业由哪些东西构成、它们之间发生什么、能对它们做什么</strong>——就是本体。</p>
+
+<h3>一个有用的判别问题</h3>
+<h3>「瓶颈不在模型」的准确版本</h3>
+<p><span class="mk mk-d">争议</span> 这是本方法论最核心、也最容易被过度陈述的一条。诚实的表述必须是有条件的：</p>
+<blockquote><p><strong>对于结构化、可验证、短时程的企业流程</strong>，边际瓶颈已从模型转移到集成、数据与组织。<br>
+<strong>但对于长时程、跨系统、要求高可靠性的自主决策</strong>，模型可靠性仍是硬约束。</p></blockquote>
+<p><strong>反方证据必须列出，它们是有分量的：</strong></p>
+<ul>
+<li><strong>METR 2026-01</strong>：视觉/计算机操作类任务的 50% 可靠度时程比软件任务<strong>低 40–100 倍</strong>；<strong>许多可靠性关键任务需要 98%+ 成功率才值得自动化</strong>。同时任务时程六年来每约 7 个月翻一番、2024–25 期间每约 4 个月翻一番——<strong>说明能力仍是在变动的那个变量</strong></li>
+<li><strong>run-to-run 方差是模型属性，治理层消除不掉</strong>：pass^4 常比 pass^1 低 15–25 个百分点；90% 的基准分可能对应约 70% 的生产可靠性</li>
+<li><strong>时间上的自我反驳</strong>：2025–26 年 agent 得以部署的前提条件恰恰是<strong>模型侧</strong>的（推理模型、更长上下文、工具协议、成本坍塌）。<strong>这条命题是对此刻的描述，不是一条规律。</strong></li>
+</ul>
+
+<div class="rule"><span class="tag">判断</span><p>判断一个企业 AI 方案是否触及真问题，只需问一句：<br><strong>这个系统被允许改变什么？</strong></p>
+<p>答不上来 → 它是知识派或数据派的方案，价值上限是「更快地看见」<br>
+答得上来 → 它必须面对权限、审批、可逆、审计——也就是真正困难的部分</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t12">
+<h2 style="margin-top:0">1.2 四代企业数据架构的演进</h2>
+<div class="callout"><span class="tag">2026-08-23 更正</span>
+<p><span class="mk mk-j">判断</span> <strong>「数据架构分几代」不是领域共识</strong>（此前本站标〔共识〕，错）。本节的四代分期是<strong>本站自建的教学装置</strong>。</p>
+<p>必须说清它与已有分期的关系：<strong>Dehghani（Data Mesh 原文）讲三代</strong>——私有企业数仓+BI → 大数据/湖生态 → <strong>现代云平台</strong>；而她把 Data Mesh 定位为对<strong>第三代失败的回应</strong>，不是第三代本身。本站把 Data Mesh 当作自己的第三代、把 Hadoop 湖与云上湖仓合并进第二代——<strong>恰好在她划分二/三代的那条线上合并了</strong>。Gartner 另有一套分期，Inmon 与 Kimball 则是同时代的方法论之争而非代际关系。</p></div>
+
+<h3>第一代：报表时代（1980 年代末–2000 年代）</h3>
+<p>数据仓库 + BI 报表。特征：<strong>面向汇总，事后回顾</strong>。<br>时间锚点：Devlin &amp; Murphy 架构论文 <strong>1988</strong>，Inmon《Building the Data Warehouse》<strong>1990/1992</strong>，Kimball《The Data Warehouse Toolkit》<strong>1996</strong>。<br>⚠️ 本站此前写「1990s–2000s」，<strong>晚了约十年</strong>，已更正。</p>
+
+<h3>第二代：大数据与湖时代（2006–2010 年代末）</h3>
+<p>Hadoop（<strong>2006</strong>）→ 数据湖（James Dixon <strong>2010-10-14</strong> 提出该词）。特征：<strong>面向规模，先存后用</strong>。<br>⚠️ <strong>湖仓（Lakehouse）不属于这一代</strong>，它是 <strong>2020</strong>（Databricks 2020-01-30 博文，CIDR 论文 2021-01）。本站此前把湖仓放进「2010s」，<strong>错了整整十年</strong>，已更正。</p>
+<p><span class="mk mk-c">共识</span> 这一代解决了存储与计算的规模问题，也留下了最大的遗产问题：<strong>数据沼泽</strong>——数据都在，但没人知道哪个能用。</p>
+
+<h3>第三代：语义与治理时代（2019–2023）</h3>
+<p>Data Mesh（首篇 <strong>2019-05</strong>，四原则 <strong>2020-12</strong>）、数据合同（<strong>2022-08</strong> 被推起来）、指标/语义层、MDM 复兴。特征：<strong>面向可信，谁负责数据</strong>。</p>
+<p>⚠️ 两处更正：①「2018」没有任何锚点，已改为 2019；②<strong>语义层与 MDM 都不是这一代的发明</strong>——语义层可上溯至 1990 年代 Business Objects 的 universes 与 OLAP，MDM 是 2000 年代技术。这一代是它们的<strong>复兴与治理化</strong>。</p>
+<p>⚠️ 关于 Data Mesh 有一处本站曾犯的稻草人化：说它「终点是把可信数据交给人」不准确——第四条原则<strong>联邦式计算化治理</strong>讲的正是把治理策略计算化地固化进平台。准确的差异表述是：<strong>Data Mesh 自动化的是治理，不是决策。</strong></p>
+<p><span class="mk mk-j">判断</span> 方向是对的，但它止于<strong>数据供给</strong>。它让「数字是可信的」，没有让「决策是自动的」——它的终点仍然是把可信的数据交给人。</p>
+
+<h3>第四代：决策与行动时代（应拆成两条线）</h3>
+<p>⚠️ 本站此前笼统写「2023– 」，不准确。应拆开：<strong>本体 / 决策智能约 2021–22 起</strong>（Gartner 早在 2021-10 就把 Decision Intelligence 列为 2022 年十大战略技术趋势；Foundry Ontology 更早，是 2010 年代中期）；<strong>Agentic 2023– 起</strong>（ChatGPT 2022-11，Palantir AIP 2023-04）。</p>
+<p><span class="mk mk-d">争议</span> 这一代的边界还没有定论——放权到什么程度、责任如何分配、评测如何做，业界没有统一答案。</p>
+
+<h3>演进的一条主线</h3>
+<pre><code>第一代  数据在哪      →  存取问题
+第二代  数据有多少    →  规模问题
+第三代  数据可不可信  →  治理问题
+第四代  能不能自己动  →  授权问题   ← 当前所在</code></pre>
+<p><span class="mk mk-j">判断</span> 每一代都没有取代上一代，而是叠加。2026 年社区调研（<strong>自选样本，非严格抽样</strong>）显示云数仓仍占主环境 44%、湖仓 27%、混合 12%——<strong>数仓从未消失</strong>。</p>
+<div class="callout"><span class="tag">一条被降级的主张</span>
+<p>本站此前写「第四代的失败案例，<strong>绝大多数</strong>是因为跳过了第三代」。<strong>现降级为〔假设〕：没有任何研究测过这个因果。</strong>最接近的支持只是相关性（Gartner 的 AI-ready 数据数据）。而且有直接反证：MIT NANDA 报告把失败归因于<strong>学习/记忆/反馈缺失</strong>——"Tools fail not because of poor models, but because they don't learn, adapt, or integrate"——不是治理缺失。</p>
+<p>保留它的理由是它可指导行动；<strong>但它不能作为论证的支点使用。</strong></p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t13">
+<h2 style="margin-top:0">1.3 十条失败症状</h2>
+<div class="callout"><span class="tag">先说这份清单是怎么来的 · 2026-08-23 更正</span>
+<p><strong>这十条是我按<a href="index.html">四条命题</a>的视角选出来的，因此下文任何「比例」都是构造的结果，不是统计结果。</strong></p>
+<p>本站此前在这里写过「十条里只有一条半是模型问题。<strong>这个比例本身就是这个领域最重要的事实</strong>」。那是循环论证——症状按已有命题选、根因照命题分，然后比例被当成「事实」。<strong>这句话已删除。</strong></p>
+<p>真正有证据的版本在 1.1：障碍分解是 46%/42%/39%（集成 / 数据 / 变更管理），那是问卷实测，且必须带上利益披露。</p></div>
+<div class="tw"><table>
+<tr><th>根因</th><th>症状</th><th>表现</th></tr>
+<tr><td rowspan="3"><strong>A · 缺少语义骨架</strong></td><td>口径不唯一</td><td>Agent 说 12.4 万，销售说 9.8 万，会议在争论定义中结束</td></tr>
+<tr><td>数据湖谬误</td><td>数据都进来了，业务侧感受不到变化</td></tr>
+<tr><td>静默错误</td><td>上游改一个字段，下游错了三周才发现</td></tr>
+<tr><td rowspan="2"><strong>B · 缺少行动闭环</strong></td><td>只读陷阱</td><td>做成会说话的看板，上线三个月日活个位数</td></tr>
+<tr><td>组织没有承接</td><td>流程照旧，系统成了「多一个要看的东西」</td></tr>
+<tr><td rowspan="2"><strong>C · 缺少边界与评测</strong></td><td>没有评测</td><td>业务问准确率，回答是「感觉还不错」</td></tr>
+<tr><td>把 Agent 当员工</td><td>期望自主，却不给可核验的输入输出合同</td></tr>
+<tr><td rowspan="3"><strong>D · 缺少治理纪律</strong></td><td>PoC 与生产的断崖</td><td>两周做完 PoC，十个月上不了线</td></tr>
+<tr><td>从数据出发</td><td>做出一堆没人要的能力</td></tr>
+<tr><td>范围与成本膨胀</td><td>本体越建越大，长期没有业务结果</td></tr>
+</table></div>
+<h3>本方法论覆盖不到的失败原因</h3>
+<p><span class="mk mk-j">判断</span> <strong>这一节比上面那张表更重要。</strong>真实项目复盘里高频出现、但<strong>一条都进不了上面十条</strong>的失败原因至少包括：</p>
+<div class="tw"><table>
+<tr><th>失败原因</th><th>为什么它不在本方法论射程内</th></tr>
+<tr><td><strong>预算被砍 / 高层换人导致 sponsor 消失</strong></td><td>组织政治，方法论提供不了对策。只能靠「选高频可逆场景快速出结果」间接对冲</td></tr>
+<tr><td><strong>关键人离职</strong></td><td>本方法论的 Owner 制度反而<strong>放大</strong>了这个风险——单点依赖是它的副作用</td></tr>
+<tr><td><strong>合规或安全评审未通过</strong></td><td>此前完全没有覆盖，现已补 <a href="playbook.html#compliance">合规与安全前置</a>，但那仍是清单不是保证</td></tr>
+<tr><td><strong>供应商交付能力不足</strong></td><td>见 <a href="playbook.html#buildbuy">自建 vs 采购</a></td></tr>
+<tr><td><strong>选定场景的业务价值被高估</strong></td><td>见 <a href="playbook.html#roi">投入产出测算</a>，但测算依赖的输入本身可能是错的</td></tr>
+<tr><td><strong>模型能力确实不够</strong></td><td>见 1.1 的 METR 数据。<strong>本方法论会系统性低估这一类</strong>，因为它的整个叙事建立在「瓶颈不在模型」之上</td></tr>
+</table></div>
+<p><strong>它们此前被排除，正是因为它们落不进四个预设根因。</strong>把它们列出来，比多列十条能落进根因的症状更有价值。</p>
+<p>项目评审用的完整反模式清单见 <a href="playbook.html#anti">实践 · 反模式</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t14">
+<h2 style="margin-top:0">1.4 概念坐标系：这些词到底什么关系</h2>
+<p><span class="mk mk-c">共识</span> 这个领域术语混乱，同一个词在不同语境下含义不同。先把坐标系立住。</p>
+
+<h3>按「解决什么问题」分类</h3>
+<div class="tw"><table>
+<tr><th>概念</th><th>解决的问题</th><th>层次</th></tr>
+<tr><td>数据湖 / 湖仓</td><td>数据在哪、怎么存算</td><td>基础设施</td></tr>
+<tr><td>MDM 主数据</td><td>名词的唯一与准确</td><td>数据治理</td></tr>
+<tr><td>数据合同 / Data Mesh</td><td>谁负责数据、变更怎么管</td><td>数据治理</td></tr>
+<tr><td>语义层 / 指标平台</td><td>数字是什么（口径唯一）</td><td>语义</td></tr>
+<tr><td>知识图谱</td><td>关系是什么</td><td>语义</td></tr>
+<tr><td><strong>本体 Ontology</strong></td><td><strong>这家企业是什么，能对它做什么</strong></td><td><strong>语义 + 行动</strong></td></tr>
+<tr><td>RAG / 向量库</td><td>模型如何取到相关文本</td><td>智能</td></tr>
+<tr><td>Agent 框架</td><td>多步任务如何编排</td><td>智能</td></tr>
+<tr><td>RPA / 工作流</td><td>已确定的流程怎么执行</td><td>行动</td></tr>
+<tr><td><strong>行动契约</strong></td><td><strong>系统被允许改变什么、怎么改</strong></td><td><strong>行动 + 治理</strong></td></tr>
+</table></div>
+
+<h3>三组最容易混淆的概念</h3>
+<h4>本体 vs 知识图谱</h4>
+<p><span class="mk mk-c">共识</span> 技术实现上高度重叠，本体常用图结构承载。</p>
+<p><span class="mk mk-j">判断</span> 关键差异是<strong>行动</strong>：知识图谱通常只读、面向检索与推理；本体必须绑定可执行的行动并承载权限。<strong>不能触发状态变更的本体，只是图谱。</strong></p>
+
+<h4>本体 vs 语义层 / 指标平台</h4>
+<p><span class="mk mk-c">共识</span> 指标平台是本体的一个子集（管住指标口径唯一）。</p>
+<p><span class="mk mk-j">判断</span> 本体还要管对象、关系、生命周期状态机、行动与权限。<strong>没有行动的语义层是 BI 的延伸，不是决策平台。</strong></p>
+
+<h4>Agent vs RPA</h4>
+<p><span class="mk mk-c">共识</span> RPA 自动化的是<strong>已确定的流程</strong>，Agent 处理的是<strong>需要判断的任务</strong>。</p>
+<p><span class="mk mk-j">判断</span> 真正的分界不是技术，是问题类型：RPA 不问「该不该做」，只问「怎么做」。企业 AI 的价值在前一个问题上。</p>
+
+<h3>定位图</h3>
+<pre><code>            高｜决策与行动闭环
+              │
+              │   ┌──────────────────────────┐
+              │   │  本体驱动的决策平台         │ ← 第四代
+              │   │  （Palantir / DIA）        │
+              │   └──────────────────────────┘
+              │
+              │        ┌─────────┐
+              │        │   RPA   │  有动作，无决策语义
+              │        └─────────┘
+   ───────────┼──────────────────────────────────▶
+              │  ┌──────────┐   ┌───────────┐   语义完整度   高
+              │  │ BI / 报表 │   │ 语义层/指标 │ ← 第一、三代
+              │  └──────────┘   └───────────┘
+              │
+            低│  ┌──────────┐   ┌──────────┐
+              │  │ 数据湖仓  │   │ 知识图谱  │ ← 第二代
+              │  └──────────┘   └──────────┘</code></pre>
+<p><span class="mk mk-j">判断</span> 右上角是<strong>本方法论关心的位置</strong>。</p>
+<div class="callout"><span class="tag">2026-08-23 软化</span><p>本站此前写「右上角是<strong>唯一有持续价值</strong>的位置，其余象限的工具都会遇到价值天花板」。这个表述过强且无论证——<strong>大量企业从 BI 与数仓获得的是长期、稳定、可观的价值</strong>（2026 年云数仓仍占主环境 44%）。准确的说法是：其余象限的<strong>价值上限</strong>低于右上角，但不等于没有持续价值，也不等于应该被替换。</p></div>
+<p>完整的范式对照见 <a href="research.html#paradigms">研究 · 坐标系</a>。</p>
+
+</section>
+
+<hr class="hr">
+
+<section id="t15">
+<h2 style="margin-top:0">1.5 本方法论的适用边界</h2>
+<p><span class="mk mk-j">判断</span> 明确说清不适用的地方，比多列适用场景更有价值。</p>
+<h3>适用</h3>
+<ul>
+<li>决策<strong>高频、可逆、有明确 Owner、有现成落点系统</strong>的业务域</li>
+<li>已达 <strong>M1</strong>（数据已集中、有可用的 BI/报表）的组织；M0 组织请先补数据工程</li>
+<li>单 Agent 或确定性编排 + 模型节点的场景</li>
+</ul>
+<h3>不适用或覆盖不足</h3>
+<div class="tw"><table>
+<tr><th>情形</th><th>说明</th></tr>
+<tr><td><strong>低频、不可逆的战略决策</strong></td><td>是否进入新市场、是否收购——这是人的领域，本方法论不应被用于此</td></tr>
+<tr><td><strong>多 Agent 协作的审计</strong></td><td><a href="m5-synthesis.html#t53">模块五 5.3</a> 承认这是未解问题。<strong>本方法论当前只覆盖单 Agent 场景</strong></td></tr>
+<tr><td><strong>模型能力本身是约束的任务</strong></td><td>长程一致性、跨模态、需要 98%+ 可靠度的任务</td></tr>
+<tr><td><strong>组织政治导致的失败</strong></td><td>sponsor 变更、预算被砍、关键人离职（见 1.3）</td></tr>
+<tr><td><strong>托管大模型的严格可重放</strong></td><td>本方法论承诺「给定代码版本 + 数据版本可重放」，<strong>这对托管模型不成立</strong>——模型会被下线、涨价、变更行为。见 <a href="dia.html#r">运行约束</a></td></tr>
+</table></div>
+
+<div class="prevnext">
+<span><a href="methodology.html">← 返回总览</a></span>
+<span><a href="m2-ontology.html">模块二｜语义与本体 →</a></span>
+</div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>

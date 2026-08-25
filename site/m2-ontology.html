@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模块二｜语义与本体 — 方法论总结</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="nav-brand" href="index.html">决策智能架构<span> · 研究站</span></a>
+<div class="nav-links">
+<a href="methodology.html" class="active">方法论总结</a>
+<a href="playbook.html">实践</a>
+<a href="domains.html">行业剖面</a>
+<a href="research.html">研究</a>
+<a href="about.html">关于</a>
+</div></div></nav>
+<div class="wrap">
+<section style="padding-bottom:16px">
+<p class="eyebrow"><a href="methodology.html" style="border:0;color:inherit">方法论总结</a> · 模块二</p>
+<h1>语义与本体</h1>
+<p class="lede">企业如何获得一层机器可理解、且业务承认的语义骨架。</p>
+<p class="meta"><span class="pill">6 主题 · 约 65 分钟</span></p>
+<ul class="topics">
+<li><span class="tn">2.1</span><span class="tt"><a href="#t21">本体是什么、不是什么</a></span><span class="td">10 min</span></li>
+<li><span class="tn">2.2</span><span class="tt"><a href="#t22">三种本体范式对照</a></span><span class="td">12 min</span></li>
+<li><span class="tn">2.3</span><span class="tt"><a href="#t23">本体的六个构成要素</a></span><span class="td">12 min</span></li>
+<li><span class="tn">2.4</span><span class="tt"><a href="#t24">对象准入判据与本体膨胀</a></span><span class="td">10 min</span></li>
+<li><span class="tn">2.5</span><span class="tt"><a href="#t25">事实基础：口径、血缘、时点正确性</a></span><span class="td">12 min</span></li>
+<li><span class="tn">2.6</span><span class="tt"><a href="#t26">数据合同与断言校验</a></span><span class="td">9 min</span></li>
+</ul>
+</section>
+
+<hr class="hr">
+
+<section id="t21">
+<h2 style="margin-top:0">2.1 本体是什么、不是什么</h2>
+<p><span class="mk mk-c">共识</span> 知识工程中的标准定义来自 Gruber：本体是「<strong>概念化的显式规范</strong>」（an explicit specification of a conceptualization）。OWL/RDF 传统沿用这一定义。</p>
+<p><span class="mk mk-j">判断</span> 这个标准定义<strong>没有缺陷</strong>，但它服务的是知识表达与推理，不服务于企业决策执行。本方法论使用的是厂商语境下、<strong>有意偏离</strong>标准的用法：</p>
+<blockquote><p>本体是企业的<strong>可执行语义层</strong>——它不仅描述企业由什么构成，还定义了<strong>能对它做什么</strong>，并承载权限。</p></blockquote>
+<p>差别在于最后半句。一个只描述不执行的本体，无法解决模块一中「只读陷阱」的问题。</p>
+<div class="rule"><span class="tag">术语提示</span><p>本站说「本体」时指的是<strong>可执行语义层</strong>，与 Gruber/OWL 传统的 ontology 不是同一个概念。<strong>这是有意的偏离，不是对标准定义的修正。</strong>与知识工程背景的同事讨论时，这个歧义需要先说明。</p></div>
+
+<h3>三个常见误解</h3>
+<div class="tw"><table>
+<tr><th>误解</th><th>区别</th></tr>
+<tr><td>本体 = 数据模型</td><td>数据模型服务于存储与事务效率；本体服务于业务语义与决策。数据模型里没有「这个客户处于流失预警状态」这种东西</td></tr>
+<tr><td>本体 = 知识图谱</td><td>图谱通常只读、面向检索与推理；本体必须绑定行动，是可执行的</td></tr>
+<tr><td>本体 = 元数据目录</td><td>目录服务于「找数据」；本体服务于「做决定」</td></tr>
+</table></div>
+<blockquote><p>数据模型回答「怎么存」，知识图谱回答「知道什么」，元数据目录回答「在哪找」，<br><strong>本体回答「这家企业是什么，以及能对它做什么」。</strong></p></blockquote>
+
+<h3>为什么它必须在架构中心</h3>
+<p><span class="mk mk-j">判断</span> 一旦本体只是「一个可选的语义层」，就会立刻出现绕过它的捷径：报表直连数据库、Agent 写自由 SQL、前端硬编码业务公式。三个月后企业就有了第二套、第三套口径，本体退化成文档。</p>
+<div class="rule"><span class="tag">架构判据</span><p>除本体外，<strong>不存在第二条通往业务语义的路径</strong>。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t22">
+<h2 style="margin-top:0">2.2 三种本体范式对照</h2>
+<p><span class="mk mk-c">共识</span> 目前有三条主流路线，各自来自不同的传统。它们不是互斥的，但侧重点差别很大。</p>
+
+<h3>范式一：语义 + 动能（Palantir 路线）</h3>
+<div class="callout"><span class="tag">⚠️ 本站曾在此处写错，2026-08-23 更正</span>
+<p>此前本站写「Palantir 官方的本体表述是三层：Semantic / Kinetic / <strong>Dynamic（绑定到对象上的模型）</strong>」。</p>
+<p><strong>官方没有 Dynamic 层。</strong>该三层说法出自第三方博客转述，本站未经核实即采用，<strong>并据此给转述来源打了高分</strong>——这是「用二手材料做一手判断」的典型代价。更正说明见 <a href="research.html#survey">参考站调研</a>。</p></div>
+
+<p><strong>官方表述是两分法：</strong></p>
+<div class="tw"><table>
+<tr><th>元素</th><th>内容</th></tr>
+<tr><td><strong>Semantic elements</strong>（语义 / 名词）</td><td>objects、properties、links</td></tr>
+<tr><td><strong>Kinetic elements</strong>（动能 / 动词）</td><td>actions、functions、<strong>dynamic security</strong></td></tr>
+</table></div>
+<p>关键点：<strong>"dynamic" 指的是 dynamic security</strong>——运行时计算的细粒度权限策略，是 kinetic 的<strong>子项</strong>，讲的是<strong>权限，不是模型</strong>。</p>
+<p>名词—动词的比喻确实是官方自己的说法（"Data elements are the nouns… actions are the verbs"），「组织的数字孪生」也是官方表述。</p>
+
+<p><strong>强项</strong>　<span class="mk mk-j">判断</span>（原标〔共识〕，已降级）把「行动」作为本体一等公民、并让权限沿语义传播，这个组合抓住了要害。</p>
+<p>⚠️ 此前本站写它是「<strong>唯一一个</strong>」这么做的主流范式——这可被证伪（Microsoft Fabric IQ Ontology、AWS 的 ontology + 推理指引、SHACL/SWRL、agentic MDM 都在做同一件事）。<strong>「唯一」已删除。</strong></p>
+<p><strong>弱项</strong>　<span class="mk mk-j">判断</span> 它是<strong>产品文档，不是可迁移的工程方法论</strong>。</p>
+<div class="callout"><span class="tag">另一处更正</span>
+<p>此前本站写「幂等、参数边界、可逆性、审批链、权限传播、时点正确性……这些<strong>公开材料里基本没有</strong>」——<strong>这是错的，且是明显的稻草人化</strong>。Palantir 公开文档逐条覆盖：参数校验（Action rules）、撤销与回退（Undo or revert Actions）、<strong>审批链（Ontology proposals，官方明确类比 Pull Request 的评审与批准流程）</strong>、权限传播（markings 沿数据管线传播）、幂等与并发冲突失败语义、时点正确（time-series 与 edits history）、本体分支与版本。</p>
+<p><strong>站得住的说法是</strong>：Palantir 把这些<strong>作为 Foundry 的产品特性</strong>记录在文档里，而不是作为一套<strong>可迁移到任意技术栈的工程方法论</strong>；对不采用 Foundry 的企业，这些文档的可移植价值有限。</p></div>
+<p><strong>当前形态</strong>　<span class="mk mk-j">判断</span> 本站此前把 Palantir 描述成一个静态概念框架，落后于实际。Ontology 现同为 Foundry 与 AIP 的核心，且已有 Ontology SDK / Platform SDK / <strong>Palantir MCP</strong> / AIP Analyst / AIP Autopilot。</p>
+<div class="rule"><span class="tag">真正的洞察 · 判断</span><p>多数人以为 Palantir 卖的是数据整合。它实际卖的是——<strong>让「分析」和「操作」发生在同一个语义空间里</strong>。你在看板上看到的那个订单，就是你能直接操作的那个订单，权限、审计、回滚一并跟着。</p></div>
+
+<h3>范式二：指标语义层（数据工程路线）</h3>
+<p>代表：dbt Semantic Layer、Cube、各类指标平台。核心主张是把指标定义从报表里抽出来集中管理，保证口径唯一。</p>
+<p><strong>强项</strong>　<span class="mk mk-j">判断</span> 工程成熟、落地成本相对低、与现有数据栈衔接顺畅（「成本低」是比较级评价，此前误标〔共识〕）。</p>
+<p><strong>弱项</strong>　<span class="mk mk-j">判断</span> 只管「数字」，不管「对象、关系、状态、行动」。它能让你不吵口径，不能让系统做决定。<strong>没有行动的语义层是 BI 的延伸。</strong></p>
+
+<h3>范式三：企业知识图谱（知识工程路线）</h3>
+<p>用图结构表达实体与复杂关系，支持推理与检索。</p>
+<p><strong>强项</strong>　<span class="mk mk-j">判断</span> 关系表达能力强，适合多跳查询与关联发现（「最强」是比较级评价，此前误标〔共识〕）。</p>
+<div class="callout"><span class="tag">现状更新</span><p><strong>微软已于 2026-08-14 将 GraphRAG 转入维护模式</strong>（不再接受新 PR、不再实现新功能）；<strong>LazyGraphRAG 从未在开源版发布</strong>。量化决策规则（GraphRAG-Bench, ICLR 2026）：简单事实检索 文本 60.9 vs 图 60.1（打平）；复杂推理 图 <strong>+10.5</strong>；上下文摘要 图 <strong>+13.1</strong>；代价 <strong>3–5 倍索引成本</strong>。</p></div>
+<p><strong>弱项</strong>　<span class="mk mk-j">判断</span> 传统 KG 是只读的、面向认知的。它回答「知道什么」，不回答「能做什么」。落到企业决策，还差行动与权限两层。</p>
+
+<h3>对照表</h3>
+<div class="tw"><table>
+<tr><th>维度</th><th>语义 + 动能（Palantir 路线）</th><th>指标语义层</th><th>知识图谱</th></tr>
+<tr><td>主要表达</td><td>对象 + 行动 + 权限</td><td>指标与维度</td><td>实体 + 关系</td></tr>
+<tr><td>绑定行动</td><td>✅ 核心</td><td>❌</td><td>❌ 通常不</td></tr>
+<tr><td>承载权限</td><td>✅</td><td>部分</td><td>通常不</td></tr>
+<tr><td>状态机</td><td>✅</td><td>❌</td><td>部分</td></tr>
+<tr><td>落地成本</td><td>高</td><td>低</td><td>中</td></tr>
+<tr><td>成熟工具</td><td>少（多为商业平台）</td><td>多</td><td>多</td></tr>
+<tr><td>适合起点</td><td>有行动闭环诉求</td><td>先解决口径战争</td><td>关系密集型业务</td></tr>
+</table></div>
+<div class="rule"><span class="tag">判断</span><p>三者不是选一个。现实中合理的组合是：<strong>以语义-动能-智能为架构目标，用指标语义层解决口径唯一，用图结构承载复杂关系。</strong></p>
+<p>但必须明确：只有第一条路线是终点，另外两条是手段。把手段当终点，就会停在「不吵口径的 BI」或「查得很爽的知识库」。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t23">
+<h2 style="margin-top:0">2.3 本体的六个构成要素</h2>
+<p><span class="mk mk-c">共识</span> 无论哪条范式，一个可用于决策的本体大致由六类要素构成。</p>
+<div class="tw"><table>
+<tr><th>要素</th><th>说明</th><th>关键约束</th></tr>
+<tr><td><strong>对象类型</strong></td><td>企业核心名词：客户、订单、SKU、工单、合同、事故</td><td>见 2.4 准入判据</td></tr>
+<tr><td><strong>属性</strong></td><td>源属性 / 派生属性 / 状态属性</td><td><strong>派生属性只能有一个权威实现；状态属性必须有状态机</strong></td></tr>
+<tr><td><strong>关系</strong></td><td>对象之间的连接</td><td>把跨系统语义缝合成可遍历路径</td></tr>
+<tr><td><strong>事件</strong></td><td>发生了什么，带时间戳且不可变</td><td>重放、审计与时点正确性的载体</td></tr>
+<tr><td><strong>指标</strong></td><td>业务度量</td><td>只允许一个权威实现，有唯一 Owner</td></tr>
+<tr><td><strong>行动</strong></td><td>可改变企业状态的操作</td><td><strong>绑定在对象上</strong></td></tr>
+</table></div>
+
+<p><span class="mk mk-j">判断</span> <strong>关系</strong>是本体相对于数据表最大的价值。一条跨七个系统的订单履约链路，在本体里是一条可遍历的关系路径，而在数据仓库里是七次 JOIN 加三次人工确认。</p>
+
+<p><span class="mk mk-j">判断</span> <strong>指标</strong>最常见的破口是「Agent 提示词里重新拼公式」——这和在报表里重算是同一类错误，但更隐蔽，因为它不在任何代码评审的视野里。</p>
+
+<div class="rule"><span class="tag">判断</span><p><strong>行动绑定在对象上</strong>——不是「系统能调价」，而是「SKU 对象上有一个调价行动」。</p>
+<p>这个绑定不是设计上的优雅，而是<strong>权限与自治能够被精确表达的前提</strong>。绑定之后，下面这些问题才有答案：谁能对哪些 SKU 调价？Agent 能调多大幅度？上周那次调价依据什么？能撤销吗？</p></div>
+<p>行动的完整契约见 <a href="m4-adoption.html#t41">模块四 4.1</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t24">
+<h2 style="margin-top:0">2.4 对象准入判据与本体膨胀</h2>
+<p><span class="mk mk-j">判断</span>（原标〔共识〕，因无出处已降级）本体建设最普遍的失败是<strong>范围失控</strong>：建设周期长期拖延而迟迟不上线，或者「有 300 张表就建 300 个对象」。</p>
+<div class="callout"><span class="tag">删掉的一个数字</span><p>此前本站在此写「建了 <strong>12–18 个月</strong>还没上线」。这个数字没有出处，是我的经验印象，<strong>已改为定性表述</strong>。相关的、有出处的数字是 Gartner：原型到生产平均 <strong>8 个月</strong>，仅 <strong>48%</strong> 进入生产。</p></div>
+<p><span class="mk mk-j">判断</span> 根因是缺少准入闸门。任何没有准入判据的建模活动都会自然膨胀——因为每个业务方都能说出「我们这个也很重要」。</p>
+
+<h3>五条准入判据（必须同时满足）</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>判据</th><th>不满足的后果</th></tr>
+<tr><td>1</td><td><strong>有唯一真身</strong>：权威源系统 + 主键</td><td>出现多个版本的「客户」，口径战争</td></tr>
+<tr><td>2</td><td><strong>有稳定标识</strong>：跨系统 ID 映射规则明确，含历史变更</td><td>关系连不起来，数据看着有其实用不了</td></tr>
+<tr><td>3</td><td><strong>有明确生命周期</strong>：状态集合与合法转移已定义</td><td>行动的前置条件无法表达</td></tr>
+<tr><td>4</td><td><strong>有绑定行动或明确决策用途</strong></td><td><strong>本体膨胀</strong></td></tr>
+<tr><td>5</td><td><strong>有业务 Owner</strong>：一个具体的人，不是一个部门</td><td>变更无人裁决，本体腐化</td></tr>
+</table></div>
+<div class="callout"><span class="tag">判断</span><p>判据 4 是最常被跳过、也最致命的一条——它是防止膨胀的唯一闸门。</p></div>
+
+<h3>全景 vs 增量：一个真实分歧</h3>
+<p><span class="mk mk-d">争议</span></p>
+<ul>
+<li><strong>全景派</strong>：先建完整的企业本体，再谈应用。理由是避免重复返工、保证一致性</li>
+<li><strong>增量派</strong>：从一个决策倒推，只建它需要的对象，逐步生长</li>
+</ul>
+<p><span class="mk mk-j">判断</span> 我站增量派，理由不是技术而是组织：全景本体要很久才有第一个业务结果，而 S&amp;P Global 显示 <strong>42% 的企业已经放弃了多数 AI 计划、平均报废 46% 的 PoC</strong>——<strong>耐心额度是真实且有限的约束</strong>。而增量派的返工风险，可以通过「第二个场景刻意复用第一个场景的对象」来检验和控制。</p>
+<pre><code>选定一个决策
+   ↓
+做这个决策需要知道哪些东西？   → 对象（3–7 个）
+它们之间是什么关系？           → 关系
+决策依据哪几个数？             → 指标
+决策的结果是对什么做什么？      → 行动
+   ↓
+只建这些。其余一概不建。</code></pre>
+<p>健康的第一版规模：<strong>5 个以内对象，3 个以内关系，1 个行动。</strong></p>
+
+<h3>本体是产品，不是项目产物</h3>
+<p><span class="mk mk-j">判断</span> 一旦本体成为企业语义权威，它必须具备产品的全部特征：版本、合同、变更流程、废弃策略、Owner、业务语言的文档。</p>
+<blockquote><p>没有变更流程的本体，会在六个月内退化成一份没人看的文档。</p></blockquote>
+
+<h3>权限沿本体传播</h3>
+<p><span class="mk mk-c">共识</span> 权限应当定义在语义层而非接口层。四个维度：<span class="pill on">对象级</span><span class="pill on">行级</span><span class="pill on">属性级</span><span class="pill on">行动级</span></p>
+<p><span class="mk mk-j">判断</span> 最关键的一条：<strong>Agent 继承调用者权限，不存在超级 AI 身份。</strong>销售 A 通过 Agent 查询时，Agent 看到的必须恰好是销售 A 能看到的那个世界。</p>
+<div class="callout"><span class="tag">此前的一个漏洞，已补</span><p>这条在人工触发时成立，但 <strong>L3/L4 是无人值守的自动执行——此时没有「调用者」</strong>。本站此前六处陈述这条约束，没有任何一处回答这时用谁的身份。补漏见 <a href="m4-adoption.html#t44b">模块四 4.4b 无人值守时的身份</a>。</p></div>
+
+<h3>一个唯一权威 Owner 在集团型企业里如何成立</h3>
+<p><span class="mk mk-j">判断</span> 「一个指标一个权威 Owner」在单一法人主体内很直接，在<strong>集团—事业部—区域</strong>三级结构里会立刻被追问。这是大型客户的第一个问题，本站此前完全没有回答。</p>
+<div class="tw"><table>
+<tr><th>模式</th><th>规则</th><th>适用</th></tr>
+<tr><td><strong>集团定义 + 事业部实例化</strong></td><td>集团定义指标的<strong>语义与计算口径</strong>，事业部只能定义<strong>过滤范围</strong>，不得改公式</td><td>集团要求横向可比</td></tr>
+<tr><td><strong>分层指标</strong></td><td>同名指标显式分为「集团口径」与「事业部口径」两个<strong>不同的指标</strong>，各有 Owner，禁止混用</td><td>两级确有不同的管理需要</td></tr>
+<tr><td><strong>联邦式</strong>（借鉴 Data Mesh 第四原则）</td><td>集团只定义<strong>元规则</strong>（必须有 Owner、可追溯、变更须通知），具体口径下放</td><td>事业部差异极大、集团管控弱</td></tr>
+</table></div>
+<p><strong>不可接受的做法</strong>：不做选择、让同名指标在各层自然分叉。这就是口径战争的起点。<br>
+<strong>跨法人主体的额外约束</strong>：数据能否跨主体流动是<strong>法律问题不是技术问题</strong>，必须先于本体设计确认。见 <a href="playbook.html#compliance">合规与安全前置</a>。</p>
+</section>
+
+<hr class="hr">
+
+<section id="t25">
+<h2 style="margin-top:0">2.5 事实基础：口径、血缘、时点正确性</h2>
+<p><span class="mk mk-c">共识</span> 本体是语义骨架，事实层是它的地基。三个必须：</p>
+
+<h3>必须一：口径权威唯一</h3>
+<p>同一度量全企业只有一个权威计算实现，有唯一 Owner；查询层、报表、前端、Agent 提示词一律只做只读投影。</p>
+<p><span class="mk mk-j">判断</span> 发现第二处实现应按<strong>缺陷</strong>处理，不按「灵活性」处理。这是一个组织决定，不是技术决定。</p>
+
+<h3>必须二：血缘可追</h3>
+<p>任何数字能在 5 分钟内回答：来自哪个源、经过什么加工、什么口径版本、数据时点、上次成功更新时间。</p>
+<p><span class="mk mk-j">判断</span> 血缘必须是<strong>可查询的运行时元数据</strong>，不是一张架构图。画在 PPT 上的血缘，在事故排查时没有任何用处。</p>
+
+<h3>必须三：时点正确（Point-in-Time）</h3>
+<p><span class="mk mk-j">判断</span> 这是企业里最容易被忽略、也最容易造成静默错误的一条，而且在 Agentic 时代危害被放大——因为系统会基于污染的历史评估自动放权。</p>
+<p>典型错误：用<strong>今天</strong>的主数据解释<strong>昨天</strong>的业务。</p>
+<div class="tw"><table>
+<tr><th>错误</th><th>后果</th></tr>
+<tr><td>用今天的客户分级分析上季度转化</td><td>结论被未来信息污染</td></tr>
+<tr><td>用今天的类目回溯半年前的品类表现</td><td>类目调整过，对不上</td></tr>
+<tr><td>用今天的组织架构归因去年业绩</td><td>人员已换部门</td></tr>
+<tr><td>用修正后的财报评估当时的判断</td><td>高估了当时的可判断性</td></tr>
+</table></div>
+<p><strong>实现要点</strong>：主数据保留<strong>有效期区间</strong>；事实记录保留<strong>双时间轴</strong>（业务发生时间 + 系统可知时间）；回溯查询必须显式指定「以哪个时点的认知为准」。</p>
+<div class="callout"><span class="tag">为什么它最贵</span><p><strong>时点错误不报错。</strong>系统会给你一个看起来完全正常、并且偏乐观的数字，直到上线后效果对不上。</p></div>
+</section>
+
+<hr class="hr">
+
+<section id="t26">
+<h2 style="margin-top:0">2.6 数据合同与断言校验</h2>
+
+<h3>数据合同</h3>
+<p><span class="mk mk-j">判断</span>（原标〔共识〕，已降级）上游变更不能静默破坏下游，这个<strong>原则</strong>争议不大；但「数据合同」作为具体实践在 2026 年仍是少数派，<strong>远未成为定论</strong>（该词 2022-08 才被推起来）。一份数据合同包含：</p>
+<div class="tw"><table>
+<tr><th>项</th><th>内容</th></tr>
+<tr><td>Schema</td><td>字段、类型、可空性</td></tr>
+<tr><td><strong>语义</strong></td><td>每个字段的业务含义与枚举值含义（<code>status=3</code> 是什么）</td></tr>
+<tr><td>质量承诺</td><td>完整性、及时性、唯一性的可度量承诺</td></tr>
+<tr><td>变更流程</td><td>提前通知期、兼容期、迁移路径</td></tr>
+<tr><td>Owner</td><td>上游负责人，具体到人</td></tr>
+<tr><td><strong>违约处理</strong></td><td>合同被破坏时下游的行为</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 最后一项最常被省略，也最重要。没有定义违约行为的合同，在被违反时只会产生一场会议，不会产生任何自动保护。</p>
+
+<h3>断言式校验</h3>
+<p><span class="mk mk-j">判断</span> 设计原则是<strong>不抽样看趋势，而是对账</strong>。抽样监控能发现「数据变化了」，发现不了「数据一直是错的」。</p>
+<div class="tw"><table>
+<tr><th>类型</th><th>例子</th></tr>
+<tr><td><strong>完整性对账</strong></td><td>应有记录数 − 实际记录数 = 已归因缺失数（差额必须为 0）</td></tr>
+<tr><td><strong>量纲断言</strong></td><td>金额/数量比值落在合理区间——防止差 100 倍的静默错误</td></tr>
+<tr><td><strong>双算校验</strong></td><td>关键派生量用两条独立实现各算一遍并比对</td></tr>
+<tr><td>唯一性 / 参照完整性</td><td>主键唯一；订单引用的客户必须存在</td></tr>
+<tr><td>枚举合法性</td><td>状态值必须在已定义集合内</td></tr>
+<tr><td>时序逻辑</td><td>发货时间 ≥ 下单时间；状态转移合法</td></tr>
+<tr><td>跨源交叉</td><td>与独立数据源比对，偏差超阈值报警</td></tr>
+</table></div>
+<p><span class="mk mk-j">判断</span> 量纲断言与双算校验是投入产出比最高的两条——它们抓的是「看起来完全正常」的那一类错误，恰恰是最贵的那一类。</p>
+<div class="rule"><span class="tag">失败关闭</span><p>断言 FAIL 的默认行为必须是<strong>阻断下游，不出结论</strong>，而不是「告警后继续」。这一原则贯穿整个架构，在 <a href="m4-adoption.html#t44">模块四 4.4</a> 展开。</p></div>
+
+<h3>不可变 + 可重放</h3>
+<p><span class="mk mk-c">共识</span> 原始数据只增不改，修正通过新增记录表达；给定代码版本 + 数据版本能重算出完全相同的结果。没有这两点，永远无法回答「三周前它为什么给出那个建议」。</p>
+
+<div class="prevnext">
+<span><a href="m1-foundations.html">← 模块一｜基础认知</a></span>
+<span><a href="m3-agentic.html">模块三｜Agentic 系统设计与编排 →</a></span>
+</div>
+</section>
+</div>
+<footer><div class="wrap">决策智能架构 · 研究站　|　<a href="methodology.html">方法论总结</a>　<a href="playbook.html">实践</a></div></footer>
+</body></html>
