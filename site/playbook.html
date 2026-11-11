@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>实践 — 成熟度 · 120 天 · 模板 · 12 问 · 合规 · 测算</title>
-<meta name="description" content="M0–M2 成熟度诊断、首个 120 天路线、决策清单工作坊、四套模板、反模式清单、开工前 12 问、合规与安全、投入产出测算、自建 vs 采购。">
+<title>实践 — 成熟度 · 120 天 · 模板 · 12 问 · 合规 · 测算 · 供应商评估</title>
+<meta name="description" content="M0–M2 成熟度诊断、首个 120 天路线、决策清单工作坊、四套模板、反模式清单、开工前 12 问、合规与安全、投入产出测算、自建 vs 采购、供应商评估清单。">
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
   <p class="eyebrow">实践</p>
   <h1>从方法论到明天早上做什么</h1>
   <p class="lede">方法论如果不能回答「读完之后明天做什么」，它就只是观点。<br>这一页全部是可以直接拿去用的东西，<strong>不依赖是否读过<a href="methodology.html">方法论总结</a></strong>。</p>
-  <p class="meta"><span class="pill">约 30 分钟</span><span class="pill">9 套工具</span><span class="pill on">与方法论总结平级</span></p>
+  <p class="meta"><span class="pill">约 35 分钟</span><span class="pill">10 套工具</span><span class="pill on">与方法论总结平级</span></p>
   <div class="toc">
     <p class="toc-title">目录</p>
     <ol>
@@ -35,6 +35,7 @@
       <li><a href="#compliance">合规与安全前置　<span style="color:var(--accent)">新增</span></a></li>
       <li><a href="#roi">投入产出测算　<span style="color:var(--accent)">新增</span></a></li>
       <li><a href="#buildbuy">自建 vs 采购 · 共存 · 退出剧本　<span style="color:var(--accent)">新增</span></a></li>
+      <li><a href="#vendor">供应商评估清单　<span style="color:var(--accent)">新增</span></a></li>
     </ol>
   </div>
 </section>
@@ -577,6 +578,116 @@
 
 <h3>诚实的边界</h3>
 <p>具体产品对照<strong>不在本节范围内</strong>——市场快速变化，任何产品清单半年内就会过时；本节只给拆解框架。「买能力、自建语义」这条结论<strong>是我的判断，不是共识</strong>；反方立场是：一体化平台的语义能力已经足够好，自建语义是重复造轮子。<strong>这个分歧在 2026 年是真实存在的。</strong></p>
+</section>
+
+<hr class="hr">
+
+<section id="vendor">
+<h2 style="margin-top:0">十、供应商评估清单</h2>
+<div class="callout"><span class="tag">2026-11-11 新增</span><p>内容路线图第二批「高」优先级选题。本节是<a href="#twelve">开工前 12 问</a>与<a href="#buildbuy">三条采购专属问题</a>的<strong>独立可交付版本</strong>——可以直接打印带进供应商评审会，不要求对方或你自己先读过本站其他内容。完整版见 <code>content/20-实践/10-供应商评估清单.md</code>。</p></div>
+
+<h3>为什么不是 12 问的复制</h3>
+<p><span class="mk mk-j">判断</span> 把 12 问原样递给供应商是这类评审最常见的浪费。<strong>同一个问题问自己和问供应商，好答案与危险信号是反的</strong>：</p>
+<div class="tw"><table>
+<tr><th></th><th>开工前 12 问</th><th>供应商评估清单</th></tr>
+<tr><td><strong>问谁</strong></td><td>问自己的组织</td><td>问候选方案商</td></tr>
+<tr><td><strong>前提组</strong>（Q1–Q4、Q10、Q12）</td><td>必答，答不上来就叫停</td><td><strong>不要问供应商。</strong>这六问问的是你的组织现状与裁决权，<strong>供应商主动替你回答本身就是危险信号</strong></td></tr>
+<tr><td><strong>设计组</strong>（Q5–Q9、Q11）</td><td>答不上来不叫停，转为方案待办</td><td><strong>必答，且必须交证物</strong></td></tr>
+<tr><td><strong>危险信号的形态</strong></td><td>「不知道」「没想过」</td><td>「当然支持」「完全可以」——<strong>供应商的危险信号是流畅，不是卡顿</strong></td></tr>
+</table></div>
+<blockquote><p><strong>要证物，不要答案。</strong><br>评审会上听到的每一句「支持」，都应当当场改写成「请演示」或「请提供文档的哪一页」。</p></blockquote>
+
+<h3>第一道筛：六问「供应商替你回答」即危险信号</h3>
+<div class="tw"><table>
+<tr><th>12 问</th><th>供应商这样回答 → 危险信号</th></tr>
+<tr><td><strong>Q1</strong> 被允许改变什么</td><td>「我们会帮您梳理出适合 AI 改造的环节」——范围由你的授权决定，不由他的产品能力决定</td></tr>
+<tr><td><strong>Q2</strong> 第一个场景</td><td>「我们在同行业有标准场景包，直接上」——<strong>同行业不等于同口径、同权限、同落点系统</strong></td></tr>
+<tr><td><strong>Q3</strong> 哪个旧动作被取消</td><td>「不取消任何现有流程，我们是增量部署」——这正是本站的反模式</td></tr>
+<tr><td><strong>Q4</strong> 口径谁说了算</td><td>「平台内置了行业标准指标体系」——<strong>口径裁决权一旦默认交给厂商，本体就不是你的了</strong></td></tr>
+<tr><td><strong>Q10</strong> 出错了谁负责</td><td>「我们有完整的 SLA 兜底」——SLA 赔的是服务可用性，赔不了一次错误的调价决策</td></tr>
+<tr><td><strong>Q12</strong> 什么情况下叫停</td><td>「我们的客户还没有失败案例」——见下</td></tr>
+</table></div>
+<div class="rule"><span class="tag">单独拎出来的一条：「我们没有失败案例」</span>
+<p>这句话在采购语境里不是优势陈述，是<strong>信息缺失的证明</strong>。一家真正做过若干落地项目的供应商<strong>必然</strong>有叫停的、缩范围的、交付后被弃用的项目；说不出任何一个，通常意味着项目数量太少，或者「成功」的定义是<strong>验收通过</strong>而不是<strong>仍在使用</strong>。</p>
+<p><strong>可用的追问</strong>：「请讲一个被客户叫停或上线后被弃用的项目，以及你们当时判断错在哪里。」——这个追问的回答质量，经验上比任何成功案例更能区分供应商。</p></div>
+
+<h3>九条供应商必答项：每条都要证物</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>问供应商</th><th>✅ 可接受的证物</th><th>🚩 危险信号</th></tr>
+<tr><td><strong>V1</strong></td><td>上游改一个字段怎么发现？<strong>请演示一次字段变更触发阻断</strong></td><td>数据合同/断言配置 + 一次真实阻断日志</td><td>「有数据质量模块」但演示不出阻断</td></tr>
+<tr><td><strong>V2</strong></td><td>回溯评估用的是当时能知道的数据吗？<strong>请展示带双时间轴的对象</strong></td><td>有效期区间 + 事实的双时间轴</td><td>「可以加时间戳字段」——<strong>加字段不等于查询默认按时点口径</strong></td></tr>
+<tr><td><strong>V3</strong><br><em>权重加倍</em></td><td>Agent 用什么身份访问我的数据？无人值守时呢？</td><td>调用者权限继承 + 工具集白名单 + <strong>无人值守的岗位委托身份</strong></td><td>「用服务账号」「可直连数据库」「权限在提示词里约束」</td></tr>
+<tr><td><strong>V4</strong></td><td>怎么证明它是对的？<strong>请提供评测集构造方式与一次完整报告</strong></td><td>冻结的金标准集 + 影子运行 + 上线判据</td><td>只有 demo 与客户好评；给出公开基准榜单名次（<strong>榜单名次不能作为证据</strong>）</td></tr>
+<tr><td><strong>V5</strong></td><td>它上一次说「我不确定」是什么时候？</td><td>弃权率看板 + 弃权后人工接管流程</td><td>「准确率很高，很少不确定」——<strong>从不弃权的系统是不知道自己不知道的系统</strong></td></tr>
+<tr><td><strong>V6</strong></td><td>三周前的某次自动执行能还原依据吗？<strong>请现场查一次</strong></td><td>输入、口径版本、模型/提示词版本、触发者、审批人五项齐全</td><td>「日志里有」——「应该有」等于没有</td></tr>
+<tr><td><strong>V7</strong><br><em>S1</em></td><td>本体定义与证据链能以什么格式导出？<strong>请导出一份给我看</strong></td><td>结构化、带 schema、第三方可读；导出是产品功能而非服务请求</td><td>「可以导出报表」——<strong>这不是导出，是打印</strong>；「需要我们协助导出」</td></tr>
+<tr><td><strong>V8</strong><br><em>S2</em></td><td>同 V3。<strong>采购场景下与 V3 合并评分，不重复计分</strong></td><td>同 V3</td><td>同 V3</td></tr>
+<tr><td><strong>V9</strong><br><em>S3</em></td><td>模型下线或涨价时，我的评测结论还成立吗？</td><td>书面的模型变更通知机制 + 变更后重跑评测的责任归属（<strong>写进合同，不是写进邮件</strong>）</td><td>「模型是透明可替换的」——透明可替换意味着<strong>行为也会变</strong></td></tr>
+</table></div>
+<p><strong>为什么 V3 权重加倍</strong>：它是唯一一个<strong>答错就必须重做架构</strong>的设计问题。在采购场景里这一条更重要——自建可以后改，<strong>买来的权限模型你改不了</strong>。V8 与 V3 是同一个问题，保留编号只为与 09 节的 S1–S3 对齐，<strong>计分时只算一次</strong>，实际计分项为八条。</p>
+<div class="rule"><span class="tag">先于技术评估的一道筛子：合规形态</span>
+<p>必须在技术评审之前问清：<strong>模型部署形态是什么？数据会不会出企业网络、会不会出境？</strong>若结论是不可出境而候选方案依赖境外 API，<strong>整个方案不进入评分</strong>。判据见<a href="#compliance">合规与安全前置</a>。这一条是<strong>否决项</strong>，不是打分项。</p></div>
+
+<h3>计分与结论</h3>
+<p>单项：<strong>当场交出证物 = 2</strong>｜有文档但不能当场演示 = 1｜只有口头答复、PPT 页或「可以定制开发」 = 0。<strong>V3 得分乘 2</strong>，满分 <strong>18</strong>。</p>
+<div class="tw"><table>
+<tr><th>情况</th><th>判断</th></tr>
+<tr><td><strong>V3 得 0 分</strong></td><td><strong>否决。</strong>与总分无关——权限模型买来之后改不了</td></tr>
+<tr><td><strong>合规形态不成立</strong></td><td><strong>否决。</strong>不进入评分</td></tr>
+<tr><td>总分 ≥ 14 且无 0 分项</td><td>可进入商务阶段；0–1 分项逐条写进合同验收条件</td></tr>
+<tr><td>总分 8–13</td><td>可作为候选，但<strong>必须把所有 0 分项转为合同交付义务并约定违约责任</strong></td></tr>
+<tr><td>总分 &lt; 8</td><td>不要采购。这是一个演示产品，不是一个可被审计的生产系统</td></tr>
+</table></div>
+<blockquote><p><strong>判据不是分数本身，是 0 分项的位置。</strong>一个总分 15 但 V6（证据链）为 0 的方案，比一个总分 11 但处处 1 分的方案更危险——前者意味着产品架构里根本没有这件事。</p></blockquote>
+<p class="meta">分数线（14 / 8）是<strong>经验估计，不是实测标定</strong>——它来自八项二值化评分的结构，没有样本支撑。可按风险偏好整体上移或下移，但不要只移一条。</p>
+
+<h3>反面：五种会得高分但不该选的供应商</h3>
+<div class="tw"><table>
+<tr><th>类型</th><th>真正的问题</th><th>怎么补测</th></tr>
+<tr><td><strong>要求你按它的模型重塑业务语义</strong></td><td>得分项全部满足，但<strong>本体不再是你的</strong>——最危险的一种锁定</td><td>问：「我的对象定义和你们的标准模型冲突时，改哪一边？」</td></tr>
+<tr><td><strong>功能齐备但没有真实生产客户</strong></td><td>所有证物都是功能演示，不是运行证据</td><td>要求出示<strong>一个运行满一年的客户的运行指标</strong>（弃权率、人工推翻率的变化）</td></tr>
+<tr><td><strong>把治理做成配置项而非默认</strong></td><td>支持不等于默认开启；交付时为赶进度会被关掉</td><td>问：「默认配置下这些约束是开还是关？关掉需要谁审批？」</td></tr>
+<tr><td><strong>交付团队与售前不是同一批人</strong></td><td>评分测的是售前的知识，不是交付的能力</td><td>要求<strong>交付负责人出席并答 V1–V6</strong>（缺席则总分 ×0.8）</td></tr>
+<tr><td><strong>强绑定单一模型供应商</strong></td><td>V9 答得漂亮，可能只是因为他和你一样无法控制上游</td><td>问：「上一次模型版本变更，你们重跑了哪些评测？报告能看吗？」</td></tr>
+</table></div>
+
+<h3>反面：不要问的四个问题</h3>
+<div class="tw"><table>
+<tr><th>不要问</th><th>为什么 · 该问什么</th></tr>
+<tr><td>「你们的准确率是多少？」</td><td>没有口径的准确率不可比 → 问 <strong>V4</strong>：评测集怎么构造的</td></tr>
+<tr><td>「支持哪些大模型？」</td><td>清单长度与你的问题无关 → 问 <strong>V9</strong>：模型变了评测怎么办</td></tr>
+<tr><td>「有多少家客户？」</td><td>客户数不等于落地深度 → 问：讲一个失败的</td></tr>
+<tr><td>「能不能私有化部署？」</td><td>几乎所有供应商都会答能 → 问<strong>合规形态</strong>：数据会不会出企业网络、出境</td></tr>
+</table></div>
+
+<h3>本节覆盖不到的</h3>
+<ul>
+<li><strong>不含任何具体产品或厂商对照</strong>——市场快速变化，产品清单半年内就会过时。本节只给判据。</li>
+<li><strong>不覆盖商务条款</strong>（定价结构、许可模型、违约责任的具体写法）。这需要法务与采购。</li>
+<li><strong>不覆盖多 Agent 场景</strong>——V6 的证据链判据是按<strong>单 Agent 单次执行</strong>设计的；多 Agent 的审计仍是本站公开承认的未解问题（<a href="m5-synthesis.html">模块五</a> 未解问题 ⑨）。若候选方案以多 Agent 为卖点，<strong>V6 不足以评估它</strong>。</li>
+<li><strong>本节未经真实采购项目验证</strong>——它是从 12 问与 09 节推导出来的，推导过程写在上面，但尚未在一次完整的供应商评审中被用过。这与<a href="about.html">案例缺口</a>是同一个缺口。</li>
+</ul>
+
+<h3>评审会怎么开（经验估计：单个供应商约 3 小时）</h3>
+<div class="tw"><table>
+<tr><th>时段</th><th>做什么</th><th>纪律</th></tr>
+<tr><td>会前</td><td>自己答完 12 问<strong>前提组</strong>，把答案作为约束写进需求书；把本节发给供应商，明确告知需要现场演示</td><td><strong>不提前发自己的前提组答案</strong>——否则会被复述回来</td></tr>
+<tr><td>0:00–0:15</td><td>问合规形态</td><td>不成立就结束，<strong>不要出于礼貌走完流程</strong></td></tr>
+<tr><td>0:15–1:45</td><td>逐条过 V1–V7、V9，<strong>每条当场记 0/1/2</strong></td><td>禁止「会后补充材料」拖过计分。<strong>会后补的材料按 1 分计</strong></td></tr>
+<tr><td>1:45–2:15</td><td>问「讲一个失败的项目」与五条补测追问</td><td><strong>这半小时的区分度通常高于前面 90 分钟</strong></td></tr>
+<tr><td>2:15–2:45</td><td>交付团队负责人答 V1–V6</td><td>缺席则总分 <strong>×0.8</strong></td></tr>
+<tr><td>2:45–3:00</td><td>当场算分、填结论、记下所有 0 分项</td><td><strong>0 分项当天就转写成合同验收条件草稿</strong>，否则会在商务阶段消失</td></tr>
+</table></div>
+
+<div class="rule"><span class="tag">读完之后明天做什么</span>
+<ol>
+<li><strong>先答自己的六问</strong>：用<a href="#twelve">开工前 12 问</a>的前提组写出答案，作为需求书的约束条件。<strong>这一步不做，下面全部无效。</strong></li>
+<li>把九条必答项发给候选供应商，明确写「需要现场演示与文档页码，<strong>不接受功能列表</strong>」。</li>
+<li>把合规形态问题<strong>提前到第一通电话</strong>，不要留到评审会。</li>
+<li>排一次 3 小时的评审，<strong>指定一个人负责当场计分</strong>——不指定就不会有人记。</li>
+<li>把所有 0 分项抄进合同验收条件草稿，再与<a href="#roi">投入产出测算</a>的叫停条件合并，形成一份完整的立项附件。</li>
+</ol>
+<p><strong>如果你现在还没到选型阶段</strong>：先做<a href="#maturity">成熟度诊断</a>与<a href="#workshop">决策清单工作坊</a>。<strong>在 M0 阶段做供应商评审是无效的</strong>——你还不知道要买什么来解决哪个决策，任何方案都会显得合理。</p></div>
 </section>
 
 <hr class="hr">

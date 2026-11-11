@@ -278,7 +278,13 @@
 <tr><td><strong>「80% 的价值来自 Tool Use」</strong></td><td><strong>删。</strong>改为「工具设计是单项投入回报最高的一件事」</td></tr>
 <tr><td>「工具超过 15–20 个」</td><td>替换为 OpenAI「单轮 &lt;20 个」与 Anthropic「&gt;10 个即启用工具检索，实测 49%→74%」</td></tr>
 </table></div>
-<p style="font-size:14.5px;color:var(--text-dim)">完整的 31 条来源清单（含 Palantir 一手文档、Agentic 研究、数据架构史时间锚点）见内容库 <code>content/40-参考/04-引用与数据来源.md</code>。</p>
+<h3>待核清单（2026-11-11 新设）</h3>
+<div class="rule"><span class="tag">公开更正</span>
+<p>本次自动更新发现<strong>上一轮降级遗漏了「外部编号」这一类</strong>：模块三 3.6 的威胁分类标着〔共识〕并直接引用 OWASP 的条目编号 <code>ASI06</code>，<strong>而引用清单里从来没有 OWASP 的对应条目</strong>——既无可点击出处，也无版本号与发布日期。</p>
+<p><strong>为什么会漏</strong>：<strong>编号比论断更像事实</strong>，因此更容易混过审查。2026-08-23 那一轮清掉了 41 处无出处的〔共识〕论断，却没有把编号当成同一类东西处理。</p>
+<p><strong>已处理</strong>：该处<strong>降级为〔判断〕</strong>，编号标「待核」，并登记为 <code>TBV1</code>。本次运行的沙箱出站网络被策略拦截（owasp.org 不在允许列表内），<strong>无法核到一手来源，因此只降级、不删除</strong>。模块三 3.6 的落点映射是按本方法论重组的，不依赖该清单的权威性，照常可用。</p>
+<p><strong>待核条目的处理期限</strong>：连续<strong>两次</strong>自动更新运行仍无法核实的，<strong>从正文中移除该外部标识符</strong>（保留论述，去掉编号），而不是继续挂「待核」。<strong>不允许用「待核」标签保留一个本来就该降级的〔共识〕</strong>——降级与待核是两件事。</p></div>
+<p style="font-size:14.5px;color:var(--text-dim)">完整的来源清单（含 Palantir 一手文档、Agentic 研究、数据架构史时间锚点）与待核清单，见内容库 <code>content/40-参考/04-引用与数据来源.md</code>。</p>
 </section>
 
 <hr class="hr">
